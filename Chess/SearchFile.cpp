@@ -1,4 +1,4 @@
-#include "Core.h"
+﻿#include "Core.h"
 
 vector<path> SearchFile(path SearchInPath, string Extension)
 {
@@ -29,4 +29,4 @@ vector<path> SearchFile(path SearchInPath, string Extension)
 		return vector<path>();										
 	}
 	return result;
-}
+} 

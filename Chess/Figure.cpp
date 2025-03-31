@@ -1,19 +1,19 @@
-#include "Figure.h"
+п»ї#include "Figure.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// vector<vector<pair<int, string>>> VectorIntLocationFigure для int должен имееть структуру => 	  
-// -1 == границы															  
-// 0 == пустая клетка 														  
-// 1+ == сторона игрока														  
+// vector<vector<pair<int, string>>> VectorIntLocationFigure РґР»СЏ int РґРѕР»Р¶РµРЅ РёРјРµРµС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ => 	  
+// -1 == РіСЂР°РЅРёС†С‹															  
+// 0 == РїСѓСЃС‚Р°СЏ РєР»РµС‚РєР° 														  
+// 1+ == СЃС‚РѕСЂРѕРЅР° РёРіСЂРѕРєР°														  
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Figure::Figure(int SIDE, bool INVULNERABLE)
 {
 	this->SIDE = SIDE;
-	this->INVULNERABLE = INVULNERABLE;
+	this->INVULNERABLE = INVULNERABLE; 
 }
 
 
@@ -53,19 +53,19 @@ int Figure::GetSIDE()
 
 
 
-/// ВИРТУАЛЬНЫЕ ФУНКЦИИ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ 
+/// Р’РР РўРЈРђР›Р¬РќР«Р• Р¤РЈРќРљР¦РР РўР Р•Р‘РЈР®Рў РџР•Р Р•РћРџР Р•Р”Р•Р›РќРРЇ Р’ РќРђРЎР›Р•Р”РќРРљРђРҐ 
 
 
 string Figure::Set_ID_FIGURE()
 {
-	//должна называться так же как и класс-наследник фигуры \\\\  требует переопределения
+	//РґРѕР»Р¶РЅР° РЅР°Р·С‹РІР°С‚СЊСЃСЏ С‚Р°Рє Р¶Рµ РєР°Рє Рё РєР»Р°СЃСЃ-РЅР°СЃР»РµРґРЅРёРє С„РёРіСѓСЂС‹ \\\\  С‚СЂРµР±СѓРµС‚ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёСЏ
 	return "Figure";
 }
 
 
 vector<vector<bool>> Figure::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	// виртуальный метод, всегда vector<vector<bool=false>>  \\\\  требует переопределения
+	// РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ РјРµС‚РѕРґ, РІСЃРµРіРґР° vector<vector<bool=false>>  \\\\  С‚СЂРµР±СѓРµС‚ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёСЏ
 	int Size = VectorLocationFigure.size();
 	return vector<vector<bool>>(Size, vector<bool>(Size, false));
 }
@@ -73,22 +73,22 @@ vector<vector<bool>> Figure::GetMoveForFigure(int XPositionCurrent, int YPositio
 
 bool Figure::GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	// виртуальный метод, всегда false   \\\\  требует переопределения
-	// стандартная фигура не имеет условий для превращения в другую фигуру
+	// РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ РјРµС‚РѕРґ, РІСЃРµРіРґР° false   \\\\  С‚СЂРµР±СѓРµС‚ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёСЏ
+	// СЃС‚Р°РЅРґР°СЂС‚РЅР°СЏ С„РёРіСѓСЂР° РЅРµ РёРјРµРµС‚ СѓСЃР»РѕРІРёР№ РґР»СЏ РїСЂРµРІСЂР°С‰РµРЅРёСЏ РІ РґСЂСѓРіСѓСЋ С„РёРіСѓСЂСѓ
 	return false;
 }
 
 bool Figure::GetPromoutionFigure(string ID_Figure)
 {
-	// виртуальный метод, всегда false   \\\\  требует переопределения
-	// не можем превратиться в любую указанную фигуру
+	// РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ РјРµС‚РѕРґ, РІСЃРµРіРґР° false   \\\\  С‚СЂРµР±СѓРµС‚ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёСЏ
+	// РЅРµ РјРѕР¶РµРј РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ Р»СЋР±СѓСЋ СѓРєР°Р·Р°РЅРЅСѓСЋ С„РёРіСѓСЂСѓ
 	return false;
 }
 
 
 bool Figure::CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	// виртуальный метод, всегда false   \\\\  требует переопределения
-	// проверка ходов
+	// РІРёСЂС‚СѓР°Р»СЊРЅС‹Р№ РјРµС‚РѕРґ, РІСЃРµРіРґР° false   \\\\  С‚СЂРµР±СѓРµС‚ РїРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёСЏ
+	// РїСЂРѕРІРµСЂРєР° С…РѕРґРѕРІ
 	return false;
 }

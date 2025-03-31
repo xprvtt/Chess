@@ -1,4 +1,4 @@
-
+﻿
 
 #include "CountdownTimer.h"
 
@@ -15,7 +15,7 @@ void CountdownTimer::SetTimer(float second)
     timeLeft = second;
     clock.restart();
 }
-
+ 
 bool CountdownTimer::TimerExpired() 
 {
     float elapsedTime = clock.getElapsedTime().asSeconds();

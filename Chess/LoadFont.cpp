@@ -1,12 +1,12 @@
-#include "Core.h"
+Ôªø#include "Core.h"
 
 Font LoadFont(path PathToFont)
 {
     Font font;
     if (font.openFromFile(PathToFont))
     {
-        OutputLog("Class -> GameField -> ÿËÙÚ Á‡„ÛÊÂÌ");
+        OutputLog("Class -> GameField -> –®—Ä–∏—Ñ—Ç –∑–∞–≥—Ä—É–∂–µ–Ω");
         return font;
     }
-    OutputLog("Class -> GameField -> Œ¯Ë·Í‡ Á‡„ÛÁÍË ¯ËÙÚ‡");
-}
+    OutputLog("Class -> GameField -> –û—à–∏–±–∫–∞ –∑–∞–≥—Ä—É–∑–∫–∏ —à—Ä–∏—Ñ—Ç–∞");
+} 

@@ -1,10 +1,10 @@
-#pragma once
+п»ї#pragma once
 
 #include "Core.h"
 #include "Figure.h"
 
 /// <summary>
-/// Класс с расположением фигур
+/// РљР»Р°СЃСЃ СЃ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµРј С„РёРіСѓСЂ 
 /// </summary>
 class FigureLocation
 {
@@ -14,13 +14,13 @@ private:
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	//--//--//--//--//--//--//--//   ДЛЯ ФИГУР НА ДОСКЕ  //--//--//--//--//--//--//--//--//--//--//--//
+	//--//--//--//--//--//--//--//   Р”Р›РЇ Р¤РР“РЈР  РќРђ Р”РћРЎРљР•  //--//--//--//--//--//--//--//--//--//--//--//
 	
 	vector< vector< shared_ptr<Figure>>>   LocationClassFigure;
 	vector< vector< shared_ptr<Texture>>>  LocationTexture;
 	vector< vector< RectangleShape >>      LocationRectangleShape;
 	
-	//--//--//--//--//--//--//--//     ДЛЯ УНИКАЛЬНЫХ ФИГУР   //--//--//--//--//--//--//--//--//--//--//
+	//--//--//--//--//--//--//--//     Р”Р›РЇ РЈРќРРљРђР›Р¬РќР«РҐ Р¤РР“РЈР    //--//--//--//--//--//--//--//--//--//--//
 
 	vector<shared_ptr<Figure>>				   UniqueFigureLocationClassFigure;
 	vector<shared_ptr<Texture>>				   UniqueFigureLocationTexture;
@@ -33,10 +33,10 @@ private:
 
 	////////////////////////////////////////////////////////////////////////////////
 																				  //
-	// vector<vector<int>> VectorIntLocationFigure должен имееть структуру => 	  //
-	// -1 == границы															  //
-	// 0 == пустая клетка 														  //
-	// 1+ == сторона игрока														  //
+	// vector<vector<int>> VectorIntLocationFigure РґРѕР»Р¶РµРЅ РёРјРµРµС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ => 	  //
+	// -1 == РіСЂР°РЅРёС†С‹															  //
+	// 0 == РїСѓСЃС‚Р°СЏ РєР»РµС‚РєР° 														  //
+	// 1+ == СЃС‚РѕСЂРѕРЅР° РёРіСЂРѕРєР°														  //
 																				  //
 	////////////////////////////////////////////////////////////////////////////////
 	
@@ -46,49 +46,49 @@ private:
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/// <summary>
-	/// колличество клеток в 1 ряду
+	/// РєРѕР»Р»РёС‡РµСЃС‚РІРѕ РєР»РµС‚РѕРє РІ 1 СЂСЏРґСѓ
 	/// </summary>
 	size_t CountCellOnXPosition;
 
 
 	/// <summary>
-	/// колличество рядов
+	/// РєРѕР»Р»РёС‡РµСЃС‚РІРѕ СЂСЏРґРѕРІ
 	/// </summary>
 	size_t CountCellOnYPosition;
 
 	/// <summary>
-	/// размер одной клетки
+	/// СЂР°Р·РјРµСЂ РѕРґРЅРѕР№ РєР»РµС‚РєРё
 	/// </summary>
 	float SizeCell;
 
 	/// <summary>
-	///  процент размера одной клетки от максимального размера SizeCell
+	///  РїСЂРѕС†РµРЅС‚ СЂР°Р·РјРµСЂР° РѕРґРЅРѕР№ РєР»РµС‚РєРё РѕС‚ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ СЂР°Р·РјРµСЂР° SizeCell
 	/// </summary>
 	float PrecentSizeFigure;
 
 	/// <summary>
-	/// размер клетки фигуры, расчитывается от процента Precent
+	/// СЂР°Р·РјРµСЂ РєР»РµС‚РєРё С„РёРіСѓСЂС‹, СЂР°СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ РѕС‚ РїСЂРѕС†РµРЅС‚Р° Precent
 	/// </summary>
 	float SizeRectangInCell;
 
 	/// <summary>
-	/// позиция клетки фигуры
+	/// РїРѕР·РёС†РёСЏ РєР»РµС‚РєРё С„РёРіСѓСЂС‹
 	/// </summary>
 	float PositionRectangInCell;
 	
 	/// <summary>
-	/// выделить можно только одну фигуру, поэтому если выделили = true;
+	/// РІС‹РґРµР»РёС‚СЊ РјРѕР¶РЅРѕ С‚РѕР»СЊРєРѕ РѕРґРЅСѓ С„РёРіСѓСЂСѓ, РїРѕСЌС‚РѕРјСѓ РµСЃР»Рё РІС‹РґРµР»РёР»Рё = true;
 	/// </summary>
 	bool SelectFigure = false;
 
 	/// <summary>
-	/// координаты выделенной фигуры Х \ У 
+	/// РєРѕРѕСЂРґРёРЅР°С‚С‹ РІС‹РґРµР»РµРЅРЅРѕР№ С„РёРіСѓСЂС‹ РҐ \ РЈ 
 	/// </summary>
 	pair<int, int> PositionSelectFigure = make_pair(0, 0);
 
 
 	/// <summary>
-	/// получаем итератор в векторах уникальных классов фигур и текстур
+	/// РїРѕР»СѓС‡Р°РµРј РёС‚РµСЂР°С‚РѕСЂ РІ РІРµРєС‚РѕСЂР°С… СѓРЅРёРєР°Р»СЊРЅС‹С… РєР»Р°СЃСЃРѕРІ С„РёРіСѓСЂ Рё С‚РµРєСЃС‚СѓСЂ
 	/// </summary>
 	/// <param name="XPosition"></param>
 	/// <param name="Yposition"></param>
@@ -100,33 +100,33 @@ private:
 public:
 
 
-	//--//--//--//--//--//--//--//   ДЛЯ ФИГУР НА ДОСКЕ  //--//--//--//--//--//--//--//--//--//--//--//
+	//--//--//--//--//--//--//--//   Р”Р›РЇ Р¤РР“РЈР  РќРђ Р”РћРЎРљР•  //--//--//--//--//--//--//--//--//--//--//--//
 
 	/// <summary>
-	/// инициализация игрового поля \ квадрат X на X
+	/// РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ \ РєРІР°РґСЂР°С‚ X РЅР° X
 	/// </summary>
-	/// <param name="CountCellOnSideWindow">колличество клеток на сторону </param>
-	/// <param name="WindowHeight">высота окна</param>
-	/// <param name="PathToEmptyImage">путь до пустой текстуры</param>
+	/// <param name="CountCellOnSideWindow">РєРѕР»Р»РёС‡РµСЃС‚РІРѕ РєР»РµС‚РѕРє РЅР° СЃС‚РѕСЂРѕРЅСѓ </param>
+	/// <param name="WindowHeight">РІС‹СЃРѕС‚Р° РѕРєРЅР°</param>
+	/// <param name="PathToEmptyImage">РїСѓС‚СЊ РґРѕ РїСѓСЃС‚РѕР№ С‚РµРєСЃС‚СѓСЂС‹</param>
 	FigureLocation(size_t CountCellOnLengthWindow, size_t CountCellOnHeightWindow,  int WindowHeight, path PathToEmptyImage, path PathToEmptyTextureEdge , float PrecentSizeFigure);
 
 	/// <summary>
-	/// метод расположения фигуры на поле
+	/// РјРµС‚РѕРґ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЏ С„РёРіСѓСЂС‹ РЅР° РїРѕР»Рµ
 	/// </summary>
-	/// <param name="XPosition">позиция Х на которую будет установлена фигура</param>
-	/// <param name="Yposition">позиция У на которую будет установлена фигура</param>
-	/// <param name="NameFigure">название фигуры</param>
-	/// <param name="Side">сторона игрока для фигуры</param>
-	/// <param name="CurrentTextureFigure">пусть до текстуры фигуры</param>
-	/// <returns>true - фигуры установлена</returns>
+	/// <param name="XPosition">РїРѕР·РёС†РёСЏ РҐ РЅР° РєРѕС‚РѕСЂСѓСЋ Р±СѓРґРµС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅР° С„РёРіСѓСЂР°</param>
+	/// <param name="Yposition">РїРѕР·РёС†РёСЏ РЈ РЅР° РєРѕС‚РѕСЂСѓСЋ Р±СѓРґРµС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅР° С„РёРіСѓСЂР°</param>
+	/// <param name="NameFigure">РЅР°Р·РІР°РЅРёРµ С„РёРіСѓСЂС‹</param>
+	/// <param name="Side">СЃС‚РѕСЂРѕРЅР° РёРіСЂРѕРєР° РґР»СЏ С„РёРіСѓСЂС‹</param>
+	/// <param name="CurrentTextureFigure">РїСѓСЃС‚СЊ РґРѕ С‚РµРєСЃС‚СѓСЂС‹ С„РёРіСѓСЂС‹</param>
+	/// <returns>true - С„РёРіСѓСЂС‹ СѓСЃС‚Р°РЅРѕРІР»РµРЅР°</returns>
 	bool SetFigure(int XPosition, int YPosition, string NameFigure_ID_Figure, int Side, bool invulnerable);
 
 
 	/// <summary>
-	/// Добавить уникальную фигуру
+	/// Р”РѕР±Р°РІРёС‚СЊ СѓРЅРёРєР°Р»СЊРЅСѓСЋ С„РёРіСѓСЂСѓ
 	/// </summary>
-	/// <param name="NewFigure">класс-наследник Figure</param>
-	/// <param name="CurrentTextureFigure">текстура фигуры</param>
+	/// <param name="NewFigure">РєР»Р°СЃСЃ-РЅР°СЃР»РµРґРЅРёРє Figure</param>
+	/// <param name="CurrentTextureFigure">С‚РµРєСЃС‚СѓСЂР° С„РёРіСѓСЂС‹</param>
 	/// <returns></returns>
 	bool AddUniqueFigure(shared_ptr<Figure> NewFigure, path CurrentTextureFigure);
 	
@@ -138,14 +138,14 @@ public:
 
 
 
-	//////////////////////////////  Текстуры фигуры  ///////////////////////////////////////////////////
+	//////////////////////////////  РўРµРєСЃС‚СѓСЂС‹ С„РёРіСѓСЂС‹  ///////////////////////////////////////////////////
 
 	/// <summary>
-	/// получаем указатель на "квадрат" (спрайт) фигуры, расположенной на позиции Х\У
+	/// РїРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° "РєРІР°РґСЂР°С‚" (СЃРїСЂР°Р№С‚) С„РёРіСѓСЂС‹, СЂР°СЃРїРѕР»РѕР¶РµРЅРЅРѕР№ РЅР° РїРѕР·РёС†РёРё РҐ\РЈ
 	/// </summary>
-	/// <param name="XPosition">позиция Х фигуры</param>
-	/// <param name="Yposition">позиция У фигуры</param>
-	/// <returns>указатель на RectangleShape  фигуры</returns>
+	/// <param name="XPosition">РїРѕР·РёС†РёСЏ РҐ С„РёРіСѓСЂС‹</param>
+	/// <param name="Yposition">РїРѕР·РёС†РёСЏ РЈ С„РёРіСѓСЂС‹</param>
+	/// <returns>СѓРєР°Р·Р°С‚РµР»СЊ РЅР° RectangleShape  С„РёРіСѓСЂС‹</returns>
 	const RectangleShape& GetRectangleShapeFigure(int XPosition, int Yposition);
 
 
@@ -155,40 +155,40 @@ public:
 
 
 
-	//////////////////////////////  информация о фигуре  ///////////////////////////////////////////////////
+	//////////////////////////////  РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ С„РёРіСѓСЂРµ  ///////////////////////////////////////////////////
 
 	/// <summary>
-	/// Получаем название фигуры на позиции
+	/// РџРѕР»СѓС‡Р°РµРј РЅР°Р·РІР°РЅРёРµ С„РёРіСѓСЂС‹ РЅР° РїРѕР·РёС†РёРё
 	/// </summary>
-	/// <param name="XPosition">позиция Х фигуры</param>
-	/// <param name="Yposition">позиция У фигуры</param>
-	/// <returns>название фигуры</returns>
+	/// <param name="XPosition">РїРѕР·РёС†РёСЏ РҐ С„РёРіСѓСЂС‹</param>
+	/// <param name="Yposition">РїРѕР·РёС†РёСЏ РЈ С„РёРіСѓСЂС‹</param>
+	/// <returns>РЅР°Р·РІР°РЅРёРµ С„РёРіСѓСЂС‹</returns>
 	string GetIDFigure(int XPosition, int Yposition);
 
 	/// <summary>
-	/// Получаем сторону игрока фигуры
+	/// РџРѕР»СѓС‡Р°РµРј СЃС‚РѕСЂРѕРЅСѓ РёРіСЂРѕРєР° С„РёРіСѓСЂС‹
 	/// </summary>
-	/// <param name="XPosition">позиция Х фигуры</param>
-	/// <param name="Yposition">позиция У фигуры</param>
-	/// <returns>сторона игрока у фигуры</returns>
+	/// <param name="XPosition">РїРѕР·РёС†РёСЏ РҐ С„РёРіСѓСЂС‹</param>
+	/// <param name="Yposition">РїРѕР·РёС†РёСЏ РЈ С„РёРіСѓСЂС‹</param>
+	/// <returns>СЃС‚РѕСЂРѕРЅР° РёРіСЂРѕРєР° Сѓ С„РёРіСѓСЂС‹</returns>
 	int GetSideFigure(int XPosition, int Yposition);
 
 	/// <summary>
-	/// Получаем координаты фигуры по расположению на игровом поле
+	/// РџРѕР»СѓС‡Р°РµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ С„РёРіСѓСЂС‹ РїРѕ СЂР°СЃРїРѕР»РѕР¶РµРЅРёСЋ РЅР° РёРіСЂРѕРІРѕРј РїРѕР»Рµ
 	/// </summary>
-	/// <param name="Positon">позиция в окне</param>
-	/// <returns>пара координатов X , Y </returns>
+	/// <param name="Positon">РїРѕР·РёС†РёСЏ РІ РѕРєРЅРµ</param>
+	/// <returns>РїР°СЂР° РєРѕРѕСЂРґРёРЅР°С‚РѕРІ X , Y </returns>
 	pair<int, int> GetPositionFigureWhenMousePressed(Vector2f Positon);
 
 
 	/// <summary>
-	/// Если есть выделеная фигура, получаем ее позицию x \ y 
+	/// Р•СЃР»Рё РµСЃС‚СЊ РІС‹РґРµР»РµРЅР°СЏ С„РёРіСѓСЂР°, РїРѕР»СѓС‡Р°РµРј РµРµ РїРѕР·РёС†РёСЋ x \ y 
 	/// </summary>
 	/// <returns></returns>
 	pair<int, int> GetPositionSelectFigure();
 
 	/// <summary>
-	/// Уязвима ли фигура на позиции
+	/// РЈСЏР·РІРёРјР° Р»Рё С„РёРіСѓСЂР° РЅР° РїРѕР·РёС†РёРё
 	/// </summary>
 	bool GetInvulnerableFigure(int XPosition, int Yposition);
 
@@ -197,58 +197,58 @@ public:
 
 
 		
-	//////////////////////////////  Взаимодействие с фигурой  ///////////////////////////////////////////////////
+	//////////////////////////////  Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ С„РёРіСѓСЂРѕР№  ///////////////////////////////////////////////////
 
 	/// <summary>
-	/// передвижение выделенной фигуры на указанную позицию
+	/// РїРµСЂРµРґРІРёР¶РµРЅРёРµ РІС‹РґРµР»РµРЅРЅРѕР№ С„РёРіСѓСЂС‹ РЅР° СѓРєР°Р·Р°РЅРЅСѓСЋ РїРѕР·РёС†РёСЋ
 	/// </summary>
-	/// <param name="XPositionFigure">текущая позиция Х фигуры</param>
-	/// <param name="YpositionFigure">текущая позиция У фигуры</param>
-	/// <param name="XPositionMove">позиция Х на которую нужно передвинуть</param>
-	/// <param name="YPositionMove">позиция У на которую нужно передвинуть</param>
-	/// <returns>true - фигуры передвинута</returns>
+	/// <param name="XPositionFigure">С‚РµРєСѓС‰Р°СЏ РїРѕР·РёС†РёСЏ РҐ С„РёРіСѓСЂС‹</param>
+	/// <param name="YpositionFigure">С‚РµРєСѓС‰Р°СЏ РїРѕР·РёС†РёСЏ РЈ С„РёРіСѓСЂС‹</param>
+	/// <param name="XPositionMove">РїРѕР·РёС†РёСЏ РҐ РЅР° РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ РїРµСЂРµРґРІРёРЅСѓС‚СЊ</param>
+	/// <param name="YPositionMove">РїРѕР·РёС†РёСЏ РЈ РЅР° РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ РїРµСЂРµРґРІРёРЅСѓС‚СЊ</param>
+	/// <returns>true - С„РёРіСѓСЂС‹ РїРµСЂРµРґРІРёРЅСѓС‚Р°</returns>
 	bool MoveSelectFigure (int XPositionMove, int YPositionMove);
 
 	/// <summary>
-	/// Выделить фигуру на позиции
+	/// Р’С‹РґРµР»РёС‚СЊ С„РёРіСѓСЂСѓ РЅР° РїРѕР·РёС†РёРё
 	/// </summary>
-	/// <param name="XPositionFigure">позиция Х фигуры</param>
-	/// <param name="YpositionFigure">позиция У фигуры</param>
-	/// <returns>true - если фигура на позиции есть и была выделена</returns>
+	/// <param name="XPositionFigure">РїРѕР·РёС†РёСЏ РҐ С„РёРіСѓСЂС‹</param>
+	/// <param name="YpositionFigure">РїРѕР·РёС†РёСЏ РЈ С„РёРіСѓСЂС‹</param>
+	/// <returns>true - РµСЃР»Рё С„РёРіСѓСЂР° РЅР° РїРѕР·РёС†РёРё РµСЃС‚СЊ Рё Р±С‹Р»Р° РІС‹РґРµР»РµРЅР°</returns>
 	bool SeletcFigure(int XPositionFigure, int YpositionFigure);
 
 	/// <summary>
-	/// отменить выделение
+	/// РѕС‚РјРµРЅРёС‚СЊ РІС‹РґРµР»РµРЅРёРµ
 	/// </summary>
-	/// <param name="XPositionFigure">позиция Х фигуры</param>
-	/// <param name="YpositionFigure">позиция У фигуры</param>
-	/// <returns>true - если выделение снято</returns>
+	/// <param name="XPositionFigure">РїРѕР·РёС†РёСЏ РҐ С„РёРіСѓСЂС‹</param>
+	/// <param name="YpositionFigure">РїРѕР·РёС†РёСЏ РЈ С„РёРіСѓСЂС‹</param>
+	/// <returns>true - РµСЃР»Рё РІС‹РґРµР»РµРЅРёРµ СЃРЅСЏС‚Рѕ</returns>
 	bool UnSeletcFigure();
 
 	/// <summary>
-	/// Есть ли хоть одна выделеная фигура?
+	/// Р•СЃС‚СЊ Р»Рё С…РѕС‚СЊ РѕРґРЅР° РІС‹РґРµР»РµРЅР°СЏ С„РёРіСѓСЂР°?
 	/// </summary>
-	/// <returns>true - если фигура выделена</returns>
+	/// <returns>true - РµСЃР»Рё С„РёРіСѓСЂР° РІС‹РґРµР»РµРЅР°</returns>
 	bool FiguresSelectedOrNot();
 
 	/// <summary>
-	/// получаем вектор доступных ходов для выделенной фигуры
+	/// РїРѕР»СѓС‡Р°РµРј РІРµРєС‚РѕСЂ РґРѕСЃС‚СѓРїРЅС‹С… С…РѕРґРѕРІ РґР»СЏ РІС‹РґРµР»РµРЅРЅРѕР№ С„РёРіСѓСЂС‹
 	/// </summary>
 	/// <returns></returns>
 	vector<vector<bool>> GetAvailableMovesForSelectFigure();
 
 
 	/// <summary>
-	/// доступно ли какое-либо превращение для фигуры на указанной позиции // обычно используется сразу после передвижения фигуры
+	/// РґРѕСЃС‚СѓРїРЅРѕ Р»Рё РєР°РєРѕРµ-Р»РёР±Рѕ РїСЂРµРІСЂР°С‰РµРЅРёРµ РґР»СЏ С„РёРіСѓСЂС‹ РЅР° СѓРєР°Р·Р°РЅРЅРѕР№ РїРѕР·РёС†РёРё // РѕР±С‹С‡РЅРѕ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ РїРµСЂРµРґРІРёР¶РµРЅРёСЏ С„РёРіСѓСЂС‹
 	/// </summary>
 	/// <param name="XPositionFigure"></param>
 	/// <param name="YpositionFigure"></param>
-	/// <returns>true - если доступно </returns>
+	/// <returns>true - РµСЃР»Рё РґРѕСЃС‚СѓРїРЅРѕ </returns>
 	bool PromoutionFigureOnPosition(int XPositionFigure, int YpositionFigure);
 
 
 	/// <summary>
-	/// Превратиться в выбранную фигуру если доступно
+	/// РџСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ РІС‹Р±СЂР°РЅРЅСѓСЋ С„РёРіСѓСЂСѓ РµСЃР»Рё РґРѕСЃС‚СѓРїРЅРѕ
 	/// </summary>
 	/// <param name="ID_Figure"></param>
 	/// <returns></returns>
@@ -258,16 +258,16 @@ public:
 
 
 
-	//////////////////////////////  Взаимодействие с игровым полем фигур  ///////////////////////////////////////////////////
+	//////////////////////////////  Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ РёРіСЂРѕРІС‹Рј РїРѕР»РµРј С„РёРіСѓСЂ  ///////////////////////////////////////////////////
 
 	/// <summary>
-	/// обновить вектор с расположение фигурами на игровом поле
+	/// РѕР±РЅРѕРІРёС‚СЊ РІРµРєС‚РѕСЂ СЃ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ С„РёРіСѓСЂР°РјРё РЅР° РёРіСЂРѕРІРѕРј РїРѕР»Рµ
 	/// </summary>
 	void UpdateVectorIntLocationFigure();
 
 
 	/// <summary>
-	/// Получить вектор с расположением фигур на игровом поле
+	/// РџРѕР»СѓС‡РёС‚СЊ РІРµРєС‚РѕСЂ СЃ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµРј С„РёРіСѓСЂ РЅР° РёРіСЂРѕРІРѕРј РїРѕР»Рµ
 	/// </summary>
 	/// <returns></returns>
 	vector<vector<pair<int,string>>> GetVectorLocationFigure();
@@ -278,10 +278,10 @@ public:
 
 
 
-	//--//--//--//--//--//--//--//     ДЛЯ Уникальных ФИГУР   //--//--//--//--//--//--//--//--//--//--//--//
+	//--//--//--//--//--//--//--//     Р”Р›РЇ РЈРЅРёРєР°Р»СЊРЅС‹С… Р¤РР“РЈР    //--//--//--//--//--//--//--//--//--//--//--//
 
 	/// <summary>
-	/// Получить ID уникальной фигуры с поля уникальных фигур
+	/// РџРѕР»СѓС‡РёС‚СЊ ID СѓРЅРёРєР°Р»СЊРЅРѕР№ С„РёРіСѓСЂС‹ СЃ РїРѕР»СЏ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 	/// </summary>
 	/// <param name="XPosition"></param>
 	/// <param name="Yposition"></param>
@@ -289,7 +289,7 @@ public:
 	string GetIDUniqueFigure(int XPosition, int Yposition);
 
 	/// <summary>
-	/// Получить Сторону у уникальной фигуры
+	/// РџРѕР»СѓС‡РёС‚СЊ РЎС‚РѕСЂРѕРЅСѓ Сѓ СѓРЅРёРєР°Р»СЊРЅРѕР№ С„РёРіСѓСЂС‹
 	/// </summary>
 	/// <param name="XPosition"></param>
 	/// <param name="Yposition"></param>
@@ -297,7 +297,7 @@ public:
 	int GetSideUniqueFigure(int XPosition, int Yposition);
 
 	/// <summary>
-	/// получить "текстуру" поля уникальных фигур
+	/// РїРѕР»СѓС‡РёС‚СЊ "С‚РµРєСЃС‚СѓСЂСѓ" РїРѕР»СЏ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 	/// </summary>
 	/// <param name="XPosition"></param>
 	/// <param name="Yposition"></param>
@@ -305,7 +305,7 @@ public:
 	const RectangleShape& GetRectangleShapeUniqueFigure(int XPosition, int Yposition);
 
 	/// <summary>
-	/// выделить фигуру на поле уникальных фигур
+	/// РІС‹РґРµР»РёС‚СЊ С„РёРіСѓСЂСѓ РЅР° РїРѕР»Рµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 	/// </summary>
 	/// <param name="XPositionFigure"></param>
 	/// <param name="YPositionFigure"></param>
@@ -313,21 +313,21 @@ public:
 	bool SeletcUniqueFigureForPromoution(int XPositionFigure, int YPositionFigure);
 
 	/// <summary>
-	/// отменить выделение всех фигур на поле уникальных фигур
+	/// РѕС‚РјРµРЅРёС‚СЊ РІС‹РґРµР»РµРЅРёРµ РІСЃРµС… С„РёРіСѓСЂ РЅР° РїРѕР»Рµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 	/// </summary>
 	/// <returns></returns>
 	bool UnSeletcUniqueFigure();
 
 
 	/// <summary>
-	/// получить позицию фигуры, на поле уникальных фигур
+	/// РїРѕР»СѓС‡РёС‚СЊ РїРѕР·РёС†РёСЋ С„РёРіСѓСЂС‹, РЅР° РїРѕР»Рµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 	/// </summary>
 	/// <param name="PositonMouse"></param>
 	/// <returns></returns>
 	pair<int, int> GetPositionUniqueFigureWhenMousePressed(Vector2f PositonMouse);
 
 	/// <summary>
-	/// Уязвима ли фигура на поле уникальных фигур
+	/// РЈСЏР·РІРёРјР° Р»Рё С„РёРіСѓСЂР° РЅР° РїРѕР»Рµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 	/// </summary>
 	bool GetInvulnerableUniqueFigure(int XPosition, int Yposition);
 

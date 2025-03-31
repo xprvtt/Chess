@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 
 #include "iostream"
@@ -14,33 +14,33 @@
 
 using namespace std;
 using namespace sf;
-using namespace filesystem;
+using namespace filesystem; 
 
 /// <summary>
-/// Функция возвращает строку веремени 
+/// Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєСѓ РІРµСЂРµРјРµРЅРё 
 /// </summary>
-/// <returns>дата и время</returns>
+/// <returns>РґР°С‚Р° Рё РІСЂРµРјСЏ</returns>
 string getCurrentTime();
 
 /// <summary>
-/// Функция выводит сообщение в файл Log/log.txt
+/// Р¤СѓРЅРєС†РёСЏ РІС‹РІРѕРґРёС‚ СЃРѕРѕР±С‰РµРЅРёРµ РІ С„Р°Р№Р» Log/log.txt
 /// </summary>
-/// <param name="message">Сообщение которое необходимо вывести</param>
-/// <returns>true если выведен</returns>
+/// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РєРѕС‚РѕСЂРѕРµ РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹РІРµСЃС‚Рё</param>
+/// <returns>true РµСЃР»Рё РІС‹РІРµРґРµРЅ</returns>
 bool OutputMessage(string message);
 
 /// <summary>
-/// Функция Загружает шрифт по пути
+/// Р¤СѓРЅРєС†РёСЏ Р—Р°РіСЂСѓР¶Р°РµС‚ С€СЂРёС„С‚ РїРѕ РїСѓС‚Рё
 /// </summary>
-/// <param name="PathToFont">путь до шрифта</param>
+/// <param name="PathToFont">РїСѓС‚СЊ РґРѕ С€СЂРёС„С‚Р°</param>
 /// <returns></returns>
 Font LoadFont(path PathToFont);
 
 
 /// <summary>
-/// поиск файлов в директории
+/// РїРѕРёСЃРє С„Р°Р№Р»РѕРІ РІ РґРёСЂРµРєС‚РѕСЂРёРё
 /// </summary>
-/// <param name="SearchInPath">путь</param>
-/// <param name="Extension">расширение файла(ов) / если не указано ищет всё </param>
-/// <returns>вектор</returns>
+/// <param name="SearchInPath">РїСѓС‚СЊ</param>
+/// <param name="Extension">СЂР°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р°(РѕРІ) / РµСЃР»Рё РЅРµ СѓРєР°Р·Р°РЅРѕ РёС‰РµС‚ РІСЃС‘ </param>
+/// <returns>РІРµРєС‚РѕСЂ</returns>
 vector<path> SearchFile(path SearchInPath, string Extension);

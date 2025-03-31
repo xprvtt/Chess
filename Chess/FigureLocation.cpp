@@ -1,4 +1,4 @@
-
+п»ї
 #include "FigureLocation.h"
 
 
@@ -22,9 +22,9 @@ FigureLocation::FigureLocation(size_t CountCellOnXPosition, size_t CountCellOnYP
 
 	VectorLocationFigure.resize(CountCellOnXPosition, vector<pair<int,string>>(CountCellOnXPosition));
 
-	/// размеры 
+	/// СЂР°Р·РјРµСЂС‹ 
 
-	//--//--//--//--//--//--//--//--//--//    ДЛЯ ФИГУР НА ДОСКЕ   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+	//--//--//--//--//--//--//--//--//--//    Р”Р›РЇ Р¤РР“РЈР  РќРђ Р”РћРЎРљР•   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//
 																													
 	LocationClassFigure.resize(   CountCellOnYPosition, vector<shared_ptr<Figure>> (CountCellOnXPosition));
 	LocationTexture.resize(       CountCellOnYPosition, vector<shared_ptr<Texture>>(CountCellOnXPosition));
@@ -33,17 +33,17 @@ FigureLocation::FigureLocation(size_t CountCellOnXPosition, size_t CountCellOnYP
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 
-
-	//--//--//--//--//--//--//--//--//--//  ДЛЯ УНИКАЛЬНЫХ ФИГУР   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+	 
+	//--//--//--//--//--//--//--//--//--//  Р”Р›РЇ РЈРќРРљРђР›Р¬РќР«РҐ Р¤РР“РЈР    //--//--//--//--//--//--//--//--//--//--//--//--//--//--//
 																															
-	UniqueFigureLocationRectangleShape.resize(CountCellOnYPosition,vector<pair<int, RectangleShape>>(CountCellOnXPosition));																																																									// 	// добавление уникальных фигур
+	UniqueFigureLocationRectangleShape.resize(CountCellOnYPosition,vector<pair<int, RectangleShape>>(CountCellOnXPosition));																																																									// 	// РґРѕР±Р°РІР»РµРЅРёРµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 
-	// нулевой элемент == край
+	// РЅСѓР»РµРІРѕР№ СЌР»РµРјРµРЅС‚ == РєСЂР°Р№
 	UniqueFigureLocationClassFigure.push_back(make_shared<Figure>(-1, true));
 	//
 	UniqueFigureLocationTexture.push_back(make_shared<Texture>(PathToEmptyTextureEdge));
 
-	// первый элемент == пустая клетка
+	// РїРµСЂРІС‹Р№ СЌР»РµРјРµРЅС‚ == РїСѓСЃС‚Р°СЏ РєР»РµС‚РєР°
 	UniqueFigureLocationClassFigure.push_back(make_shared<Figure>(NULL, false));
 	UniqueFigureLocationTexture.push_back(make_shared<Texture>(PathToEmptyTextureGameField));
 
@@ -54,12 +54,12 @@ FigureLocation::FigureLocation(size_t CountCellOnXPosition, size_t CountCellOnYP
 	{
 		for (int XPosition = 0; XPosition < CountCellOnXPosition; XPosition++)
 		{
-			int U; // итератор расположение уникального класса и уникальную текстуру в векторах
+			int U; // РёС‚РµСЂР°С‚РѕСЂ СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ СѓРЅРёРєР°Р»СЊРЅРѕРіРѕ РєР»Р°СЃСЃР° Рё СѓРЅРёРєР°Р»СЊРЅСѓСЋ С‚РµРєСЃС‚СѓСЂСѓ РІ РІРµРєС‚РѕСЂР°С…
 
-			// если край то используем фигуру-край == Side -1
+			// РµСЃР»Рё РєСЂР°Р№ С‚Рѕ РёСЃРїРѕР»СЊР·СѓРµРј С„РёРіСѓСЂСѓ-РєСЂР°Р№ == Side -1
 			if (XPosition == 0 || YPosition == 0 || XPosition == CountCellOnXPosition - 1 || YPosition == CountCellOnYPosition - 1)
 			{
-				U = 0; // итератор на край
+				U = 0; // РёС‚РµСЂР°С‚РѕСЂ РЅР° РєСЂР°Р№
 
 				LocationClassFigure[YPosition][XPosition] = UniqueFigureLocationClassFigure[U];
 				LocationTexture[YPosition][XPosition] = UniqueFigureLocationTexture[U];
@@ -69,11 +69,11 @@ FigureLocation::FigureLocation(size_t CountCellOnXPosition, size_t CountCellOnYP
 				UniqueFigureLocationRectangleShape[YPosition][XPosition].second.setTexture(UniqueFigureLocationTexture[U].get(), true);
 				UniqueFigureLocationRectangleShape[YPosition][XPosition].first = U;
 			}
-			// в противном случае считаем как пустая клетка
+			// РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ СЃС‡РёС‚Р°РµРј РєР°Рє РїСѓСЃС‚Р°СЏ РєР»РµС‚РєР°
 			else
 
 			{
-				U = 1; // итератор на пустую клетку (фигуру)
+				U = 1; // РёС‚РµСЂР°С‚РѕСЂ РЅР° РїСѓСЃС‚СѓСЋ РєР»РµС‚РєСѓ (С„РёРіСѓСЂСѓ)
 
 				LocationClassFigure[YPosition][XPosition] = UniqueFigureLocationClassFigure[U];
 				LocationTexture[YPosition][XPosition] = UniqueFigureLocationTexture[U];
@@ -83,7 +83,7 @@ FigureLocation::FigureLocation(size_t CountCellOnXPosition, size_t CountCellOnYP
 				UniqueFigureLocationRectangleShape[YPosition][XPosition].second.setTexture(UniqueFigureLocationTexture[U].get(), true);
 			}
 
-			//--//--//--//--//--//--//--//--//--//   ДЛЯ ФИГУР НА ДОСКЕ  //--//--//--//--//--//--//--//--//--//--//--//--//--//-//
+			//--//--//--//--//--//--//--//--//--//   Р”Р›РЇ Р¤РР“РЈР  РќРђ Р”РћРЎРљР•  //--//--//--//--//--//--//--//--//--//--//--//--//--//-//
 																																
 			LocationRectangleShape[YPosition][XPosition].setSize(Vector2f(SizeCell, SizeCell));										
 			LocationRectangleShape[YPosition][XPosition].setPosition(Vector2f(XPosition * SizeCell, YPosition * SizeCell));		
@@ -91,7 +91,7 @@ FigureLocation::FigureLocation(size_t CountCellOnXPosition, size_t CountCellOnYP
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-			//--//--//--//--//--//--//--//--//--//     ДЛЯ УНИКАЛЬНЫХ ФИГУР   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+			//--//--//--//--//--//--//--//--//--//     Р”Р›РЇ РЈРќРРљРђР›Р¬РќР«РҐ Р¤РР“РЈР    //--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
 
 			UniqueFigureLocationRectangleShape[YPosition][XPosition].second.setSize(Vector2f(SizeCell * PrecentSizeFigure, SizeCell * PrecentSizeFigure));			
 			UniqueFigureLocationRectangleShape[YPosition][XPosition].second.setPosition(Vector2f(XPosition * SizeCell * PrecentSizeFigure + WindowHeight, YPosition * SizeCell * PrecentSizeFigure + WindowHeight / 2 ));
@@ -105,7 +105,7 @@ FigureLocation::FigureLocation(size_t CountCellOnXPosition, size_t CountCellOnYP
 	}
 }
 
-//--//--//--//--//--//--//--//--//--//    ДЛЯ ФИГУР НА ДОСКЕ   //--//--//--//--//--//--//--//--//--//--//--//--//
+//--//--//--//--//--//--//--//--//--//    Р”Р›РЇ Р¤РР“РЈР  РќРђ Р”РћРЎРљР•   //--//--//--//--//--//--//--//--//--//--//--//--//
 
 
 bool FigureLocation::SetFigure(int XPosition, int YPosition, string ID_Figure, int Side, bool invulnerable)
@@ -113,88 +113,88 @@ bool FigureLocation::SetFigure(int XPosition, int YPosition, string ID_Figure, i
 
 	if (LocationClassFigure[YPosition][XPosition]->GetSIDE() == -1)
 	{
-		OutputLog("ERROR -> Class -> FigureLocation -> SetFigure -> попытка установить за границу");
+		OutputLog("ERROR -> Class -> FigureLocation -> SetFigure -> РїРѕРїС‹С‚РєР° СѓСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р° РіСЂР°РЅРёС†Сѓ");
 		return false;
 	}
 
 	for (int it = 0; it < UniqueFigureLocationClassFigure.size(); it++)
 	{
-		//находим итератор указанной финугы
+		//РЅР°С…РѕРґРёРј РёС‚РµСЂР°С‚РѕСЂ СѓРєР°Р·Р°РЅРЅРѕР№ С„РёРЅСѓРіС‹
 		if (   UniqueFigureLocationClassFigure[it]->GetSIDE() == Side 
 			&& UniqueFigureLocationClassFigure[it]->Get_ID_FIGURE() == ID_Figure
 			&& UniqueFigureLocationClassFigure[it]->GetINVULNERABLE() == invulnerable
 		   )
 		{
 
-			// станавливаем текстуру фигуры на поле
+			// СЃС‚Р°РЅР°РІР»РёРІР°РµРј С‚РµРєСЃС‚СѓСЂСѓ С„РёРіСѓСЂС‹ РЅР° РїРѕР»Рµ
 			LocationTexture[YPosition][XPosition] = UniqueFigureLocationTexture[it];
 
-			// устанавливаем позицию и размер фигуры -> меньше чем пустая клетка или край
+			// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїРѕР·РёС†РёСЋ Рё СЂР°Р·РјРµСЂ С„РёРіСѓСЂС‹ -> РјРµРЅСЊС€Рµ С‡РµРј РїСѓСЃС‚Р°СЏ РєР»РµС‚РєР° РёР»Рё РєСЂР°Р№
 			LocationRectangleShape[YPosition][XPosition].setSize(Vector2f(SizeCell * PrecentSizeFigure, SizeCell * PrecentSizeFigure));
 			LocationRectangleShape[YPosition][XPosition].setPosition(Vector2f(XPosition * SizeCell + PositionRectangInCell, YPosition * SizeCell + PositionRectangInCell));
-			// передаем установленную текстуру
+			// РїРµСЂРµРґР°РµРј СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅСѓСЋ С‚РµРєСЃС‚СѓСЂСѓ
 			LocationRectangleShape[YPosition][XPosition].setTexture(LocationTexture[YPosition][XPosition].get(), true);
 
-			//ставим класс фигуры на поле
+			//СЃС‚Р°РІРёРј РєР»Р°СЃСЃ С„РёРіСѓСЂС‹ РЅР° РїРѕР»Рµ
 			LocationClassFigure[YPosition][XPosition] = UniqueFigureLocationClassFigure[it];
 
 			return true;
 		}
 	}
-	OutputLog("ERROR -> Class -> FigureLocation -> SetFigure -> фигура не найдена, сначала ее необходимо добавить -> AddUniqueFigure()");
+	OutputLog("ERROR -> Class -> FigureLocation -> SetFigure -> С„РёРіСѓСЂР° РЅРµ РЅР°Р№РґРµРЅР°, СЃРЅР°С‡Р°Р»Р° РµРµ РЅРµРѕР±С…РѕРґРёРјРѕ РґРѕР±Р°РІРёС‚СЊ -> AddUniqueFigure()");
 	return false;
 }
 
 bool FigureLocation::PromoutionSelectFigure(string ID_Figure)
 {
-	// фигура может превратиться в указанную фигуру???.........
+	// С„РёРіСѓСЂР° РјРѕР¶РµС‚ РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ СѓРєР°Р·Р°РЅРЅСѓСЋ С„РёРіСѓСЂСѓ???.........
 	if (LocationClassFigure[PositionSelectFigure.second][PositionSelectFigure.first]->GetPromoutionFigure(ID_Figure))
 	{
 		for (int it = 0; it < UniqueFigureLocationClassFigure.size(); it++)
 		{
 			if (UniqueFigureLocationClassFigure[it]->Get_ID_FIGURE() == ID_Figure && UniqueFigureLocationClassFigure[it]->GetSIDE() == LocationClassFigure[PositionSelectFigure.second][PositionSelectFigure.first]->GetSIDE())
 			{
-				// заменяем текстуру
+				// Р·Р°РјРµРЅСЏРµРј С‚РµРєСЃС‚СѓСЂСѓ
 				LocationTexture[PositionSelectFigure.second][PositionSelectFigure.first] = UniqueFigureLocationTexture[it];
 
-				// передаем установленную текстуру
+				// РїРµСЂРµРґР°РµРј СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅСѓСЋ С‚РµРєСЃС‚СѓСЂСѓ
 				LocationRectangleShape[PositionSelectFigure.second][PositionSelectFigure.first].setTexture(LocationTexture[PositionSelectFigure.second][PositionSelectFigure.first].get(), true);
 
-				//ставим класс фигуры на поле
+				//СЃС‚Р°РІРёРј РєР»Р°СЃСЃ С„РёРіСѓСЂС‹ РЅР° РїРѕР»Рµ
 				LocationClassFigure[PositionSelectFigure.second][PositionSelectFigure.first] = UniqueFigureLocationClassFigure[it];
 
 				return true;
 			}
 		}
-		OutputLog("Error -> Class -> FigureLocation -> PromoutionSelectFigure() -> не найден итератор");
+		OutputLog("Error -> Class -> FigureLocation -> PromoutionSelectFigure() -> РЅРµ РЅР°Р№РґРµРЅ РёС‚РµСЂР°С‚РѕСЂ");
 	}
 	{
-		OutputLog("Error -> Class -> FigureLocation -> PromoutionSelectFigure() -> невозможно превратиться в эту фигуру");
+		OutputLog("Error -> Class -> FigureLocation -> PromoutionSelectFigure() -> РЅРµРІРѕР·РјРѕР¶РЅРѕ РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ СЌС‚Сѓ С„РёРіСѓСЂСѓ");
 	}
 	return false;
 }
 
 bool FigureLocation::AddUniqueFigure(shared_ptr<Figure> NewFigure, path CurrentTextureFigure)
 {
-	// изначально считаем что фигура уникальная 
-	// проверяем есть ли такие фигуры у нас еще?
-	// начинаем с 2 т.к. 0 и 1 слоты заняты заранее "краем" и пустой фигурой "клеткой" соответственно
+	// РёР·РЅР°С‡Р°Р»СЊРЅРѕ СЃС‡РёС‚Р°РµРј С‡С‚Рѕ С„РёРіСѓСЂР° СѓРЅРёРєР°Р»СЊРЅР°СЏ 
+	// РїСЂРѕРІРµСЂСЏРµРј РµСЃС‚СЊ Р»Рё С‚Р°РєРёРµ С„РёРіСѓСЂС‹ Сѓ РЅР°СЃ РµС‰Рµ?
+	// РЅР°С‡РёРЅР°РµРј СЃ 2 С‚.Рє. 0 Рё 1 СЃР»РѕС‚С‹ Р·Р°РЅСЏС‚С‹ Р·Р°СЂР°РЅРµРµ "РєСЂР°РµРј" Рё РїСѓСЃС‚РѕР№ С„РёРіСѓСЂРѕР№ "РєР»РµС‚РєРѕР№" СЃРѕРѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕ
 	int Size = UniqueFigureLocationClassFigure.size();
 
 	for (int it = 2; it < Size; it++)
 	{
-		// если поля совпадают значит не уникальна и не добавляем
+		// РµСЃР»Рё РїРѕР»СЏ СЃРѕРІРїР°РґР°СЋС‚ Р·РЅР°С‡РёС‚ РЅРµ СѓРЅРёРєР°Р»СЊРЅР° Рё РЅРµ РґРѕР±Р°РІР»СЏРµРј
 		if ( UniqueFigureLocationClassFigure[it]->Get_ID_FIGURE()         == NewFigure->Get_ID_FIGURE() 
 			 && UniqueFigureLocationClassFigure[it]->GetSIDE()            == NewFigure->GetSIDE()
 			 && UniqueFigureLocationClassFigure[it]->GetINVULNERABLE()    == NewFigure->GetINVULNERABLE()
 		   )
 		{
-			//не добавляем
+			//РЅРµ РґРѕР±Р°РІР»СЏРµРј
 			return false;
 		}	
 	}
 
-	// иначе, если поля отличаются добавляем
+	// РёРЅР°С‡Рµ, РµСЃР»Рё РїРѕР»СЏ РѕС‚Р»РёС‡Р°СЋС‚СЃСЏ РґРѕР±Р°РІР»СЏРµРј
 	UniqueFigureLocationClassFigure.push_back(NewFigure);
 	UniqueFigureLocationTexture.push_back(make_shared<Texture>(CurrentTextureFigure));
 
@@ -202,17 +202,17 @@ bool FigureLocation::AddUniqueFigure(shared_ptr<Figure> NewFigure, path CurrentT
 	{
 		for (int Col = 1; Col < CountCellOnXPosition - 1; Col++)
 		{
-			// если клетка пустая то сразу же размещаем аникальную фигуру на поле уникальных фигур
+			// РµСЃР»Рё РєР»РµС‚РєР° РїСѓСЃС‚Р°СЏ С‚Рѕ СЃСЂР°Р·Сѓ Р¶Рµ СЂР°Р·РјРµС‰Р°РµРј Р°РЅРёРєР°Р»СЊРЅСѓСЋ С„РёРіСѓСЂСѓ РЅР° РїРѕР»Рµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
 			if (UniqueFigureLocationRectangleShape[Row][Col].first == 0)
 			{
 				size_t LatestElement = UniqueFigureLocationTexture.size() - 1;
 
-				// ставим текстуру
+				// СЃС‚Р°РІРёРј С‚РµРєСЃС‚СѓСЂСѓ
 				UniqueFigureLocationRectangleShape[Row][Col].second.setTexture(UniqueFigureLocationTexture[LatestElement].get(), true);
 				UniqueFigureLocationRectangleShape[Row][Col].second.setOutlineThickness(-2);
 				UniqueFigureLocationRectangleShape[Row][Col].second.setOutlineColor(Color::Black);
 
-				// ставим итератор откуда привязали
+				// СЃС‚Р°РІРёРј РёС‚РµСЂР°С‚РѕСЂ РѕС‚РєСѓРґР° РїСЂРёРІСЏР·Р°Р»Рё
 				UniqueFigureLocationRectangleShape[Row][Col].first = LatestElement;
 				return true;
 			}
@@ -228,7 +228,7 @@ bool FigureLocation::MoveSelectFigure(int XPositionMove, int YPositionMove)
 
 	if (!AvailableMove[YPositionMove][XPositionMove])
 	{
-		OutputLog("ход невозможен");
+		OutputLog("С…РѕРґ РЅРµРІРѕР·РјРѕР¶РµРЅ");
 		return false;
 	}
 
@@ -238,29 +238,29 @@ bool FigureLocation::MoveSelectFigure(int XPositionMove, int YPositionMove)
 		swap(LocationTexture[PositionSelectFigure.second][PositionSelectFigure.first], LocationTexture[YPositionMove][XPositionMove]);
 
 
-		//изменяем размер и положение
+		//РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂ Рё РїРѕР»РѕР¶РµРЅРёРµ
 		LocationRectangleShape[PositionSelectFigure.second][PositionSelectFigure.first].setSize(Vector2f(SizeCell, SizeCell));
 		LocationRectangleShape[PositionSelectFigure.second][PositionSelectFigure.first].setPosition(Vector2f(SizeCell * PositionSelectFigure.first, SizeCell * PositionSelectFigure.second));
 
-		// установили тестуры т.к. они свапнуты
+		// СѓСЃС‚Р°РЅРѕРІРёР»Рё С‚РµСЃС‚СѓСЂС‹ С‚.Рє. РѕРЅРё СЃРІР°РїРЅСѓС‚С‹
 		LocationRectangleShape[PositionSelectFigure.second][PositionSelectFigure.first].setTexture(LocationTexture[PositionSelectFigure.second][PositionSelectFigure.first].get(), true);
 
-		//изменяем размер и положение
+		//РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂ Рё РїРѕР»РѕР¶РµРЅРёРµ
 		LocationRectangleShape[YPositionMove][XPositionMove].setSize(Vector2f(SizeCell * PrecentSizeFigure, SizeCell * PrecentSizeFigure));
 		LocationRectangleShape[YPositionMove][XPositionMove].setPosition(Vector2f(SizeCell * XPositionMove + PositionRectangInCell, SizeCell * YPositionMove + PositionRectangInCell));
 
-		// установили тестуры т.к. они свапнуты
+		// СѓСЃС‚Р°РЅРѕРІРёР»Рё С‚РµСЃС‚СѓСЂС‹ С‚.Рє. РѕРЅРё СЃРІР°РїРЅСѓС‚С‹
 		LocationRectangleShape[YPositionMove][XPositionMove].setTexture(LocationTexture[YPositionMove][XPositionMove].get(), true);
 
 		return true;
 	}
-	// если клетка не пустая предполагается что там фигура другого игрока
+	// РµСЃР»Рё РєР»РµС‚РєР° РЅРµ РїСѓСЃС‚Р°СЏ РїСЂРµРґРїРѕР»Р°РіР°РµС‚СЃСЏ С‡С‚Рѕ С‚Р°Рј С„РёРіСѓСЂР° РґСЂСѓРіРѕРіРѕ РёРіСЂРѕРєР°
 	else
 	{	
-		// Фигура должна быть доступна для взятия т.е. Invulnerability = false		
+		// Р¤РёРіСѓСЂР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РґРѕСЃС‚СѓРїРЅР° РґР»СЏ РІР·СЏС‚РёСЏ С‚.Рµ. Invulnerability = false		
 		if (LocationClassFigure[YPositionMove][XPositionMove]->GetINVULNERABLE())
 		{
-			OutputLog("ERROR -> class -> FigureLocation -> MoveSelectFigure() -> фигура неуязвима");
+			OutputLog("ERROR -> class -> FigureLocation -> MoveSelectFigure() -> С„РёРіСѓСЂР° РЅРµСѓСЏР·РІРёРјР°");
 			return false;
 		}
 
@@ -275,10 +275,10 @@ bool FigureLocation::MoveSelectFigure(int XPositionMove, int YPositionMove)
 		LocationRectangleShape[YPositionMove][XPositionMove].setTexture(LocationTexture[YPositionMove][XPositionMove].get(), true);
 
 		//
-		LocationTexture[PositionSelectFigure.second][PositionSelectFigure.first] = UniqueFigureLocationTexture[1]; // 1 - пустая текстура
+		LocationTexture[PositionSelectFigure.second][PositionSelectFigure.first] = UniqueFigureLocationTexture[1]; // 1 - РїСѓСЃС‚Р°СЏ С‚РµРєСЃС‚СѓСЂР°
 
 		//
-		LocationClassFigure[PositionSelectFigure.second][PositionSelectFigure.first] = UniqueFigureLocationClassFigure[1]; // 1 - пустая фигура (клетка)
+		LocationClassFigure[PositionSelectFigure.second][PositionSelectFigure.first] = UniqueFigureLocationClassFigure[1]; // 1 - РїСѓСЃС‚Р°СЏ С„РёРіСѓСЂР° (РєР»РµС‚РєР°)
 
 		//
 		LocationRectangleShape[PositionSelectFigure.second][PositionSelectFigure.first].setSize(Vector2f(SizeCell, SizeCell));
@@ -299,7 +299,7 @@ pair<int, int> FigureLocation::GetPositionFigureWhenMousePressed(Vector2f Posito
 	{
 		for (int XPosition = 0; XPosition < CountCellOnXPosition; XPosition++)
 		{
-			// если задели фигуру на игровом поле
+			// РµСЃР»Рё Р·Р°РґРµР»Рё С„РёРіСѓСЂСѓ РЅР° РёРіСЂРѕРІРѕРј РїРѕР»Рµ
 			if (LocationRectangleShape[YPosition][XPosition].getGlobalBounds().contains(PositonMouse))
 			{
 				return make_pair(XPosition, YPosition);
@@ -427,7 +427,7 @@ bool FigureLocation::GetInvulnerableFigure(int XPosition, int Yposition)
 
 
 
-//--//--//--//--//--//--//--//--//--//      ДЛЯ ПОЛЕ УНИКАЛЬНЫХ ФИГУР     //--//--//--//--//--//--//--//--//--//--//--//-//
+//--//--//--//--//--//--//--//--//--//      Р”Р›РЇ РџРћР›Р• РЈРќРРљРђР›Р¬РќР«РҐ Р¤РР“РЈР      //--//--//--//--//--//--//--//--//--//--//--//-//
 
 bool FigureLocation::GetInvulnerableUniqueFigure(int XPosition, int Yposition)
 {
@@ -459,7 +459,7 @@ int FigureLocation::GetIteratorUniqueFigure(int XPosition, int Yposition)
 
 bool FigureLocation::SeletcUniqueFigureForPromoution(int XPositionFigure, int YPositionFigure)
 {
-	// выделяем фигуры в которые может превратиться фигура
+	// РІС‹РґРµР»СЏРµРј С„РёРіСѓСЂС‹ РІ РєРѕС‚РѕСЂС‹Рµ РјРѕР¶РµС‚ РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ С„РёРіСѓСЂР°
 	int SideFigure = LocationClassFigure[YPositionFigure][XPositionFigure]->GetSIDE();
 
 	for ( auto& VectorRectangleShape : UniqueFigureLocationRectangleShape)
@@ -468,13 +468,13 @@ bool FigureLocation::SeletcUniqueFigureForPromoution(int XPositionFigure, int YP
 		{
 			int it = RectangleShape.first;
 
-			// если фигура той же стороны.......
+			// РµСЃР»Рё С„РёРіСѓСЂР° С‚РѕР№ Р¶Рµ СЃС‚РѕСЂРѕРЅС‹.......
 			if (UniqueFigureLocationClassFigure[it]->GetSIDE() == SideFigure)
 			{
-				// и может превратиться в указанную фигуру???... ......
+				// Рё РјРѕР¶РµС‚ РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ СѓРєР°Р·Р°РЅРЅСѓСЋ С„РёРіСѓСЂСѓ???... ......
 				if (LocationClassFigure[YPositionFigure][XPositionFigure]->GetPromoutionFigure(UniqueFigureLocationClassFigure[it]->Get_ID_FIGURE()))
 				{
-					//подкрашиваем фигуру
+					//РїРѕРґРєСЂР°С€РёРІР°РµРј С„РёРіСѓСЂСѓ
 					RectangleShape.second.setOutlineColor(Color::Red);
 				}
 			}
@@ -501,7 +501,7 @@ pair<int, int> FigureLocation::GetPositionUniqueFigureWhenMousePressed(Vector2f 
 	{
 		for (int XPosition = 0; XPosition < CountCellOnXPosition; XPosition++)
 		{
-			// если задели фигуру на поле уникальных фигур возвращаем позицию в минусе
+			// РµСЃР»Рё Р·Р°РґРµР»Рё С„РёРіСѓСЂСѓ РЅР° РїРѕР»Рµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ РІРѕР·РІСЂР°С‰Р°РµРј РїРѕР·РёС†РёСЋ РІ РјРёРЅСѓСЃРµ
 			if (UniqueFigureLocationRectangleShape[YPosition][XPosition].second.getGlobalBounds().contains(PositonMouse))
 			{
 				return make_pair(XPosition, YPosition);

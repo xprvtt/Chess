@@ -1,12 +1,12 @@
-#pragma once
+п»ї#pragma once
 #include "Core.h"
 
 class CountdownTimer 
 {
 private:
-    Clock clock;         // Таймер
-    Time duration;       // Длительность отсчета
-    float timeLeft;      // Оставшееся время в секундах
+    Clock clock;         // РўР°Р№РјРµСЂ
+    Time duration;       // Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РѕС‚СЃС‡РµС‚Р°
+    float timeLeft;      // РћСЃС‚Р°РІС€РµРµСЃСЏ РІСЂРµРјСЏ РІ СЃРµРєСѓРЅРґР°С… 
 
 public:
 

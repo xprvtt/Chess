@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "Core.h"
 
@@ -8,17 +8,17 @@ class Figure
 private:
 
 	/// <summary>
-	/// единый id для фигур этого типа
+	/// РµРґРёРЅС‹Р№ id РґР»СЏ С„РёРіСѓСЂ СЌС‚РѕРіРѕ С‚РёРїР°
 	/// </summary>
 	string ID_FIGURE;
 
 	/// <summary>
-	/// сторока игрока 1 - белый \ 2 - черный
+	/// СЃС‚РѕСЂРѕРєР° РёРіСЂРѕРєР° 1 - Р±РµР»С‹Р№ \ 2 - С‡РµСЂРЅС‹Р№
 	/// </summary>
 	int SIDE;
 
 	/// <summary>
-	/// фигуру можно убить?
+	/// С„РёРіСѓСЂСѓ РјРѕР¶РЅРѕ СѓР±РёС‚СЊ? 
 	/// </summary>
 	bool INVULNERABLE;
 
@@ -27,72 +27,72 @@ public:
 
 	
 	/// <summary>
-	/// определяем сторону игрока фигуры и уязвимость при инициализации
+	/// РѕРїСЂРµРґРµР»СЏРµРј СЃС‚РѕСЂРѕРЅСѓ РёРіСЂРѕРєР° С„РёРіСѓСЂС‹ Рё СѓСЏР·РІРёРјРѕСЃС‚СЊ РїСЂРё РёРЅРёС†РёР°Р»РёР·Р°С†РёРё
 	/// </summary>
-	/// <param name="SIDE">сторона игрока</param>
-	/// <param name="Inulnerability">true = неуязвимость \ false = пешку можно взять (убить) </param>
+	/// <param name="SIDE">СЃС‚РѕСЂРѕРЅР° РёРіСЂРѕРєР°</param>
+	/// <param name="Inulnerability">true = РЅРµСѓСЏР·РІРёРјРѕСЃС‚СЊ \ false = РїРµС€РєСѓ РјРѕР¶РЅРѕ РІР·СЏС‚СЊ (СѓР±РёС‚СЊ) </param>
 	Figure(int SIDE, bool INVULNERABLE);
 
 	/// <summary>
-	/// Конструктор копирования
+	/// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
 	/// </summary>
 	/// <param name="OthreFigure"></param>
 	Figure(const Figure &OthreFigure);
 
 	/// <summary>
-	/// Проверяем доступен ли ход на указанные координаты
+	/// РџСЂРѕРІРµСЂСЏРµРј РґРѕСЃС‚СѓРїРµРЅ Р»Рё С…РѕРґ РЅР° СѓРєР°Р·Р°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
 	/// </summary>
-	/// <param name="MoveCoordinate"> передаем конечные координаты</param>
-	/// <returns>логическое значение</returns>
+	/// <param name="MoveCoordinate"> РїРµСЂРµРґР°РµРј РєРѕРЅРµС‡РЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹</param>
+	/// <returns>Р»РѕРіРёС‡РµСЃРєРѕРµ Р·РЅР°С‡РµРЅРёРµ</returns>
 	bool CheckMoveForFigure(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure);
 
 	/// <summary>
-	/// Получить имя фигуры
+	/// РџРѕР»СѓС‡РёС‚СЊ РёРјСЏ С„РёРіСѓСЂС‹
 	/// </summary>
-	/// <returns>имя фигуры</returns>
+	/// <returns>РёРјСЏ С„РёРіСѓСЂС‹</returns>
 	string Get_ID_FIGURE();
 
 	/// <summary>
-	/// Получаем сторону игрока у фигуры
+	/// РџРѕР»СѓС‡Р°РµРј СЃС‚РѕСЂРѕРЅСѓ РёРіСЂРѕРєР° Сѓ С„РёРіСѓСЂС‹
 	/// </summary>
-	/// <returns>сторона игрока</returns>
+	/// <returns>СЃС‚РѕСЂРѕРЅР° РёРіСЂРѕРєР°</returns>
 	int GetSIDE();
 
 
 	/// <summary>
-	/// Неуязвима ли фигура?
+	/// РќРµСѓСЏР·РІРёРјР° Р»Рё С„РёРіСѓСЂР°?
 	/// </summary>
-	/// <returns>true = неуязвима \ false - можно убить</returns>
+	/// <returns>true = РЅРµСѓСЏР·РІРёРјР° \ false - РјРѕР¶РЅРѕ СѓР±РёС‚СЊ</returns>
 	bool GetINVULNERABLE();
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//																			  
-	// vector<vector<pair<int, string>>> VectorLocationFigure для int должен имееть структуру =>
-	// -1 == границы															  
-	// 0 == пустая клетка 														  
-	// 1+ == сторона игрока														  
+	// vector<vector<pair<int, string>>> VectorLocationFigure РґР»СЏ int РґРѕР»Р¶РµРЅ РёРјРµРµС‚СЊ СЃС‚СЂСѓРєС‚СѓСЂСѓ =>
+	// -1 == РіСЂР°РЅРёС†С‹															  
+	// 0 == РїСѓСЃС‚Р°СЏ РєР»РµС‚РєР° 														  
+	// 1+ == СЃС‚РѕСЂРѕРЅР° РёРіСЂРѕРєР°														  
 	//																	  
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	/// ВСЕ ВИРТУАЛЬНЫЕ ФУНКЦИИ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ 
+	/// Р’РЎР• Р’РР РўРЈРђР›Р¬РќР«Р• Р¤РЈРќРљР¦РР РўР Р•Р‘РЈР®Рў РџР•Р Р•РћРџР Р•Р”Р•Р›РќРРЇ Р’ РќРђРЎР›Р•Р”РќРРљРђРҐ 
 
 	/// <summary>
-	/// получаем доступные координаты для хода
+	/// РїРѕР»СѓС‡Р°РµРј РґРѕСЃС‚СѓРїРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РґР»СЏ С…РѕРґР°
 	/// </summary>
-	/// <param name="Coordiante">Координаты на которые мы хочем сходить</param>
-	/// <returns>логическое значение</returns>
+	/// <param name="Coordiante">РљРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєРѕС‚РѕСЂС‹Рµ РјС‹ С…РѕС‡РµРј СЃС…РѕРґРёС‚СЊ</param>
+	/// <returns>Р»РѕРіРёС‡РµСЃРєРѕРµ Р·РЅР°С‡РµРЅРёРµ</returns>
 	virtual vector<vector<bool>> GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure);
 
 	/// <summary>
-	/// возможность превращения пешки если выполнены условия
+	/// РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РїСЂРµРІСЂР°С‰РµРЅРёСЏ РїРµС€РєРё РµСЃР»Рё РІС‹РїРѕР»РЅРµРЅС‹ СѓСЃР»РѕРІРёСЏ
 	/// </summary>
 	/// <returns></returns>
 	virtual bool GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure);
 
 	/// <summary>
-	/// можем ли мы превратиться в другую указанную фигуру?
+	/// РјРѕР¶РµРј Р»Рё РјС‹ РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ РґСЂСѓРіСѓСЋ СѓРєР°Р·Р°РЅРЅСѓСЋ С„РёРіСѓСЂСѓ?
 	/// </summary>
 	/// <returns></returns>
 	virtual bool GetPromoutionFigure(string ID_Figure);
@@ -101,14 +101,14 @@ public:
 protected:
 
 	/// <summary>
-	/// Проверяем доступен ли ход на указанные координаты, определяется для каждой фигуры
+	/// РџСЂРѕРІРµСЂСЏРµРј РґРѕСЃС‚СѓРїРµРЅ Р»Рё С…РѕРґ РЅР° СѓРєР°Р·Р°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹, РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РґР»СЏ РєР°Р¶РґРѕР№ С„РёРіСѓСЂС‹
 	/// </summary>
-	/// <param name="Coordiante">Координаты на которые мы хочем сходить</param>
-	/// <returns>логическое значение</returns>
+	/// <param name="Coordiante">РљРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєРѕС‚РѕСЂС‹Рµ РјС‹ С…РѕС‡РµРј СЃС…РѕРґРёС‚СЊ</param>
+	/// <returns>Р»РѕРіРёС‡РµСЃРєРѕРµ Р·РЅР°С‡РµРЅРёРµ</returns>
 	virtual bool CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure);
 
 	/// <summary>
-	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
+	/// РЈРЎРўРђРўРђРќРђР’Р›РР’РђР•Рњ ID Р”Р›РЇ Р¤РР“РЈР Р« Р”РћР›Р–РќРђ Р‘Р«РўР¬ РџРћ РќРђР—Р’РђРќРР® РљР›РђРЎРЎРђ Р”Р›РЇ РЈР”РћР‘РЎРўР’Рђ
 	/// </summary>
 	virtual string Set_ID_FIGURE();
 };

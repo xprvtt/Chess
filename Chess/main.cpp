@@ -1,4 +1,4 @@
-#include "Main.h"
+п»ї#include "Main.h"
 
 
 unordered_map<string, Texture> TextureMap;
@@ -7,18 +7,18 @@ unordered_map<string, Texture> TextureMap;
 int main()
 {
 
-    OutputLog("Инициация");
+    OutputLog("РРЅРёС†РёР°С†РёСЏ");
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    /// высота окна, от нее зависит длина окна
+    /// РІС‹СЃРѕС‚Р° РѕРєРЅР°, РѕС‚ РЅРµРµ Р·Р°РІРёСЃРёС‚ РґР»РёРЅР° РѕРєРЅР°
     unsigned int SizeWindowHeight = 1000;
 
-    /// длина окна
+    /// РґР»РёРЅР° РѕРєРЅР°
     unsigned int SizeWindowLength = SizeWindowHeight + SizeWindowHeight * 0.5;
     
-    /// количество ИГРОВЫХ клеток на одной стороне + 2 клетки для координат
-    unsigned int CountCellOnLengthWindow = 8 + 2;   
+    /// РєРѕР»РёС‡РµСЃС‚РІРѕ РР“Р РћР’Р«РҐ РєР»РµС‚РѕРє РЅР° РѕРґРЅРѕР№ СЃС‚РѕСЂРѕРЅРµ + 2 РєР»РµС‚РєРё РґР»СЏ РєРѕРѕСЂРґРёРЅР°С‚
+    unsigned int CountCellOnLengthWindow = 8 + 2;    
     unsigned int CountCellOnHeightWindow = 8 + 2;
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -26,21 +26,21 @@ int main()
 
 
     ///////////////////////////////////  FONT   /////////////////////////////////////// 
-    /// обнаруживаем все шрифты в папке 
+    /// РѕР±РЅР°СЂСѓР¶РёРІР°РµРј РІСЃРµ С€СЂРёС„С‚С‹ РІ РїР°РїРєРµ 
     vector<path> SearchFont = SearchFile("Font/", ".ttf");
 
-    /// если шрифтов не найдено нет смысла продолжать
+    /// РµСЃР»Рё С€СЂРёС„С‚РѕРІ РЅРµ РЅР°Р№РґРµРЅРѕ РЅРµС‚ СЃРјС‹СЃР»Р° РїСЂРѕРґРѕР»Р¶Р°С‚СЊ
     if (SearchFont.empty())
     {
-        OutputLog("Шрифт не найден, завершение");
+        OutputLog("РЁСЂРёС„С‚ РЅРµ РЅР°Р№РґРµРЅ, Р·Р°РІРµСЂС€РµРЅРёРµ");
         return -1;
     }
-    // используем первый в списке шрифт
+    // РёСЃРїРѕР»СЊР·СѓРµРј РїРµСЂРІС‹Р№ РІ СЃРїРёСЃРєРµ С€СЂРёС„С‚
     Font CurrentFont = LoadFont(SearchFont[0]);
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    //// стандартные текстуры для инициализации игры ////
+    //// СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ С‚РµРєСЃС‚СѓСЂС‹ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РёРіСЂС‹ ////
     path PathToEmptyimage      = "Assets/Standart/Empty.png";
     path PathToEmptyPawn       = "Assets/Standart/EmptyPawn.png";
 
@@ -52,21 +52,21 @@ int main()
     ///////////////////////////////////////////////////////////////////////////////////
 
     
-    /// текст расположенный в первом ряду
+    /// С‚РµРєСЃС‚ СЂР°СЃРїРѕР»РѕР¶РµРЅРЅС‹Р№ РІ РїРµСЂРІРѕРј СЂСЏРґСѓ
     Text TextInGameRow1(CurrentFont);
     TextInGameRow1.setString(L"TextInGameRow1");
     TextInGameRow1.setCharacterSize(SizeWindowHeight / (CountCellOnLengthWindow * 3));
     TextInGameRow1.setFillColor(Color::Black);
     TextInGameRow1.setPosition(Vector2f(SizeWindowHeight / CountCellOnLengthWindow / 2 + SizeWindowHeight , SizeWindowHeight / CountCellOnLengthWindow));
 
-    /// текст расположенный во втором ряду
+    /// С‚РµРєСЃС‚ СЂР°СЃРїРѕР»РѕР¶РµРЅРЅС‹Р№ РІРѕ РІС‚РѕСЂРѕРј СЂСЏРґСѓ
     Text TextInGameRow2(CurrentFont);
     TextInGameRow2.setString(L"TextInGameRow2");
     TextInGameRow2.setCharacterSize(SizeWindowHeight / (CountCellOnLengthWindow * 3));
     TextInGameRow2.setFillColor(Color::Black);
     TextInGameRow2.setPosition(Vector2f(SizeWindowHeight / CountCellOnLengthWindow / 2+ SizeWindowHeight , SizeWindowHeight / CountCellOnLengthWindow * 2.5));
 
-    /// текст расположенный во втором ряду
+    /// С‚РµРєСЃС‚ СЂР°СЃРїРѕР»РѕР¶РµРЅРЅС‹Р№ РІРѕ РІС‚РѕСЂРѕРј СЂСЏРґСѓ
     Text TextInGameRow3(CurrentFont);
     TextInGameRow3.setString(L"TextInGameRow3");
     TextInGameRow3.setCharacterSize(SizeWindowHeight / (CountCellOnLengthWindow * 3));
@@ -76,40 +76,40 @@ int main()
     ///////////////////////////////////////////////////////////////////////////////////
 
 
-    // создаем вывод в логи
+    // СЃРѕР·РґР°РµРј РІС‹РІРѕРґ РІ Р»РѕРіРё
     permissions("Log/log.txt", perms::all);
     remove("Log/log.txt");
-    OutputLog("Запуск!");
+    OutputLog("Р—Р°РїСѓСЃРє!");
 
     
-    // создаем окно игры
+    // СЃРѕР·РґР°РµРј РѕРєРЅРѕ РёРіСЂС‹
 
-    /// Окно игры
+    /// РћРєРЅРѕ РёРіСЂС‹
     RenderWindow window(VideoMode({ SizeWindowLength, SizeWindowHeight }), "Chess");
     window.setFramerateLimit(60);
 
-    /// основное игровое поле 
-    /// содержит только конструкцию игрового поля
+    /// РѕСЃРЅРѕРІРЅРѕРµ РёРіСЂРѕРІРѕРµ РїРѕР»Рµ 
+    /// СЃРѕРґРµСЂР¶РёС‚ С‚РѕР»СЊРєРѕ РєРѕРЅСЃС‚СЂСѓРєС†РёСЋ РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ
     GameField ChessField(CountCellOnLengthWindow, SizeWindowHeight, CurrentFont, Color(140, 140, 140), Color::White, Color(152, 118, 84));
 
-    OutputLog("Инициация Игрового поля закончено");
+    OutputLog("РРЅРёС†РёР°С†РёСЏ РРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ Р·Р°РєРѕРЅС‡РµРЅРѕ");
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-    OutputLog("Расположение Фигур начато");
+    OutputLog("Р Р°СЃРїРѕР»РѕР¶РµРЅРёРµ Р¤РёРіСѓСЂ РЅР°С‡Р°С‚Рѕ");
 
 
-    /// класс с полным расположением фигур \ первоначально создается пустым 
-    /// для размещения фигур необходимо добавить уникальные фигуры -> AddUniqueFigure();
-    /// в последствии можно установить фигуры на игровое поле-> SetFigure();
+    /// РєР»Р°СЃСЃ СЃ РїРѕР»РЅС‹Рј СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµРј С„РёРіСѓСЂ \ РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅРѕ СЃРѕР·РґР°РµС‚СЃСЏ РїСѓСЃС‚С‹Рј 
+    /// РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ С„РёРіСѓСЂ РЅРµРѕР±С…РѕРґРёРјРѕ РґРѕР±Р°РІРёС‚СЊ СѓРЅРёРєР°Р»СЊРЅС‹Рµ С„РёРіСѓСЂС‹ -> AddUniqueFigure();
+    /// РІ РїРѕСЃР»РµРґСЃС‚РІРёРё РјРѕР¶РЅРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ С„РёРіСѓСЂС‹ РЅР° РёРіСЂРѕРІРѕРµ РїРѕР»Рµ-> SetFigure();
 
     FigureLocation Newlocation(CountCellOnLengthWindow, CountCellOnHeightWindow, SizeWindowHeight, PathToEmptyimage, PathToEmptyimage, 0.5f);
 
 
-    //// другие текстуры, такие как фигуры ///
-    /// добавляем уникальные фигуры
+    //// РґСЂСѓРіРёРµ С‚РµРєСЃС‚СѓСЂС‹, С‚Р°РєРёРµ РєР°Рє С„РёРіСѓСЂС‹ ///
+    /// РґРѕР±Р°РІР»СЏРµРј СѓРЅРёРєР°Р»СЊРЅС‹Рµ С„РёРіСѓСЂС‹
     ////// 1
     path PathToBlackPawnTexture = "Assets/pawn-black.png";
     path PathToWhitePawnTexture = "Assets/pawn-white.png";
@@ -159,8 +159,8 @@ int main()
 
 
 
-    /// заполняем игровое поле пешками
-    // колличество игроков (Сторон)
+    /// Р·Р°РїРѕР»РЅСЏРµРј РёРіСЂРѕРІРѕРµ РїРѕР»Рµ РїРµС€РєР°РјРё
+    // РєРѕР»Р»РёС‡РµСЃС‚РІРѕ РёРіСЂРѕРєРѕРІ (РЎС‚РѕСЂРѕРЅ)
     int CountPlayer = 2;
 
     for (int Row = 0; Row < CountCellOnHeightWindow; Row++)
@@ -195,7 +195,7 @@ int main()
         }
     }
 
-    OutputLog("Расположение Фигур закончено");
+    OutputLog("Р Р°СЃРїРѕР»РѕР¶РµРЅРёРµ Р¤РёРіСѓСЂ Р·Р°РєРѕРЅС‡РµРЅРѕ");
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                                      
@@ -231,28 +231,28 @@ int main()
                 window.close();
             }
 
-            ///выделяем фигуру при нажатии по ней
+            ///РІС‹РґРµР»СЏРµРј С„РёРіСѓСЂСѓ РїСЂРё РЅР°Р¶Р°С‚РёРё РїРѕ РЅРµР№
             else if (const auto& mouseButtonPressed = event->getIf<Event::MouseButtonPressed>())
             {
                 if (mouseButtonPressed->button == Mouse::Button::Left )
                 {
 
-                    /// получаем координаты фигуры(клетки на игровом поле) по которой нажали
+                    /// РїРѕР»СѓС‡Р°РµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ С„РёРіСѓСЂС‹(РєР»РµС‚РєРё РЅР° РёРіСЂРѕРІРѕРј РїРѕР»Рµ) РїРѕ РєРѕС‚РѕСЂРѕР№ РЅР°Р¶Р°Р»Рё
                     CurrentPositionInGameField = Newlocation.GetPositionFigureWhenMousePressed(MouseWorldPos);
 
-                    /// получаем координаты фигуры(клетки на поле с уникальными фигурами) по которой нажали
+                    /// РїРѕР»СѓС‡Р°РµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ С„РёРіСѓСЂС‹(РєР»РµС‚РєРё РЅР° РїРѕР»Рµ СЃ СѓРЅРёРєР°Р»СЊРЅС‹РјРё С„РёРіСѓСЂР°РјРё) РїРѕ РєРѕС‚РѕСЂРѕР№ РЅР°Р¶Р°Р»Рё
                     CurrentgvPositionInUniqueFigureField = Newlocation.GetPositionUniqueFigureWhenMousePressed(MouseWorldPos);
 
 
 
-                    // если число минусовые то значит нажали на поле уникальных фигур
+                    // РµСЃР»Рё С‡РёСЃР»Рѕ РјРёРЅСѓСЃРѕРІС‹Рµ С‚Рѕ Р·РЅР°С‡РёС‚ РЅР°Р¶Р°Р»Рё РЅР° РїРѕР»Рµ СѓРЅРёРєР°Р»СЊРЅС‹С… С„РёРіСѓСЂ
                     if (!Promoution)
                     {
 
 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // ВРЕМЕННОЕ
-                        // выводим информацию о фигуре на игровом поле
+                        // Р’Р Р•РњР•РќРќРћР•
+                        // РІС‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ С„РёРіСѓСЂРµ РЅР° РёРіСЂРѕРІРѕРј РїРѕР»Рµ
 
                         string Name = Newlocation.GetIDFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second) + " ";
                         string Coordinate = "X:" + to_string(CurrentPositionInGameField.first) + " Y:" + to_string(CurrentPositionInGameField.second);
@@ -261,30 +261,30 @@ int main()
                         string invulnerable = "\ninvulnerable: ";
                         Newlocation.GetInvulnerableFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second) ? invulnerable += "true" : invulnerable += "false";
 
-                        wstring Player = L"\nСейчас ход игрока #" + to_string(NextPlayer);
+                        wstring Player = L"\nРЎРµР№С‡Р°СЃ С…РѕРґ РёРіСЂРѕРєР° #" + to_string(NextPlayer);
                         TextInGameRow1.setString(Name + Coordinate + sideFigure + invulnerable + Player);
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        //сторона у выбранной фигуры
+                        //СЃС‚РѕСЂРѕРЅР° Сѓ РІС‹Р±СЂР°РЅРЅРѕР№ С„РёРіСѓСЂС‹
                         int Side = Newlocation.GetSideFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
 
-                        ///выделяем ее или снимаем выделение, если выделено то ожидается передвижение фигуры
+                        ///РІС‹РґРµР»СЏРµРј РµРµ РёР»Рё СЃРЅРёРјР°РµРј РІС‹РґРµР»РµРЅРёРµ, РµСЃР»Рё РІС‹РґРµР»РµРЅРѕ С‚Рѕ РѕР¶РёРґР°РµС‚СЃСЏ РїРµСЂРµРґРІРёР¶РµРЅРёРµ С„РёРіСѓСЂС‹
                         if (!Newlocation.FiguresSelectedOrNot() && Side == NextPlayer)
                         {
-                            //выделяем выбранную фигуру
+                            //РІС‹РґРµР»СЏРµРј РІС‹Р±СЂР°РЅРЅСѓСЋ С„РёРіСѓСЂСѓ
                             Newlocation.SeletcFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
 
-                            // получаем вектор доступных ходов
+                            // РїРѕР»СѓС‡Р°РµРј РІРµРєС‚РѕСЂ РґРѕСЃС‚СѓРїРЅС‹С… С…РѕРґРѕРІ
                             SelectCellForMove = Newlocation.GetAvailableMovesForSelectFigure();
 
-                            // выделяем доступные ходы на доске
+                            // РІС‹РґРµР»СЏРµРј РґРѕСЃС‚СѓРїРЅС‹Рµ С…РѕРґС‹ РЅР° РґРѕСЃРєРµ
                             ChessField.SelectCell(SelectCellForMove);
 
 
                             DebugCode
                             (
                                 ////////////////////////////////////////////////////////////////////////////////////////////////////
-                                /// Информация о доступных ходах                       
+                                /// РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РґРѕСЃС‚СѓРїРЅС‹С… С…РѕРґР°С…                       
                                 OutputLog(Newlocation.GetIDFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second));
                                 for (int row = 0; row < SelectCellForMove.size(); row++)
                                 {
@@ -303,13 +303,13 @@ int main()
                         }
                         else
                         {
-                            // двигаем фигуру на выбранные координаты если возможно
+                            // РґРІРёРіР°РµРј С„РёРіСѓСЂСѓ РЅР° РІС‹Р±СЂР°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РµСЃР»Рё РІРѕР·РјРѕР¶РЅРѕ
                             if (Newlocation.MoveSelectFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second))
                             {
-                                //если передвинули проверяем может ли фигура превратиться в другую
+                                //РµСЃР»Рё РїРµСЂРµРґРІРёРЅСѓР»Рё РїСЂРѕРІРµСЂСЏРµРј РјРѕР¶РµС‚ Р»Рё С„РёРіСѓСЂР° РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ РґСЂСѓРіСѓСЋ
                                 if (Newlocation.PromoutionFigureOnPosition(CurrentPositionInGameField.first, CurrentPositionInGameField.second))
                                 {
-                                    TextInGameRow3.setString(L"Превращение доступно");
+                                    TextInGameRow3.setString(L"РџСЂРµРІСЂР°С‰РµРЅРёРµ РґРѕСЃС‚СѓРїРЅРѕ");
                                     
                                     OldPosition = CurrentPositionInGameField;
 
@@ -323,7 +323,7 @@ int main()
                                     Newlocation.UnSeletcFigure();
                                 }
 
-                                //передаем ход следующему игроку
+                                //РїРµСЂРµРґР°РµРј С…РѕРґ СЃР»РµРґСѓСЋС‰РµРјСѓ РёРіСЂРѕРєСѓ
                                 NextPlayer < CountPlayer ? NextPlayer++ : NextPlayer = 1;
                             }
                             else
@@ -336,7 +336,7 @@ int main()
                         DebugCode
                         (
                             /////////////////////////////////////////////////////////////////////////////////
-                            ///выводим доступные ходы 
+                            ///РІС‹РІРѕРґРёРј РґРѕСЃС‚СѓРїРЅС‹Рµ С…РѕРґС‹ 
                             for (int Ypos = 0; Ypos < SelectCellForMove.size(); Ypos++)
                             {
                                 string Message ;
@@ -356,7 +356,7 @@ int main()
                     {
 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // выводим информацию о фигуре на игровом поле
+                        // РІС‹РІРѕРґРёРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ С„РёРіСѓСЂРµ РЅР° РёРіСЂРѕРІРѕРј РїРѕР»Рµ
                         string Name = Newlocation.GetIDUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second) + " ";
                         string Coordinate = "X:" + to_string(CurrentgvPositionInUniqueFigureField.first) + " Y:" + to_string(CurrentgvPositionInUniqueFigureField.second);
                         string sideFigure = " Side: " + to_string(Newlocation.GetSideUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second));
@@ -365,7 +365,7 @@ int main()
                         TextInGameRow1.setString(Name + Coordinate + sideFigure + invulnerable);
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                        // сторона передвинутой фигуры должно совпадать с выбранной
+                        // СЃС‚РѕСЂРѕРЅР° РїРµСЂРµРґРІРёРЅСѓС‚РѕР№ С„РёРіСѓСЂС‹ РґРѕР»Р¶РЅРѕ СЃРѕРІРїР°РґР°С‚СЊ СЃ РІС‹Р±СЂР°РЅРЅРѕР№
                         if ( Newlocation.GetSideFigure(OldPosition.first, OldPosition.second) == Newlocation.GetSideUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second))
                         {
                             if (Newlocation.PromoutionSelectFigure(Newlocation.GetIDUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second)))
@@ -373,16 +373,16 @@ int main()
                                 Newlocation.UnSeletcUniqueFigure();
                                 Newlocation.UnSeletcFigure();
                                 Promoution = false;
-                                TextInGameRow3.setString(L"превращение выполнено");
+                                TextInGameRow3.setString(L"РїСЂРµРІСЂР°С‰РµРЅРёРµ РІС‹РїРѕР»РЅРµРЅРѕ");
                             }
                             else
                             {
-                                TextInGameRow3.setString(L"превращение невозможно\nв эту фигуру");
+                                TextInGameRow3.setString(L"РїСЂРµРІСЂР°С‰РµРЅРёРµ РЅРµРІРѕР·РјРѕР¶РЅРѕ\nРІ СЌС‚Сѓ С„РёРіСѓСЂСѓ");
                             }
                         }
                         else
                         {
-                            TextInGameRow3.setString(L"неверная фигура");
+                            TextInGameRow3.setString(L"РЅРµРІРµСЂРЅР°СЏ С„РёРіСѓСЂР°");
                         }
                     }
                 }

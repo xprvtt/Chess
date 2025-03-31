@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "Core.h"
 
@@ -6,7 +6,7 @@
 /// CLASS 
 
 
-// фигуры
+// С„РёРіСѓСЂС‹
 #include "Pawn.h"
 #include "Rook.h"
 #include "Queen.h"
@@ -14,13 +14,13 @@
 #include "King.h"
 #include "Bishop.h"
 
-// игровое поле
+// РёРіСЂРѕРІРѕРµ РїРѕР»Рµ
 #include "GameField.h"
 
 //
 #include "FigureLocation.h"
 
 //
-#include "CountdownTimer.h"
+#include "CountdownTimer.h" 
 
 

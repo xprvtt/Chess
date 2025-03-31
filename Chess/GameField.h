@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include "Core.h"
 
@@ -7,17 +7,17 @@ class GameField
 private:
 
 	/// <summary>
-	/// вектор с размещениями клеток (доска)
+	/// РІРµРєС‚РѕСЂ СЃ СЂР°Р·РјРµС‰РµРЅРёСЏРјРё РєР»РµС‚РѕРє (РґРѕСЃРєР°) 
 	/// </summary>
 	vector<vector<RectangleShape>> RectangleShapeOnField;
 
 	/// <summary>
-	/// вектор с отображением координат 
+	/// РІРµРєС‚РѕСЂ СЃ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµРј РєРѕРѕСЂРґРёРЅР°С‚ 
 	/// </summary>
 	vector<vector<Text>> FieldCoordinate;
 
 	/// <summary>
-	/// размер одной клетки на поле
+	/// СЂР°Р·РјРµСЂ РѕРґРЅРѕР№ РєР»РµС‚РєРё РЅР° РїРѕР»Рµ
 	/// </summary>
 	float SizeCell = 0.f;
 
@@ -26,68 +26,68 @@ private:
 public:
 	
 	/// <summary>
-	/// определение класса
+	/// РѕРїСЂРµРґРµР»РµРЅРёРµ РєР»Р°СЃСЃР°
 	/// </summary>
-	/// <param name="CountCell">колличество клеток, по умолчанию 10х10 т.к. 2 строки и 2 столбца уходят на стандартную разметку</param>
-	/// <param name="SizeWindow">разрешение окна</param>
+	/// <param name="CountCell">РєРѕР»Р»РёС‡РµСЃС‚РІРѕ РєР»РµС‚РѕРє, РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ 10С…10 С‚.Рє. 2 СЃС‚СЂРѕРєРё Рё 2 СЃС‚РѕР»Р±С†Р° СѓС…РѕРґСЏС‚ РЅР° СЃС‚Р°РЅРґР°СЂС‚РЅСѓСЋ СЂР°Р·РјРµС‚РєСѓ</param>
+	/// <param name="SizeWindow">СЂР°Р·СЂРµС€РµРЅРёРµ РѕРєРЅР°</param>
 	GameField(int CountCell, int WindowHeight, const Font& font, Color OuterSide, Color ColorCellOne, Color ColorCellTwo);
 
 	/// <summary>
-	/// получаем текущий квадрат для отрисовки
+	/// РїРѕР»СѓС‡Р°РµРј С‚РµРєСѓС‰РёР№ РєРІР°РґСЂР°С‚ РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё
 	/// </summary>
-	/// <returns>текуший квадрат</returns>
+	/// <returns>С‚РµРєСѓС€РёР№ РєРІР°РґСЂР°С‚</returns>
 	RectangleShape GetRectangleShapeOnField(int XPosition, int YPosition);
 
 
 	/// <summary>
-	/// Получает текстовый вид координаты
+	/// РџРѕР»СѓС‡Р°РµС‚ С‚РµРєСЃС‚РѕРІС‹Р№ РІРёРґ РєРѕРѕСЂРґРёРЅР°С‚С‹
 	/// </summary>
-	/// <param name="XPosition">позиция Х</param>
-	/// <param name="YPosition">позиция Y</param>
-	/// <param name="font">Шрифт</param>
+	/// <param name="XPosition">РїРѕР·РёС†РёСЏ РҐ</param>
+	/// <param name="YPosition">РїРѕР·РёС†РёСЏ Y</param>
+	/// <param name="font">РЁСЂРёС„С‚</param>
 	/// <returns></returns>
 	Text GetFieldCoordinateOnField(int XPosition, int YPosition);
 
 	/// <summary>
-	/// Получаем колличество рядов в поле
+	/// РџРѕР»СѓС‡Р°РµРј РєРѕР»Р»РёС‡РµСЃС‚РІРѕ СЂСЏРґРѕРІ РІ РїРѕР»Рµ
 	/// </summary>
-	/// <returns>колличество рядов</returns>
+	/// <returns>РєРѕР»Р»РёС‡РµСЃС‚РІРѕ СЂСЏРґРѕРІ</returns>
 	int GetCounRowRectangleShape();
 
 	/// <summary>
-	/// получаем колличество столбцов в ряду
+	/// РїРѕР»СѓС‡Р°РµРј РєРѕР»Р»РёС‡РµСЃС‚РІРѕ СЃС‚РѕР»Р±С†РѕРІ РІ СЂСЏРґСѓ
 	/// </summary>
 	/// <param name="No"></param>
 	/// <returns></returns>
 	int GetCounCollRectangleShape(int No = 0);
 
 	/// <summary>
-	/// получаем колличество координат в ряду
+	/// РїРѕР»СѓС‡Р°РµРј РєРѕР»Р»РёС‡РµСЃС‚РІРѕ РєРѕРѕСЂРґРёРЅР°С‚ РІ СЂСЏРґСѓ
 	/// </summary>
 	/// <returns></returns>
 	int GetCounRowFieldCoordinate();
 
 	/// <summary>
-	/// получаем полличество столбцов в ряду
+	/// РїРѕР»СѓС‡Р°РµРј РїРѕР»Р»РёС‡РµСЃС‚РІРѕ СЃС‚РѕР»Р±С†РѕРІ РІ СЂСЏРґСѓ
 	/// </summary>
 	/// <param name="No"></param>
 	/// <returns></returns>
 	int GetCounCollFieldCoordinate(int No = 0);
 
 	/// <summary>
-	/// размер клетки тип float
+	/// СЂР°Р·РјРµСЂ РєР»РµС‚РєРё С‚РёРї float
 	/// </summary>
 	/// <returns></returns>
 	float GetSizeCell();
 
 	/// <summary>
-	/// Выделяем клетки указанные в векторе
+	/// Р’С‹РґРµР»СЏРµРј РєР»РµС‚РєРё СѓРєР°Р·Р°РЅРЅС‹Рµ РІ РІРµРєС‚РѕСЂРµ
 	/// </summary>
-	/// <param name="Coordinate">вектор координат</param>
+	/// <param name="Coordinate">РІРµРєС‚РѕСЂ РєРѕРѕСЂРґРёРЅР°С‚</param>
 	bool SelectCell(const vector<vector<bool>>& Coordinate);
 
 	/// <summary>
-	/// снять выделение с клеток
+	/// СЃРЅСЏС‚СЊ РІС‹РґРµР»РµРЅРёРµ СЃ РєР»РµС‚РѕРє
 	/// </summary>
 	/// <returns></returns>
 	bool UnSelectCell();

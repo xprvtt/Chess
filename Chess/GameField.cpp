@@ -1,4 +1,4 @@
-#include "GameField.h"
+п»ї#include "GameField.h"
 
 
 GameField::GameField(int CountCell, int WindowHeight, const Font& font, Color OuterSide, Color ColorCellOne, Color ColorCellTwo)
@@ -112,7 +112,7 @@ int GameField::GetCounCollFieldCoordinate(int No)
 float GameField::GetSizeCell()
 {
 	return SizeCell;
-}
+} 
 
 bool GameField::SelectCell(const vector<vector<bool>>& Coordinate)
 {
@@ -121,7 +121,7 @@ bool GameField::SelectCell(const vector<vector<bool>>& Coordinate)
 
 	if (SizeCoordinate != SizeRectangleShapeOnField)
 	{
-		OutputLog( "ERROR -> Class -> GameField -> SelectCell -> несовпадение размеров поля:");
+		OutputLog( "ERROR -> Class -> GameField -> SelectCell -> РЅРµСЃРѕРІРїР°РґРµРЅРёРµ СЂР°Р·РјРµСЂРѕРІ РїРѕР»СЏ:");
 		OutputLog(to_string(SizeCoordinate) + "\\" + to_string(SizeRectangleShapeOnField));
 		return false;
 	}

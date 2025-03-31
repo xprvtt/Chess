@@ -1,4 +1,4 @@
-#include "Core.h"
+﻿#include "Core.h"
 
 string getCurrentTime()
 {
@@ -9,4 +9,4 @@ string getCurrentTime()
     strftime(buffer, sizeof(buffer), "[%Y-%m-%d %H:%M:%S] ", &timeinfo);
 
     return string(buffer);
-}
+} 

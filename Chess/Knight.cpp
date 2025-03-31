@@ -1,4 +1,4 @@
-#include "Knight.h"
+п»ї#include "Knight.h"
 
 string Knight::Set_ID_FIGURE()
 {
@@ -7,15 +7,15 @@ string Knight::Set_ID_FIGURE()
 
 vector<vector<bool>> Knight::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	/// ИГРОК 1 НИЖНИЙ БЕЛЫЙ
+	/// РР“Р РћРљ 1 РќРР–РќРР™ Р‘Р•Р›Р«Р™
 
 	int Row = VectorLocationFigure.size();
 	int Col = VectorLocationFigure[0].size();
 
-	//изначально считаем что ходов доступных нет
+	//РёР·РЅР°С‡Р°Р»СЊРЅРѕ СЃС‡РёС‚Р°РµРј С‡С‚Рѕ С…РѕРґРѕРІ РґРѕСЃС‚СѓРїРЅС‹С… РЅРµС‚
 	vector<vector<bool>> result(Row, vector<bool>(Col, false));
 
-	//вправо  вверх
+	//РІРїСЂР°РІРѕ  РІРІРµСЂС…
 
 	int XPos;
 	int YPos;
@@ -67,17 +67,17 @@ vector<vector<bool>> Knight::GetMoveForFigure(int XPositionCurrent, int YPositio
 			continue;
 		}
 
-		// пока не встретим свою или чужую фигуру
+		// РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј СЃРІРѕСЋ РёР»Рё С‡СѓР¶СѓСЋ С„РёРіСѓСЂСѓ 
 		if (VectorLocationFigure[YPos][XPos].first == 0)
 		{
 			result[YPos][XPos] = true;
 		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
+		// РµСЃР»Рё РІСЃС‚СЂРµС‚РёРј С„РёРіСѓСЂСѓ РїСЂРѕС‚РёРІРЅРёРєР° РґРѕР±Р°РІР»СЏРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІР·СЏС‚РёСЏ Рё РІС‹С…РѕРґРёРј
 		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
 		{
 			result[YPos][XPos] = true;
 		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+		// РёРЅР°С‡Рµ РїСЂРµРґРїРѕР»Р°РіР°РµРј С‡С‚Рѕ РІСЃС‚СЂРµС‚РёР»Рё С„РёРіСѓСЂСѓ СЃРІРѕРµР№ СЃС‚РѕСЂРѕРЅС‹ Рё С‚Р° Р¶Рµ РІС‹С…РѕРґРёРј
 		else
 		{
 			result[YPos][XPos] = false;

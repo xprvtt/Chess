@@ -1,4 +1,4 @@
-
+﻿
 #include "Core.h"
 
 bool OutputMessage(string message)
@@ -13,4 +13,4 @@ bool OutputMessage(string message)
 			return true;
 		}
 		return false;
-}
+} 

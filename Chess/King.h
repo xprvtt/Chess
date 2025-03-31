@@ -1,41 +1,41 @@
-#pragma once
+п»ї#pragma once
 
 #pragma once
 #include "Figure.h"
 
 class King : public Figure
 {
-	//наследуем все конструторы
+	//РЅР°СЃР»РµРґСѓРµРј РІСЃРµ РєРѕРЅСЃС‚СЂСѓС‚РѕСЂС‹
 	using Figure::Figure;
 
 	/// <summary>
-	/// получаем доступные координаты для хода
+	/// РїРѕР»СѓС‡Р°РµРј РґРѕСЃС‚СѓРїРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РґР»СЏ С…РѕРґР°
 	/// </summary>
-	/// <param name="Coordiante">Координаты на которые мы хочем сходить</param>
-	/// <returns>логическое значение</returns>
+	/// <param name="Coordiante">РљРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєРѕС‚РѕСЂС‹Рµ РјС‹ С…РѕС‡РµРј СЃС…РѕРґРёС‚СЊ</param>
+	/// <returns>Р»РѕРіРёС‡РµСЃРєРѕРµ Р·РЅР°С‡РµРЅРёРµ</returns>
 	virtual vector<vector<bool>> GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure);
 
-	/// <summary>
-	/// возможность превращения пешки если выполнены условия
+	/// <summary> 
+	/// РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РїСЂРµРІСЂР°С‰РµРЅРёСЏ РїРµС€РєРё РµСЃР»Рё РІС‹РїРѕР»РЅРµРЅС‹ СѓСЃР»РѕРІРёСЏ
 	/// </summary>
 	/// <returns></returns>
 	virtual bool GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure);
 
 	/// <summary>
-	/// можем ли мы превратиться в другую указанную фигуру?
+	/// РјРѕР¶РµРј Р»Рё РјС‹ РїСЂРµРІСЂР°С‚РёС‚СЊСЃСЏ РІ РґСЂСѓРіСѓСЋ СѓРєР°Р·Р°РЅРЅСѓСЋ С„РёРіСѓСЂСѓ?
 	/// </summary>
 	/// <returns></returns>
 	virtual bool GetPromoutionFigure(string ID_Figure);
 
 	/// <summary>
-	/// Проверяем доступен ли ход на указанные координаты, определяется для каждой фигуры
+	/// РџСЂРѕРІРµСЂСЏРµРј РґРѕСЃС‚СѓРїРµРЅ Р»Рё С…РѕРґ РЅР° СѓРєР°Р·Р°РЅРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹, РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РґР»СЏ РєР°Р¶РґРѕР№ С„РёРіСѓСЂС‹
 	/// </summary>
-	/// <param name="Coordiante">Координаты на которые мы хочем сходить</param>
-	/// <returns>логическое значение</returns>
+	/// <param name="Coordiante">РљРѕРѕСЂРґРёРЅР°С‚С‹ РЅР° РєРѕС‚РѕСЂС‹Рµ РјС‹ С…РѕС‡РµРј СЃС…РѕРґРёС‚СЊ</param>
+	/// <returns>Р»РѕРіРёС‡РµСЃРєРѕРµ Р·РЅР°С‡РµРЅРёРµ</returns>
 	virtual bool CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure);
 
 	/// <summary>
-	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
+	/// РЈРЎРўРђРўРђРќРђР’Р›РР’РђР•Рњ ID Р”Р›РЇ Р¤РР“РЈР Р« Р”РћР›Р–РќРђ Р‘Р«РўР¬ РџРћ РќРђР—Р’РђРќРР® РљР›РђРЎРЎРђ Р”Р›РЇ РЈР”РћР‘РЎРўР’Рђ
 	/// </summary>
 	virtual string Set_ID_FIGURE();
 

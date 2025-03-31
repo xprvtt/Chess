@@ -1,4 +1,4 @@
-#include "Rook.h"
+п»ї#include "Rook.h"
 
 string Rook::Set_ID_FIGURE()
 {
@@ -7,52 +7,52 @@ string Rook::Set_ID_FIGURE()
 
 vector<vector<bool>> Rook::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	/// ИГРОК 1 НИЖНИЙ БЕЛЫЙ
+	/// РР“Р РћРљ 1 РќРР–РќРР™ Р‘Р•Р›Р«Р™
 
 	int Row = VectorLocationFigure.size();
 	int Col = VectorLocationFigure[0].size();
 
-	//изначально считаем что ходов доступных нет
+	//РёР·РЅР°С‡Р°Р»СЊРЅРѕ СЃС‡РёС‚Р°РµРј С‡С‚Рѕ С…РѕРґРѕРІ РґРѕСЃС‚СѓРїРЅС‹С… РЅРµС‚
 	vector<vector<bool>> result(Row, vector<bool>(Col, false));
 
-	//проходимся по горизонтали
+	//РїСЂРѕС…РѕРґРёРјСЃСЏ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё
 
-	// вправо от фигуры (ладьи)
+	// РІРїСЂР°РІРѕ РѕС‚ С„РёРіСѓСЂС‹ (Р»Р°РґСЊРё)
 	for (int XPos = XPositionCurrent + 1; XPos < Col; XPos++)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
+		// РїСЂРѕРґРѕР»Р¶Р°РµРј РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј СЃРІРѕСЋ РёР»Рё С‡СѓР¶СѓСЋ С„РёРіСѓСЂСѓ
 		if (VectorLocationFigure[YPositionCurrent][XPos].first == 0)
 		{
 			result[YPositionCurrent][XPos] = true;
 		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
+		// РµСЃР»Рё РІСЃС‚СЂРµС‚РёРј С„РёРіСѓСЂСѓ РїСЂРѕС‚РёРІРЅРёРєР° РґРѕР±Р°РІР»СЏРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІР·СЏС‚РёСЏ Рё РІС‹С…РѕРґРёРј
 		else if (VectorLocationFigure[YPositionCurrent][XPos].first != GetSIDE() && VectorLocationFigure[YPositionCurrent][XPos].first > 0)
 		{
 			result[YPositionCurrent][XPos] = true;
 			break;
 		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+		// РёРЅР°С‡Рµ РїСЂРµРґРїРѕР»Р°РіР°РµРј С‡С‚Рѕ РІСЃС‚СЂРµС‚РёР»Рё С„РёРіСѓСЂСѓ СЃРІРѕРµР№ СЃС‚РѕСЂРѕРЅС‹ Рё С‚Р° Р¶Рµ РІС‹С…РѕРґРёРј
 		else
 		{
 			result[YPositionCurrent][XPos] = false;
 			break;
 		}
 	}
-	// влево от фигуры
+	// РІР»РµРІРѕ РѕС‚ С„РёРіСѓСЂС‹
 	for (int XPos = XPositionCurrent - 1; XPos > 0; XPos--)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
+		// РїСЂРѕРґРѕР»Р¶Р°РµРј РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј СЃРІРѕСЋ РёР»Рё С‡СѓР¶СѓСЋ С„РёРіСѓСЂСѓ
 		if (VectorLocationFigure[YPositionCurrent][XPos].first == 0)
 		{
 			result[YPositionCurrent][XPos] = true;
 		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
+		// РµСЃР»Рё РІСЃС‚СЂРµС‚РёРј С„РёРіСѓСЂСѓ РїСЂРѕС‚РёРІРЅРёРєР° РґРѕР±Р°РІР»СЏРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІР·СЏС‚РёСЏ Рё РІС‹С…РѕРґРёРј
 		else if (VectorLocationFigure[YPositionCurrent][XPos].first != GetSIDE() && VectorLocationFigure[YPositionCurrent][XPos].first > 0)
 		{
 			result[YPositionCurrent][XPos] = true;
 			break;
 		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+		// РёРЅР°С‡Рµ РїСЂРµРґРїРѕР»Р°РіР°РµРј С‡С‚Рѕ РІСЃС‚СЂРµС‚РёР»Рё С„РёРіСѓСЂСѓ СЃРІРѕРµР№ СЃС‚РѕСЂРѕРЅС‹ Рё С‚Р° Р¶Рµ РІС‹С…РѕРґРёРј
 		else
 		{
 			result[YPositionCurrent][XPos] = false;
@@ -60,42 +60,42 @@ vector<vector<bool>> Rook::GetMoveForFigure(int XPositionCurrent, int YPositionC
 		}
 	}
 
-	//вверх от фигуры
+	//РІРІРµСЂС… РѕС‚ С„РёРіСѓСЂС‹
 	for (int YPos = YPositionCurrent - 1; YPos > 0; YPos--)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
+		// РїСЂРѕРґРѕР»Р¶Р°РµРј РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј СЃРІРѕСЋ РёР»Рё С‡СѓР¶СѓСЋ С„РёРіСѓСЂСѓ
 		if (VectorLocationFigure[YPos][XPositionCurrent].first == 0)
 		{
 			result[YPos][XPositionCurrent] = true;
 		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
+		// РµСЃР»Рё РІСЃС‚СЂРµС‚РёРј С„РёРіСѓСЂСѓ РїСЂРѕС‚РёРІРЅРёРєР° РґРѕР±Р°РІР»СЏРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІР·СЏС‚РёСЏ Рё РІС‹С…РѕРґРёРј
 		else if (VectorLocationFigure[YPos][XPositionCurrent].first != GetSIDE() && VectorLocationFigure[YPos][XPositionCurrent].first > 0)
 		{
 			result[YPos][XPositionCurrent] = true;
 			break;
 		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+		// РёРЅР°С‡Рµ РїСЂРµРґРїРѕР»Р°РіР°РµРј С‡С‚Рѕ РІСЃС‚СЂРµС‚РёР»Рё С„РёРіСѓСЂСѓ СЃРІРѕРµР№ СЃС‚РѕСЂРѕРЅС‹ Рё С‚Р° Р¶Рµ РІС‹С…РѕРґРёРј
 		else
 		{
-			result[YPos][XPositionCurrent] = false;
+			result[YPos][XPositionCurrent] = false; 
 			break;
 		}
 	}
-	//вниз от фигуры
+	//РІРЅРёР· РѕС‚ С„РёРіСѓСЂС‹
 	for (int YPos = YPositionCurrent + 1; YPos < Row; YPos++)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
+		// РїСЂРѕРґРѕР»Р¶Р°РµРј РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј СЃРІРѕСЋ РёР»Рё С‡СѓР¶СѓСЋ С„РёРіСѓСЂСѓ
 		if (VectorLocationFigure[YPos][XPositionCurrent].first == 0)
 		{
 			result[YPos][XPositionCurrent] = true;
 		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
+		// РµСЃР»Рё РІСЃС‚СЂРµС‚РёРј С„РёРіСѓСЂСѓ РїСЂРѕС‚РёРІРЅРёРєР° РґРѕР±Р°РІР»СЏРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІР·СЏС‚РёСЏ Рё РІС‹С…РѕРґРёРј
 		else if (VectorLocationFigure[YPos][XPositionCurrent].first != GetSIDE() && VectorLocationFigure[YPos][XPositionCurrent].first > 0)
 		{
 			result[YPos][XPositionCurrent] = true;
 			break;
 		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+		// РёРЅР°С‡Рµ РїСЂРµРґРїРѕР»Р°РіР°РµРј С‡С‚Рѕ РІСЃС‚СЂРµС‚РёР»Рё С„РёРіСѓСЂСѓ СЃРІРѕРµР№ СЃС‚РѕСЂРѕРЅС‹ Рё С‚Р° Р¶Рµ РІС‹С…РѕРґРёРј
 		else
 		{
 			result[YPos][XPositionCurrent] = false;
