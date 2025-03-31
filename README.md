@@ -18,5 +18,6 @@ Chess 1.0.0-beta-1
 
 <details>
   <summary>Нажмите, чтобы раскрыть картинку</summary>
-  [https://github.com/xprvtt/Chess/tree/main/AssetGithub/MainWindow.png](https://github.com/xprvtt/Chess/blob/main/AssetGithub/MainWindow.png)
+  ![ChessMainWindow](https://github.com/xprvtt/Chess/blob/main/AssetGithub/MainWindow.png)
+  
 </details>
