@@ -18,8 +18,8 @@ int main()
     unsigned int SizeWindowLength = SizeWindowHeight + SizeWindowHeight * 0.5;
     
     /// количество ИГРОВЫХ клеток на одной стороне + 2 клетки для координат
-    unsigned int CountCellOnLengthWindow = 15 + 2;   
-    unsigned int CountCellOnHeightWindow = 15 + 2;
+    unsigned int CountCellOnLengthWindow = 8 + 2;   
+    unsigned int CountCellOnHeightWindow = 8 + 2;
 
     ///////////////////////////////////////////////////////////////////////////////////
 
