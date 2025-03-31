@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\Class">
+      <UniqueIdentifier>{db299005-e3aa-4406-869e-a46373dcc22c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Class">
+      <UniqueIdentifier>{6fd743bb-778c-44ec-9db3-42a0d683f0d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Class\Figure">
+      <UniqueIdentifier>{0ab0caac-7bd6-48c0-af8b-e3746c9b4086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Class\Figure">
+      <UniqueIdentifier>{984bd4f6-b206-4362-90c1-834bb6709958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Class\GameField">
+      <UniqueIdentifier>{010434ef-4594-45a1-9814-26bc2e69c720}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Define">
+      <UniqueIdentifier>{ce249f3f-17ea-454e-9d0e-475a5638675c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Main">
+      <UniqueIdentifier>{c28fbba6-9f9e-4fb0-9373-584b05f7a3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Main">
+      <UniqueIdentifier>{b1759cde-c249-499b-b9a3-e6a845749ca0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Main\RelatedFunction">
+      <UniqueIdentifier>{f4c434f5-a506-431b-95b2-14867fe09c05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Class\GameField">
+      <UniqueIdentifier>{30621fed-9b34-47cc-a446-3ade5a81a985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Class\OtherClass">
+      <UniqueIdentifier>{41440dd8-96f1-48d6-b83a-64047305f431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Class\OtherClass">
+      <UniqueIdentifier>{76e3ac6e-b24b-4eb5-9d3f-653d6270f75e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Class\Figure\heirs">
+      <UniqueIdentifier>{85b1a571-ba21-4fd2-8ffc-4c17a7c8cdf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Class\Figure\heirs">
+      <UniqueIdentifier>{903c47f2-4740-45cc-8b8c-7d44ffae38df}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Figure.cpp">
+      <Filter>Исходные файлы\Class\Figure</Filter>
+    </ClCompile>
+    <ClCompile Include="GameField.cpp">
+      <Filter>Исходные файлы\Class\GameField</Filter>
+    </ClCompile>
+    <ClCompile Include="getCurrentTime.cpp">
+      <Filter>Исходные файлы\Main\RelatedFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputMessage.cpp">
+      <Filter>Исходные файлы\Main\RelatedFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadFont.cpp">
+      <Filter>Исходные файлы\Main\RelatedFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="FigureLocation.cpp">
+      <Filter>Исходные файлы\Class\GameField</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchFile.cpp">
+      <Filter>Исходные файлы\Main\RelatedFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="CountdownTimer.cpp">
+      <Filter>Исходные файлы\Class\OtherClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Pawn.cpp">
+      <Filter>Исходные файлы\Class\Figure\heirs</Filter>
+    </ClCompile>
+    <ClCompile Include="Rook.cpp">
+      <Filter>Исходные файлы\Class\Figure\heirs</Filter>
+    </ClCompile>
+    <ClCompile Include="Queen.cpp">
+      <Filter>Исходные файлы\Class\Figure\heirs</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>Исходные файлы\Class\Figure\heirs</Filter>
+    </ClCompile>
+    <ClCompile Include="King.cpp">
+      <Filter>Исходные файлы\Class\Figure\heirs</Filter>
+    </ClCompile>
+    <ClCompile Include="Bishop.cpp">
+      <Filter>Исходные файлы\Class\Figure\heirs</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Main.h">
+      <Filter>Файлы заголовков\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Figure.h">
+      <Filter>Файлы заголовков\Class\Figure</Filter>
+    </ClInclude>
+    <ClInclude Include="GameField.h">
+      <Filter>Файлы заголовков\Class\GameField</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>Файлы заголовков\Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Файлы заголовков\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="FigureLocation.h">
+      <Filter>Файлы заголовков\Class\GameField</Filter>
+    </ClInclude>
+    <ClInclude Include="CountdownTimer.h">
+      <Filter>Файлы заголовков\Class\OtherClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Pawn.h">
+      <Filter>Файлы заголовков\Class\Figure\heirs</Filter>
+    </ClInclude>
+    <ClInclude Include="Rook.h">
+      <Filter>Файлы заголовков\Class\Figure\heirs</Filter>
+    </ClInclude>
+    <ClInclude Include="Bishop.h">
+      <Filter>Файлы заголовков\Class\Figure\heirs</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>Файлы заголовков\Class\Figure\heirs</Filter>
+    </ClInclude>
+    <ClInclude Include="Queen.h">
+      <Filter>Файлы заголовков\Class\Figure\heirs</Filter>
+    </ClInclude>
+    <ClInclude Include="King.h">
+      <Filter>Файлы заголовков\Class\Figure\heirs</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
