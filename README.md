@@ -17,6 +17,6 @@ Chess 1.0.0-beta-1
 Создано с помощью библиотеки SFML для редактирования необходима ее настройка. Использованы бесплатные текстуры.
 
 <details>
-  <summary>Нажмите, чтобы раскрыть</summary>
-  Картинка
+  <summary>Нажмите, чтобы раскрыть картинку</summary>
+  ![Описание изображения](https://github.com/xprvtt/Chess/tree/main/AssetGithub/MainWindow.jpg)
 </details>
