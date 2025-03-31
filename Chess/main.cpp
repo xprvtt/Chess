@@ -66,7 +66,7 @@ int main()
     TextInGameRow2.setFillColor(Color::Black);
     TextInGameRow2.setPosition(Vector2f(SizeWindowHeight / CountCellOnLengthWindow / 2+ SizeWindowHeight , SizeWindowHeight / CountCellOnLengthWindow * 2.5));
 
-    /// текст расположенный во втором ряду
+    /// текст расположенный в третьем ряду
     Text TextInGameRow3(CurrentFont);
     TextInGameRow3.setString(L"TextInGameRow3");
     TextInGameRow3.setCharacterSize(SizeWindowHeight / (CountCellOnLengthWindow * 3));
