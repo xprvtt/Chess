@@ -14,9 +14,11 @@ Chess 1.0.0-beta-1
 
 Гибкое строение ядра позволяет добавлять свои собственные фигуры, свой собственный размер игрового поля.
 
-Создано с помощью библиотеки SFML для редактирования необходима ее настройка. Использованы бесплатные текстуры.
+Создано с помощью библиотеки SFML. Использованы бесплатные текстуры.
+
+
 
 <details>
   <summary>Нажмите, чтобы раскрыть картинку</summary>
-  ![Описание изображения](https://github.com/xprvtt/Chess/tree/main/AssetGithub/MainWindow.png)
+  <img src="https://github.com/xprvtt/Chess/blob/main/AssetGithub/MainWindow.png" alt="ChessMainWindow">  
 </details>
