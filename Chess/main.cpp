@@ -7,8 +7,12 @@ unordered_map<string, Texture> TextureMap;
 int main()
 {
 
-    OutputLog("Инициация");
 
+    // создаем вывод в логи
+    permissions("Log/log.txt", perms::all);
+    remove("Log/log.txt");
+    OutputLog("Запуск!");
+    
     ///////////////////////////////////////////////////////////////////////////////////
 
     /// высота окна, от нее зависит длина окна
@@ -76,10 +80,7 @@ int main()
     ///////////////////////////////////////////////////////////////////////////////////
 
 
-    // создаем вывод в логи
-    permissions("Log/log.txt", perms::all);
-    remove("Log/log.txt");
-    OutputLog("Запуск!");
+
 
     
     // создаем окно игры
@@ -356,7 +357,7 @@ int main()
                     {
 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // выводим информацию о фигуре на игровом поле
+                        // выводим информацию о фигуре на поле уникальных фигур
                         string Name = Newlocation.GetIDUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second) + " ";
                         string Coordinate = "X:" + to_string(CurrentgvPositionInUniqueFigureField.first) + " Y:" + to_string(CurrentgvPositionInUniqueFigureField.second);
                         string sideFigure = " Side: " + to_string(Newlocation.GetSideUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second));
