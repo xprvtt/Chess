@@ -7,8 +7,6 @@ string Queen::Set_ID_FIGURE()
 
 vector<vector<bool>> Queen::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	/// ИГРОК 1 НИЖНИЙ БЕЛЫЙ
-
 	int Row = VectorLocationFigure.size();
 	int Col = VectorLocationFigure[0].size();
 
