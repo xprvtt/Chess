@@ -65,7 +65,7 @@ string Figure::Set_ID_FIGURE()
 
 vector<vector<bool>> Figure::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	// виртуальный метод, всегда vector<vector<bool=false>>  \\\\  требует переопределения
+	// виртуальный метод, для фигуры Figure всегда vector<vector<bool=false>>  \\\\  требует переопределения
 	int Size = VectorLocationFigure.size();
 	return vector<vector<bool>>(Size, vector<bool>(Size, false));
 }
@@ -73,14 +73,14 @@ vector<vector<bool>> Figure::GetMoveForFigure(int XPositionCurrent, int YPositio
 
 bool Figure::GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	// виртуальный метод, всегда false   \\\\  требует переопределения
+	// виртуальный метод, всегда false для фигуры Figure  \\\\  требует переопределения
 	// стандартная фигура не имеет условий для превращения в другую фигуру
 	return false;
 }
 
 bool Figure::GetPromoutionFigure(string ID_Figure)
 {
-	// виртуальный метод, всегда false   \\\\  требует переопределения
+	// виртуальный метод, всегда false  для фигуры Figure \\\\  требует переопределения
 	// не можем превратиться в любую указанную фигуру
 	return false;
 }
@@ -88,7 +88,7 @@ bool Figure::GetPromoutionFigure(string ID_Figure)
 
 bool Figure::CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	// виртуальный метод, всегда false   \\\\  требует переопределения
+	// виртуальный метод, всегда false   для фигуры Figure\\\\  требует переопределения
 	// проверка ходов
 	return false;
 }
