@@ -8,7 +8,7 @@ class Figure
 private:
 
 	/// <summary>
-	/// единый id для фигур этого типа
+	/// единый id для фигур этого типа должен быть по названию класса для удобства например для class Figure -> ID_FIGURE = "Figure"
 	/// </summary>
 	string ID_FIGURE;
 
