@@ -13,7 +13,7 @@ private:
 	string ID_FIGURE;
 
 	/// <summary>
-	/// сторока игрока 1 - белый \ 2 - черный
+	/// сторона игрока 1 - белый \ 2 - черный
 	/// </summary>
 	int SIDE;
 
