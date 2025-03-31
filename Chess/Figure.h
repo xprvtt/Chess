@@ -30,7 +30,7 @@ public:
 	/// определяем сторону игрока фигуры и уязвимость при инициализации
 	/// </summary>
 	/// <param name="SIDE">сторона игрока</param>
-	/// <param name="Inulnerability">true = неуязвимость \ false = пешку можно взять (убить) </param>
+	/// <param name="Inulnerability">true = неуязвимость \ false = фигуру можно взять (убить) </param>
 	Figure(int SIDE, bool INVULNERABLE);
 
 	/// <summary>
