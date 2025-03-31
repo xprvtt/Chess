@@ -1,4 +1,4 @@
-#include "King.h"
+п»ї#include "King.h"
 
 string King::Set_ID_FIGURE()
 {
@@ -7,12 +7,12 @@ string King::Set_ID_FIGURE()
 
 vector<vector<bool>> King::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
 {
-	/// ИГРОК 1 НИЖНИЙ БЕЛЫЙ
+	/// РР“Р РћРљ 1 РќРР–РќРР™ Р‘Р•Р›Р«Р™
 
 	int Row = VectorLocationFigure.size();
 	int Col = VectorLocationFigure[0].size();
 
-	//изначально считаем что ходов доступных нет
+	//РёР·РЅР°С‡Р°Р»СЊРЅРѕ СЃС‡РёС‚Р°РµРј С‡С‚Рѕ С…РѕРґРѕРІ РґРѕСЃС‚СѓРїРЅС‹С… РЅРµС‚
 	vector<vector<bool>> result(Row, vector<bool>(Col, false));
 
 	int YPos = YPositionCurrent;
@@ -28,40 +28,40 @@ vector<vector<bool>> King::GetMoveForFigure(int XPositionCurrent, int YPositionC
 			YPos = YPositionCurrent;
 			break;
 		case 1:
-			//влево от фигуры
+			//РІР»РµРІРѕ РѕС‚ С„РёРіСѓСЂС‹
 			XPos = XPositionCurrent - 1;
 			YPos = YPositionCurrent;
 			break;
 		case 2:
-			//вверх от фигуры
+			//РІРІРµСЂС… РѕС‚ С„РёРіСѓСЂС‹
 			XPos = XPositionCurrent;
 			YPos = YPositionCurrent - 1;
 			break;
 		case 3:
-			//вниз от фигуры
+			//РІРЅРёР· РѕС‚ С„РёРіСѓСЂС‹
 			XPos = XPositionCurrent;
 			YPos = YPositionCurrent + 1;
 			break;
 		case 4:
-			///// диагональ
+			///// РґРёР°РіРѕРЅР°Р»СЊ
 
-			//в право вверх от фигуры
+			//РІ РїСЂР°РІРѕ РІРІРµСЂС… РѕС‚ С„РёРіСѓСЂС‹
 			XPos = XPositionCurrent + 1;
 			YPos = YPositionCurrent - 1;
 			break;
 		case 5:
-			//  в право вниз от фигуры
+			//  РІ РїСЂР°РІРѕ РІРЅРёР· РѕС‚ С„РёРіСѓСЂС‹
 			XPos = XPositionCurrent + 1;
 			YPos = YPositionCurrent + 1;
 			break;
 		case 6:
 
-			// влево вниз от фигуры
+			// РІР»РµРІРѕ РІРЅРёР· РѕС‚ С„РёРіСѓСЂС‹
 			XPos = XPositionCurrent - 1;
 			YPos = YPositionCurrent + 1;
 			break;
 		case 7:
-			// влево вверх от фигуры
+			// РІР»РµРІРѕ РІРІРµСЂС… РѕС‚ С„РёРіСѓСЂС‹
 			XPos = XPositionCurrent - 1;
 			YPos = YPositionCurrent - 1;
 			break;
@@ -69,17 +69,17 @@ vector<vector<bool>> King::GetMoveForFigure(int XPositionCurrent, int YPositionC
 		default:
 			break;
 		}
-		// продолжаем пока не встретим свою или чужую фигуру
+		// РїСЂРѕРґРѕР»Р¶Р°РµРј РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј СЃРІРѕСЋ РёР»Рё С‡СѓР¶СѓСЋ С„РёРіСѓСЂСѓ
 		if (VectorLocationFigure[YPos][XPos].first == 0)
 		{
 			result[YPos][XPos] = true;
 		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
+		// РµСЃР»Рё РІСЃС‚СЂРµС‚РёРј С„РёРіСѓСЂСѓ РїСЂРѕС‚РёРІРЅРёРєР° РґРѕР±Р°РІР»СЏРµРј РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІР·СЏС‚РёСЏ Рё РІС‹С…РѕРґРёРј
 		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
 		{
 			result[YPos][XPos] = true;
 		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+		// РёРЅР°С‡Рµ РїСЂРµРґРїРѕР»Р°РіР°РµРј С‡С‚Рѕ РІСЃС‚СЂРµС‚РёР»Рё С„РёРіСѓСЂСѓ СЃРІРѕРµР№ СЃС‚РѕСЂРѕРЅС‹ Рё С‚Р° Р¶Рµ РІС‹С…РѕРґРёРј
 		else
 		{
 			result[YPos][XPos] = false;
