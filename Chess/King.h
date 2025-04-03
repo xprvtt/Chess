@@ -15,7 +15,7 @@ class King : public Figure
 	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
 	vector<pair<size_t, size_t>> GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
-
+	 
 	/// <summary>
 	/// проверка -> возможно ли превращение фигуры на указанной позиции?
 	/// </summary>

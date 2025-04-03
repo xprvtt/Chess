@@ -24,7 +24,7 @@ class Queen : public Figure
 	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns> логическое значение \ true - вревращение возможно</returns>
 	bool GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
-
+	 
 
 	/// <summary>
 	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры

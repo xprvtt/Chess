@@ -13,7 +13,7 @@ class Bishop : public Figure
 	/// <param name="XPositionCurrent"> текущая позиция фигуры Х</param>
 	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
 	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
-	/// <returns></returns>
+	/// <returns></returns> 
 	vector<pair<size_t, size_t>> GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
 
 

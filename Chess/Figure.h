@@ -27,7 +27,7 @@ private:
 	/// </summary>
 	bool IMPORTANT;
 
-	/// <summary>
+	/// <summary> 
 	/// имеет ли фигура возможность превращения
 	/// </summary>
 	bool PROMOUTION;
