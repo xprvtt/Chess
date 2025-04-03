@@ -83,7 +83,7 @@ vector<pair<size_t, size_t>> Knight::GetMoveForFigure(size_t XPositionCurrent, s
 	}
 	return result;
 }
-
+ 
 bool Knight::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
 	vector<pair<size_t, size_t>> VMove = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);

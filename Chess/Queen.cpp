@@ -211,7 +211,7 @@ bool Queen::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t X
 		{
 			return true;
 		}
-	}
+	} 
 	return false;
 }
 

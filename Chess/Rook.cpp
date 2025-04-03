@@ -26,7 +26,7 @@ vector<pair<size_t, size_t>> Rook::GetMoveForFigure(size_t XPositionCurrent, siz
 		if (get<0>(VectorLocationFigure[YPositionCurrent][XPos]) == 0)
 		{
 			result.push_back(make_pair(XPos, YPositionCurrent));
-		}
+		} 
 		// если встретим фигуру противника добавляем возможность взятия и выходим
 		else if (get<0>(VectorLocationFigure[YPositionCurrent][XPos]) != Side && get<0>(VectorLocationFigure[YPositionCurrent][XPos]) > 0)
 		{

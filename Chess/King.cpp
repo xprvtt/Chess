@@ -15,7 +15,7 @@ vector<pair<size_t, size_t>> King::GetMoveForFigure(size_t XPositionCurrent, siz
 
 	size_t YPos;
 	size_t XPos;
-
+	 
 	for (size_t count = 0; count < 8; count++)
 	{
 		switch (count)

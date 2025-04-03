@@ -166,7 +166,7 @@ vector<pair<size_t, size_t>> AvailableMoveForFigure2(size_t XPositionCurrent, si
 		result.push_back(make_pair(XPositionCurrent - 1, YPositionCurrent + 1));
 	}
 	if (get<0>(VectorLocationFigure[YPositionCurrent + 1][XPositionCurrent + 1]) > 0 && get<0>(VectorLocationFigure[YPositionCurrent + 1][XPositionCurrent + 1]) != get<0>(VectorLocationFigure[YPositionCurrent][XPositionCurrent]))
-	{
+	{ 
 		result.push_back(make_pair(XPositionCurrent + 1, YPositionCurrent + 1));
 	}
 

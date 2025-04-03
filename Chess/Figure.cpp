@@ -69,7 +69,7 @@ int Figure::GetSIDE()
 vector<tuple<int, string, bool, bool, bool>> Figure::GetVectorPROMOUTION()
 {
 	return VectorPROMOUTION;
-}
+} 
 
 bool Figure::GetPromoutionFigure(int SIDE, string ID_FIGURE,  bool INVULNERABLE, bool IMPORTANT, bool PROMOUTION)
 {

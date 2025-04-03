@@ -14,7 +14,7 @@ vector<pair<size_t, size_t>> Bishop::GetMoveForFigure(size_t XPositionCurrent, s
 
 
 	int Side = GetSIDE();
-	//// по диагонали
+	//// по диагонали 
 
 	//в правый низ от фигуры
 	for (size_t YPos = YPositionCurrent + 1, XPos = XPositionCurrent + 1; YPos < Row || XPos < Col; YPos++, XPos++)
