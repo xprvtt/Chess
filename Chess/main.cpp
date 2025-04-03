@@ -524,7 +524,7 @@ int main()
                 window.draw(NewLocation.GetRectangleShapeUniqueFigure(coll, row));
             }
         } 
-        window.display();
+        window.display(); 
     }
 
     return 0;

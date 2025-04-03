@@ -265,7 +265,7 @@ public:
 	/// <param name="XPositionFigure">позиция Х фигуры</param>
 	/// <param name="YpositionFigure">позиция У фигуры</param>
 	/// <returns>true - если фигура на позиции есть и была выделена</returns>
-	bool SeletcFigure(size_t XPositionFigure, size_t YpositionFigure);
+	bool SeletcFigure(size_t XPositionFigure, size_t YpositionFigure); 
 
 	/// <summary>
 	/// отменить выделение

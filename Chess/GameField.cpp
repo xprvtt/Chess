@@ -122,7 +122,7 @@ bool GameField::SelectCell(const vector<vector<bool>>& Coordinate, Color color)
 		{
 			if (Coordinate[Row][Col] == true)
 			{
-				RectangleShapeOnField[Row][Col].setOutlineThickness(-5);
+				RectangleShapeOnField[Row][Col].setOutlineThickness(-5); 
 				RectangleShapeOnField[Row][Col].setOutlineColor(color);
 			}
 		}

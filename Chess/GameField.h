@@ -22,7 +22,7 @@ private:
 	float SizeCell = 0.f;
 
 	Font GameFieldFont;
-
+	 
 public:
 	
 	/// <summary>

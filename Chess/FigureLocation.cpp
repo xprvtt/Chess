@@ -236,7 +236,7 @@ bool FigureLocation::MoveSelectFigure(size_t XPositionMove, size_t YPositionMove
 	bool exists = false;
 
 	for (const auto& Move : AvailableMove)
-	{
+	{ 
 		if (Move.first == XPositionMove && Move.second == YPositionMove)
 		{
 			exists = true;
