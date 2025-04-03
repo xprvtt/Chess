@@ -5,19 +5,18 @@ string King::Set_ID_FIGURE()
 	return "King";
 }
 
-vector<vector<bool>> King::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
+vector<pair<size_t, size_t>> King::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
-	int Row = VectorLocationFigure.size();
-	int Col = VectorLocationFigure[0].size();
+	vector<pair<size_t, size_t>> result;
 
-	//изначально считаем что ходов доступных нет
-	vector<vector<bool>> result(Row, vector<bool>(Col, false));
-
-	int YPos = YPositionCurrent;
-	int XPos = XPositionCurrent;
+	size_t Row = VectorLocationFigure.size();
+	size_t Col = VectorLocationFigure[0].size();
 
 
-	for (int count = 0; count < 8; count++)
+	size_t YPos;
+	size_t XPos;
+
+	for (size_t count = 0; count < 8; count++)
 	{
 		switch (count)
 		{
@@ -42,7 +41,6 @@ vector<vector<bool>> King::GetMoveForFigure(int XPositionCurrent, int YPositionC
 			break;
 		case 4:
 			///// диагональ
-
 			//в право вверх от фигуры
 			XPos = XPositionCurrent + 1;
 			YPos = YPositionCurrent - 1;
@@ -53,7 +51,6 @@ vector<vector<bool>> King::GetMoveForFigure(int XPositionCurrent, int YPositionC
 			YPos = YPositionCurrent + 1;
 			break;
 		case 6:
-
 			// влево вниз от фигуры
 			XPos = XPositionCurrent - 1;
 			YPos = YPositionCurrent + 1;
@@ -63,42 +60,40 @@ vector<vector<bool>> King::GetMoveForFigure(int XPositionCurrent, int YPositionC
 			XPos = XPositionCurrent - 1;
 			YPos = YPositionCurrent - 1;
 			break;
-
 		default:
 			break;
 		}
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPos][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPos]) != GetSIDE() && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
-			result[YPos][XPos] = true;
-		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
-		else
-		{
-			result[YPos][XPos] = false;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
 	}
 	return result;
 }
 
-bool King::CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure)
+bool King::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
-	vector<vector<bool>> temp = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+	vector<pair<size_t, size_t>> VMove = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
 
-	return temp[XPositionMove][YPositionMove] ? true : false;
-}
-
-bool King::GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
-{
+	for (const auto& Move : VMove)
+	{
+		if (Move.first == XPositionMove && Move.second == YPositionMove)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
-bool King::GetPromoutionFigure(string ID_Figure)
+bool King::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
 	return false;
 }

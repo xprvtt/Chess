@@ -1,9 +1,9 @@
 ﻿#include "GameField.h"
 
 
-GameField::GameField(int CountCell, int WindowHeight, const Font& font, Color OuterSide, Color ColorCellOne, Color ColorCellTwo)
+GameField::GameField(size_t CountCell, int WindowHeight, const Font& font, Color OuterSide, Color ColorCellOne, Color ColorCellTwo)
 {
-	SizeCell = WindowHeight / CountCell;
+	SizeCell = static_cast<float>(WindowHeight / CountCell);
 
 	GameFieldFont = font;
 
@@ -16,14 +16,14 @@ GameField::GameField(int CountCell, int WindowHeight, const Font& font, Color Ou
 		{
 			RectangleShape Cell;
 			Cell.setSize(Vector2f(SizeCell, SizeCell));
-			Cell.setPosition(Vector2f(SizeCell * Col, SizeCell * Row));
+			Cell.setPosition(Vector2f(static_cast<float>(SizeCell * Col), static_cast<float>(SizeCell * Row)));
 			Cell.setOutlineColor(Color::Black);
 			Cell.setOutlineThickness(-1);
 
 			Text TextCoordinate(GameFieldFont, " ");
-			TextCoordinate.setCharacterSize(SizeCell / 5);
+			TextCoordinate.setCharacterSize(static_cast<unsigned int>(SizeCell / 5));
 			TextCoordinate.setFillColor(Color::Black);
-			TextCoordinate.setPosition(Vector2f(SizeCell * Col + SizeCell / 1.6 , SizeCell * Row + SizeCell / 1.4));
+			TextCoordinate.setPosition(Vector2f(static_cast<float>(SizeCell * Col + SizeCell / 1.6), static_cast<float>(SizeCell * Row + SizeCell / 1.4)));
 
 			if (Row == 0 || Row == CountCell-1 || Col == 0 || Col == CountCell-1)
 			{
@@ -58,7 +58,7 @@ GameField::GameField(int CountCell, int WindowHeight, const Font& font, Color Ou
 	}
 }
 
-RectangleShape GameField::GetRectangleShapeOnField(int XPosition, int YPosition)
+RectangleShape GameField::GetRectangleShapeOnField(size_t XPosition, size_t YPosition)
 {
 	if (XPosition < RectangleShapeOnField[YPosition].size() && YPosition < RectangleShapeOnField.size() && XPosition >= 0 && YPosition >= 0)
 	{
@@ -72,7 +72,7 @@ RectangleShape GameField::GetRectangleShapeOnField(int XPosition, int YPosition)
 
 }
 
-Text GameField::GetFieldCoordinateOnField(int XPosition, int YPosition)
+Text GameField::GetFieldCoordinateOnField(size_t XPosition, size_t YPosition)
 {
 	if (XPosition < FieldCoordinate[YPosition].size() && YPosition < FieldCoordinate.size() && XPosition >= 0 && YPosition >= 0)
 	{
@@ -84,29 +84,19 @@ Text GameField::GetFieldCoordinateOnField(int XPosition, int YPosition)
 		Text Error(GameFieldFont, "Error Text");
 		Error.setPosition(Vector2f(temp * XPosition + temp / 2 , temp * YPosition + temp / 2));
 		Error.setFillColor(Color::Black);
-		Error.setCharacterSize(temp / 5);
+		Error.setCharacterSize(static_cast<unsigned int>(temp / 5));
 		return Error;
 	}
 }
 
-int GameField::GetCounRowRectangleShape()
+size_t GameField::GetCounRow()
 {
 	return RectangleShapeOnField.size();
 }
 
-int GameField::GetCounCollRectangleShape(int No)
+size_t GameField::GetCounColl(size_t No)
 {
 	return RectangleShapeOnField[No].size();
-}
-
-int GameField::GetCounRowFieldCoordinate()
-{
-	return FieldCoordinate.size();
-}
-
-int GameField::GetCounCollFieldCoordinate(int No)
-{
-	return FieldCoordinate[No].size();
 }
 
 float GameField::GetSizeCell()
@@ -114,10 +104,10 @@ float GameField::GetSizeCell()
 	return SizeCell;
 } 
 
-bool GameField::SelectCell(const vector<vector<bool>>& Coordinate)
+bool GameField::SelectCell(const vector<vector<bool>>& Coordinate, Color color)
 {
-	int SizeCoordinate = Coordinate.size();
-	int SizeRectangleShapeOnField = RectangleShapeOnField.size();
+	size_t SizeCoordinate = Coordinate.size();
+	size_t SizeRectangleShapeOnField = RectangleShapeOnField.size();
 
 	if (SizeCoordinate != SizeRectangleShapeOnField)
 	{
@@ -126,19 +116,38 @@ bool GameField::SelectCell(const vector<vector<bool>>& Coordinate)
 		return false;
 	}
 
-	for (int Row = 0; Row < Coordinate.size(); Row++)
+	for (size_t Row = 0; Row < Coordinate.size(); Row++)
 	{
-		for (int Col = 0; Col < Coordinate[0].size(); Col++)
+		for (size_t Col = 0; Col < Coordinate[0].size(); Col++)
 		{
 			if (Coordinate[Row][Col] == true)
 			{
 				RectangleShapeOnField[Row][Col].setOutlineThickness(-5);
-				RectangleShapeOnField[Row][Col].setOutlineColor(Color::Red);
+				RectangleShapeOnField[Row][Col].setOutlineColor(color);
 			}
 		}
 	}	
 	return true;
 }
+bool GameField::SelectCell(size_t XPosition, size_t YPosition, Color color)
+{
+	size_t SizeV = RectangleShapeOnField.size();
+	size_t SizeVV = RectangleShapeOnField[0].size();
+
+	if (XPosition < 1 || YPosition < 1 || XPosition > SizeVV - 1 || YPosition > SizeV - 1)
+	{
+		OutputLog("ERROR -> Class -> GameField -> SelectCell -> выход за игровое поле или выделение границы:");
+		OutputLog(to_string(SizeV) + "\\" + to_string(SizeVV));
+		return false;
+	}
+
+	RectangleShapeOnField[YPosition][XPosition].setOutlineThickness(-5);
+	RectangleShapeOnField[YPosition][XPosition].setOutlineColor(color);
+
+	return true;
+}
+
+
 
 bool GameField::UnSelectCell()
 {

@@ -1,43 +1,46 @@
 ﻿#pragma once
 
-#include "Core.h"
 #include "Figure.h"
-
 
 class Pawn : public Figure
 {
-	//наследуем все конструторы
+	//наследуем все конструкторы
 	using Figure::Figure;
 
 	/// <summary>
-	/// получаем доступные координаты для хода
+	/// получить доступные координаты для хода -> true - доступная координата
 	/// </summary>
-	/// <param name="Coordiante">Координаты на которые мы хочем сходить</param>
-	/// <returns>логическое значение</returns>
-	virtual vector<vector<bool>> GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure);
-
-	/// <summary> 
-	/// возможность превращения пешки если выполнены условия
-	/// </summary>
+	/// <param name="XPositionCurrent"> текущая позиция фигуры Х</param>
+	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
+	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	virtual bool GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure);
+	vector<pair<size_t, size_t>>GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
 
 	/// <summary>
-	/// можем ли мы превратиться в другую указанную фигуру?
+	/// проверка -> возможно ли превращение фигуры на указанной позиции?
 	/// </summary>
-	/// <returns></returns>
-	virtual bool GetPromoutionFigure(string ID_Figure);
+	/// <param name="XPositionCurrent"> текущая позиция фигуры Х</param>
+	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
+	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
+	/// <returns> логическое значение \ true - вревращение возможно</returns>
+	bool GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
+
 
 	/// <summary>
-	/// Проверяем доступен ли ход на указанные координаты, определяется для каждой фигуры
+	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры
 	/// </summary>
-	/// <param name="Coordiante">Координаты на которые мы хочем сходить</param>
-	/// <returns>логическое значение</returns>
-	virtual bool CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure);
+	/// <param name="XPositionCurrent">текущие координаты фигуры </param>
+	/// <param name="YPositionCurrent">текущие координаты фигуры </param>
+	/// <param name="XPositionMove"> координаты, на которые планируем переметиться</param>
+	/// <param name="YPositionMove"> координаты, на которые планируем переметиться</param>
+	/// <param name="VectorLocationFigure"></param>
+	/// <returns></returns>
+	bool CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
 
 	/// <summary>
 	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
+	/// ФИГУРА НЕ ДОЛЖНА НАЗЫВАТЬСЯ "ALL"
 	/// </summary>
-	virtual string Set_ID_FIGURE();
+	string Set_ID_FIGURE() override;
 
 };

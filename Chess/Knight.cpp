@@ -5,21 +5,22 @@ string Knight::Set_ID_FIGURE()
 	return "Knight";
 }
 
-vector<vector<bool>> Knight::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
+vector<pair<size_t, size_t>> Knight::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
 
-	int Row = VectorLocationFigure.size();
-	int Col = VectorLocationFigure[0].size();
+	size_t Row = VectorLocationFigure.size();
+	size_t Col = VectorLocationFigure[0].size();
 
 	//изначально считаем что ходов доступных нет
-	vector<vector<bool>> result(Row, vector<bool>(Col, false));
+	vector<pair<size_t, size_t>> result;
+
 
 	//вправо  вверх
 
-	int XPos;
-	int YPos;
+	size_t XPos;
+	size_t YPos;
 
-	for (int count = 0; count < 8; count++)
+	for (size_t count = 0; count < 8; count++)
 	{
 
 		switch (count)
@@ -67,38 +68,37 @@ vector<vector<bool>> Knight::GetMoveForFigure(int XPositionCurrent, int YPositio
 		}
 
 		// пока не встретим свою или чужую фигуру 
-		if (VectorLocationFigure[YPos][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPos]) != GetSIDE() && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
-		else
-		{
-			result[YPos][XPos] = false;
-		}
-		
+		// иначе предполагаем что встретили фигуру своей стороны
 	}
 	return result;
 }
 
-bool Knight::CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure)
+bool Knight::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
-	vector<vector<bool>> temp = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+	vector<pair<size_t, size_t>> VMove = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
 
-	return temp[XPositionMove][YPositionMove] ? true : false;
-}
-
-bool Knight::GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
-{
+	for (const auto& Move : VMove)
+	{
+		if (Move.first == XPositionMove && Move.second == YPositionMove)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
-bool Knight::GetPromoutionFigure(string ID_Figure)
+bool Knight::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
 	return false;
 }

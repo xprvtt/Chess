@@ -5,186 +5,195 @@ string Queen::Set_ID_FIGURE()
 	return "Queen";
 }
 
-vector<vector<bool>> Queen::GetMoveForFigure(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
+vector<pair<size_t, size_t>> Queen::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
-	int Row = VectorLocationFigure.size();
-	int Col = VectorLocationFigure[0].size();
+	size_t Row = VectorLocationFigure.size();
+	size_t Col = VectorLocationFigure[0].size();
 
 	//изначально считаем что ходов доступных нет
-	vector<vector<bool>> result(Row, vector<bool>(Col, false));
+	vector<pair<size_t, size_t>> result;
 
 
+	int Side = GetSIDE();
 	// вправо от фигуры
-	for (int XPos = XPositionCurrent + 1; XPos < Col; XPos++)
+	for (size_t XPos = XPositionCurrent + 1; XPos < Col; XPos++)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPositionCurrent][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPositionCurrent][XPos]) == 0)
 		{
-			result[YPositionCurrent][XPos] = true;
+			result.push_back(make_pair(XPos, YPositionCurrent));
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPositionCurrent][XPos].first != GetSIDE() && VectorLocationFigure[YPositionCurrent][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPositionCurrent][XPos]) != Side && get<0>(VectorLocationFigure[YPositionCurrent][XPos]) > 0)
 		{
-			result[YPositionCurrent][XPos] = true;
+			result.push_back(make_pair(XPos, YPositionCurrent));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPositionCurrent][XPos] = false;
 			break;
 		}
 	}
 	// влево от фигуры
-	for (int XPos = XPositionCurrent - 1; XPos > 0; XPos--)
+	for (size_t XPos = XPositionCurrent - 1; XPos > 0; XPos--)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPositionCurrent][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPositionCurrent][XPos]) == 0)
 		{
-			result[YPositionCurrent][XPos] = true;
+			result.push_back(make_pair(XPos, YPositionCurrent));
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPositionCurrent][XPos].first != GetSIDE() && VectorLocationFigure[YPositionCurrent][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPositionCurrent][XPos]) != Side && get<0>(VectorLocationFigure[YPositionCurrent][XPos]) > 0)
 		{
-			result[YPositionCurrent][XPos] = true;
+			result.push_back(make_pair(XPos, YPositionCurrent));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPositionCurrent][XPos] = false;
 			break;
 		}
 	}
 
 	//вверх от фигуры
-	for (int YPos = YPositionCurrent - 1; YPos > 0; YPos--)
+	for (size_t YPos = YPositionCurrent - 1; YPos > 0; YPos--)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPos][XPositionCurrent].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPositionCurrent]) == 0)
 		{
-			result[YPos][XPositionCurrent] = true;
+
+			result.push_back(make_pair(XPositionCurrent, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPositionCurrent].first != GetSIDE() && VectorLocationFigure[YPos][XPositionCurrent].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPositionCurrent]) != Side && get<0>(VectorLocationFigure[YPos][XPositionCurrent]) > 0)
 		{
-			result[YPos][XPositionCurrent] = true;
+			result.push_back(make_pair(XPositionCurrent, YPos));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPos][XPositionCurrent] = false;
 			break;
 		}
 	}
 	//вниз от фигуры
-	for (int YPos = YPositionCurrent + 1; YPos < Row; YPos++)
+	for (size_t YPos = YPositionCurrent + 1; YPos < Row; YPos++)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPos][XPositionCurrent].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPositionCurrent]) == 0)
 		{
-			result[YPos][XPositionCurrent] = true;
+
+			result.push_back(make_pair(XPositionCurrent, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPositionCurrent].first != GetSIDE() && VectorLocationFigure[YPos][XPositionCurrent].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPositionCurrent]) != Side && get<0>(VectorLocationFigure[YPos][XPositionCurrent]) > 0)
 		{
-			result[YPos][XPositionCurrent] = true;
+			result.push_back(make_pair(XPositionCurrent, YPos));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPos][XPositionCurrent] = false;
 			break;
 		}
 	}
 	//// по диагонали
 
 	//в правый низ от фигуры
-	for (int YPos = YPositionCurrent + 1, XPos = XPositionCurrent + 1; YPos < Row || XPos < Col; YPos++, XPos++)
+	for (size_t YPos = YPositionCurrent + 1, XPos = XPositionCurrent + 1; YPos < Row || XPos < Col; YPos++, XPos++)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPos][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPos][XPos] = false;
 			break;
 		}
 	}
 
 	// в правый верх от фигуры
-	for (int YPos = YPositionCurrent - 1, XPos = XPositionCurrent + 1; YPos > 0 || XPos < Col; YPos--, XPos++)
+	for (size_t YPos = YPositionCurrent - 1, XPos = XPositionCurrent + 1; YPos > 0 || XPos < Col; YPos--, XPos++)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPos][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPos][XPos] = false;
 			break;
 		}
 	}
 
 
 	//левый верх от фигуры
-	for (int YPos = YPositionCurrent - 1, XPos = XPositionCurrent - 1; YPos > 0 || XPos > 0; YPos--, XPos--)
+	for (size_t YPos = YPositionCurrent - 1, XPos = XPositionCurrent - 1; YPos > 0 || XPos > 0; YPos--, XPos--)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPos][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPos][XPos] = false;
 			break;
 		}
 	}
 	//левый низ от фигуры
-	for (int YPos = YPositionCurrent + 1, XPos = XPositionCurrent - 1; YPos < Row || XPos > 0; YPos++, XPos--)
+	for (size_t YPos = YPositionCurrent + 1, XPos = XPositionCurrent - 1; YPos < Row || XPos > 0; YPos++, XPos--)
 	{
 		// продолжаем пока не встретим свою или чужую фигуру
-		if (VectorLocationFigure[YPos][XPos].first == 0)
+		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (VectorLocationFigure[YPos][XPos].first != GetSIDE() && VectorLocationFigure[YPos][XPos].first > 0)
+		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
-			result[YPos][XPos] = true;
+			result.push_back(make_pair(XPos, YPos));
+
 			break;
 		}
 		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
 		else
 		{
-			result[YPos][XPos] = false; 
 			break;
 		}
 	}
@@ -192,19 +201,21 @@ vector<vector<bool>> Queen::GetMoveForFigure(int XPositionCurrent, int YPosition
 	return result;
 }
 
-bool Queen::CheckMove(int XPositionCurrent, int YPositionCurrent, int XPositionMove, int YPositionMove, const vector<vector<pair<int, string>>>& VectorLocationFigure)
+bool Queen::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
-	vector<vector<bool>> temp = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+	vector<pair<size_t, size_t>> VMove = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
 
-	return temp[XPositionMove][YPositionMove] ? true : false;
-}
-
-bool Queen::GetPossibilityPromotion(int XPositionCurrent, int YPositionCurrent, const vector<vector<pair<int, string>>>& VectorLocationFigure)
-{
+	for (const auto& Move : VMove)
+	{
+		if (Move.first == XPositionMove && Move.second == YPositionMove)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
-bool Queen::GetPromoutionFigure(string ID_Figure)
+bool Queen::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
 	return false;
 }
