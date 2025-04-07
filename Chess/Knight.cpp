@@ -77,7 +77,6 @@ vector<pair<size_t, size_t>> Knight::GetMoveForFigure(size_t XPositionCurrent, s
 		else if (get<0>(VectorLocationFigure[YPos][XPos]) != GetSIDE() && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
 			result.push_back(make_pair(XPos, YPos));
-
 		}
 		// иначе предполагаем что встретили фигуру своей стороны
 	}

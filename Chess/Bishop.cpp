@@ -1,5 +1,7 @@
 ﻿#include "Bishop.h"
 
+static bool CheckCell(size_t XPos, size_t YPos, int Side, vector<pair<size_t, size_t>>& result, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+
 string Bishop::Set_ID_FIGURE()
 {
 	return "Bishop";
@@ -12,101 +14,52 @@ vector<pair<size_t, size_t>> Bishop::GetMoveForFigure(size_t XPositionCurrent, s
 	size_t Row = VectorLocationFigure.size();
 	size_t Col = VectorLocationFigure[0].size(); 
 
-
 	int Side = GetSIDE();
 	//// по диагонали 
 
 	//в правый низ от фигуры
 	for (size_t YPos = YPositionCurrent + 1, XPos = XPositionCurrent + 1; YPos < Row || XPos < Col; YPos++, XPos++)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
-		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-			break;
-		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
-		else
-		{
-			break;
-		}
+		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
 	}
-
 	// в правый верх от фигуры
 	for (size_t YPos = YPositionCurrent - 1, XPos = XPositionCurrent + 1; YPos > 0 || XPos < Col; YPos--, XPos++)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
-		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-
-		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-
-			break;
-		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
-		else
-		{
-			break;
-		}
+		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
 	}
-
-
 	//левый верх от фигуры 
 	for (size_t YPos = YPositionCurrent - 1, XPos = XPositionCurrent - 1; YPos > 0 || XPos > 0; YPos--, XPos--)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
-		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-
-		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-
-			break;
-		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
-		else
-		{
-			break;
-		}
+		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
 	}
 	//левый низ от фигуры
 	for (size_t YPos = YPositionCurrent + 1, XPos = XPositionCurrent - 1; YPos < Row || XPos > 0; YPos++, XPos--)
 	{
-		// продолжаем пока не встретим свою или чужую фигуру
-		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-
-		}
-		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
-		{
-			result.push_back(make_pair(XPos, YPos));
-
-			break;
-		}
-		// иначе предполагаем что встретили фигуру своей стороны и та же выходим
-		else
-		{
-			break;
-		}
+		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
 	}
-
 	return result;
+}
+
+static bool CheckCell(size_t XPos, size_t YPos, int Side,  vector<pair<size_t, size_t>>& result, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+{
+	// продолжаем пока не встретим свою или чужую фигуру
+	if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
+	{
+		result.push_back(make_pair(XPos, YPos));
+		return true;
+
+	}
+	// если встретим фигуру противника добавляем возможность взятия и выходим
+	else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
+	{
+		result.push_back(make_pair(XPos, YPos));
+		return false;
+	}
+	// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+	else
+	{
+		return false;
+	}
 }
 
 bool Bishop::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)

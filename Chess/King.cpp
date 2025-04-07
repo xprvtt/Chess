@@ -67,13 +67,11 @@ vector<pair<size_t, size_t>> King::GetMoveForFigure(size_t XPositionCurrent, siz
 		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
 		{
 			result.push_back(make_pair(XPos, YPos));
-
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
 		else if (get<0>(VectorLocationFigure[YPos][XPos]) != GetSIDE() && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
 		{
 			result.push_back(make_pair(XPos, YPos));
-
 		}
 	}
 	return result;
