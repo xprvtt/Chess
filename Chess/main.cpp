@@ -30,7 +30,7 @@ int main()
 
     ///////////////////////////////////  FONT   /////////////////////////////////////// 
     /// обнаруживаем все шрифты в папке 
-    vector<path> SearchFont = SearchFile("Font/", ".ttf");
+    vector<path> SearchFont = searchFile("Font/", ".ttf");
 
     /// если шрифтов не найдено вых
     if (SearchFont.empty())
@@ -39,7 +39,7 @@ int main()
         return -1;
     }
     // используем первый в списке шрифт
-    Font CurrentFont = LoadFont(SearchFont[0]);
+    Font CurrentFont = loadFont(SearchFont[0]);
 
     ///////////////////////////////////////////////////////////////////////////////////
 
@@ -290,7 +290,7 @@ int main()
                         ChessField.SelectCell(CurrentPos.first, CurrentPos.second, Color::Green);
                     }
 
-                    if (PositionFrendlyFigure.size() == 1 && PositionFrendlyFigure[0].second == 0 && PositionFrendlyFigure[0].first == 0)
+                    if (PositionFrendlyFigure.size() == 1 && PositionFrendlyFigure[0] == pair(size_t(0),size_t(0)))
                     {
                         wstring CheckmatePlayer = L"поставлен мат игроку: " + to_wstring(CurrentPlayer);
                         TextInGameRow4.setString(CheckmatePlayer);
@@ -307,7 +307,7 @@ int main()
                 window.close();
             }
             ///выделяем фигуру при нажатии по ней
-            if (const auto& mouseButtonPressed = event->getIf<Event::MouseButtonPressed>())
+            else if (const auto& mouseButtonPressed = event->getIf<Event::MouseButtonPressed>())
             {
                 if (mouseButtonPressed->button == Mouse::Button::Left )
                 {

@@ -1,6 +1,6 @@
 ﻿#include "Core.h"
 
-vector<path> SearchFile(path SearchInPath, string Extension)
+vector<path> searchFile(path SearchInPath, string Extension)
 {
 	vector<path> result;
 	try

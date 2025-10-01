@@ -7,15 +7,10 @@ string Knight::Set_ID_FIGURE()
 
 vector<pair<size_t, size_t>> Knight::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
+	vector<pair<size_t, size_t>> result;
 
 	size_t Row = VectorLocationFigure.size();
 	size_t Col = VectorLocationFigure[0].size();
-
-	//изначально считаем что ходов доступных нет
-	vector<pair<size_t, size_t>> result;
-
-
-	//вправо  вверх
 
 	size_t XPos;
 	size_t YPos;

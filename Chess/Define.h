@@ -6,7 +6,7 @@
 #define DEBUG
 
 #ifdef DEBUG
-	#define OutputLog(StringMessage) OutputMessage(StringMessage) 
+	#define OutputLog(StringMessage) outputMessage(StringMessage) 
 	#define DebugCode(d_code) d_code
 
 #elif

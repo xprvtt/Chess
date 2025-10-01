@@ -16,6 +16,8 @@ using namespace std;
 using namespace sf;
 using namespace filesystem; 
 
+
+
 /// <summary>
 /// Функция возвращает строку веремени 
 /// </summary>
@@ -27,14 +29,14 @@ string getCurrentTime();
 /// </summary>
 /// <param name="message">Сообщение которое необходимо вывести</param>
 /// <returns>true если выведен</returns>
-bool OutputMessage(string message);
+bool outputMessage(string message);
 
 /// <summary>
 /// Функция Загружает шрифт по пути
 /// </summary>
 /// <param name="PathToFont">путь до шрифта</param>
 /// <returns></returns>
-Font LoadFont(path PathToFont);
+Font loadFont(path PathToFont);
 
 
 /// <summary>
@@ -43,4 +45,4 @@ Font LoadFont(path PathToFont);
 /// <param name="SearchInPath">путь</param>
 /// <param name="Extension">расширение файла(ов) / если не указано ищет всё </param>
 /// <returns>вектор</returns>
-vector<path> SearchFile(path SearchInPath, string Extension);
+vector<path> searchFile(path searchInPath, string extension);

@@ -100,7 +100,6 @@ static vector<pair<size_t, size_t>> AvailableMoveForFigure1(size_t XPositionCurr
 	size_t Row = VectorLocationFigure.size();
 	size_t Col = VectorLocationFigure[0].size();
 
-	//изначально считаем что ходов доступных нет
 	vector<pair<size_t, size_t>> result;
 
 

@@ -55,7 +55,7 @@ static bool CheckCell(size_t XPos, size_t YPos, int Side,  vector<pair<size_t, s
 		result.push_back(make_pair(XPos, YPos));
 		return false;
 	}
-	// иначе предполагаем что встретили фигуру своей стороны и та же выходим
+	// иначе предполагаем что встретили фигуру своей стороны и так же выходим
 	else
 	{
 		return false;

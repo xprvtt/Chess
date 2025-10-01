@@ -1,7 +1,7 @@
 ﻿
 #include "Core.h"
 
-bool OutputMessage(string message)
+bool outputMessage(string message)
 {		
 		ofstream out;
 		out.open("Log/log.txt", ios::app);

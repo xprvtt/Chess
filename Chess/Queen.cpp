@@ -11,7 +11,6 @@ vector<pair<size_t, size_t>> Queen::GetMoveForFigure(size_t XPositionCurrent, si
 	size_t Row = VectorLocationFigure.size();
 	size_t Col = VectorLocationFigure[0].size();
 
-	//изначально считаем что ходов доступных нет
 	vector<pair<size_t, size_t>> result;
 
 

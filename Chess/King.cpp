@@ -9,10 +9,6 @@ vector<pair<size_t, size_t>> King::GetMoveForFigure(size_t XPositionCurrent, siz
 {
 	vector<pair<size_t, size_t>> result;
 
-	size_t Row = VectorLocationFigure.size();
-	size_t Col = VectorLocationFigure[0].size();
-
-
 	size_t YPos;
 	size_t XPos;
 	 

@@ -91,11 +91,6 @@ bool Figure::GetPromoutionFigure(int SIDE, string ID_FIGURE,  bool INVULNERABLE,
 
 
 
-
-
-
-
-
 /// ВИРТУАЛЬНЫЕ ФУНКЦИИ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ 
 
 
@@ -108,9 +103,7 @@ string Figure::Set_ID_FIGURE()
 
 vector<pair<size_t, size_t>> Figure::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
 {
-	// виртуальный метод, для фигуры Figure всегда vector<vector<bool=false>> = нет условий, не может превратиться
-	int Size = VectorLocationFigure.size();
-	int Size2 = VectorLocationFigure[0].size();
+	// виртуальный метод, для фигуры Figure - нет условий, не может превратиться
 	return vector<pair<size_t, size_t>>();
 }
 
