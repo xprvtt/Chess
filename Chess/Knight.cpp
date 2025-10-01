@@ -1,19 +1,19 @@
 ﻿#include "Knight.h"
 
-string Knight::Set_ID_FIGURE()
+string Knight::set_ID_FIGURE()
 {
 	return "Knight";
 }
 
-vector<pair<size_t, size_t>> Knight::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+vector<pair<size_t, size_t>> Knight::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	vector<pair<size_t, size_t>> result;
 
-	size_t Row = VectorLocationFigure.size();
-	size_t Col = VectorLocationFigure[0].size();
+	size_t row = vectorLocationFigure.size();
+	size_t col = vectorLocationFigure[0].size();
 
-	size_t XPos;
-	size_t YPos;
+	size_t xPos;
+	size_t yPos;
 
 	for (size_t count = 0; count < 8; count++)
 	{
@@ -21,70 +21,70 @@ vector<pair<size_t, size_t>> Knight::GetMoveForFigure(size_t XPositionCurrent, s
 		switch (count)
 		{
 		case 0:
-			XPos = XPositionCurrent - 2;
-			YPos = YPositionCurrent - 1;
+			xPos = xPositionCurrent - 2;
+			yPos = yPositionCurrent - 1;
 			break;
 		case 1:
-			XPos = XPositionCurrent - 1;
-			YPos = YPositionCurrent - 2;
+			xPos = xPositionCurrent - 1;
+			yPos = yPositionCurrent - 2;
 			break;
 		case 2:
-			XPos = XPositionCurrent + 1;
-			YPos = YPositionCurrent - 2;
+			xPos = xPositionCurrent + 1;
+			yPos = yPositionCurrent - 2;
 			break;
 		case 3:
-			XPos = XPositionCurrent + 2;
-			YPos = YPositionCurrent - 1;
+			xPos = xPositionCurrent + 2;
+			yPos = yPositionCurrent - 1;
 			break;
 		case 4:
-			XPos = XPositionCurrent + 2;
-			YPos = YPositionCurrent + 1;
+			xPos = xPositionCurrent + 2;
+			yPos = yPositionCurrent + 1;
 			break;
 		case 5:
-			XPos = XPositionCurrent + 1;
-			YPos = YPositionCurrent + 2;
+			xPos = xPositionCurrent + 1;
+			yPos = yPositionCurrent + 2;
 			break;
 		case 6:
-			XPos = XPositionCurrent - 1;
-			YPos = YPositionCurrent + 2;
+			xPos = xPositionCurrent - 1;
+			yPos = yPositionCurrent + 2;
 			break;
 		case 7:
-			XPos = XPositionCurrent - 2;
-			YPos = YPositionCurrent + 1;
+			xPos = xPositionCurrent - 2;
+			yPos = yPositionCurrent + 1;
 			break;
 
 		default:
 			break;
 		}
 
-		if (XPos >= Col || YPos >= Row || XPos < 0 || YPos < 0)
+		if (xPos >= col || yPos >= row || xPos < 0 || yPos < 0)
 		{
 			continue;
 		}
 
 		// пока не встретим свою или чужую фигуру 
-		if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
+		if (get<0>(vectorLocationFigure[yPos][xPos]) == 0)
 		{
-			result.push_back(make_pair(XPos, YPos));
+			result.push_back(make_pair(xPos, yPos));
 
 		}
 		// если встретим фигуру противника добавляем возможность взятия и выходим
-		else if (get<0>(VectorLocationFigure[YPos][XPos]) != GetSIDE() && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
+		else if (get<0>(vectorLocationFigure[yPos][xPos]) != get_SIDE() && get<0>(vectorLocationFigure[yPos][xPos]) > 0)
 		{
-			result.push_back(make_pair(XPos, YPos));
+			result.push_back(make_pair(xPos, yPos));
 		}
 		// иначе предполагаем что встретили фигуру своей стороны
 	}
 	return result;
 }
  
-bool Knight::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Knight::checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
-	vector<pair<size_t, size_t>> VMove = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+	vector<pair<size_t, size_t>> vMove = getMoveForFigure(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 
-	for (const auto& Move : VMove)
+	for (const auto& move : vMove)
 	{
-		if (Move.first == XPositionMove && Move.second == YPositionMove)
+		if (move.first == xPositionMove && move.second == yPositionMove)
 		{
 			return true;
 		}
@@ -92,7 +92,7 @@ bool Knight::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t 
 	return false;
 }
 
-bool Knight::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Knight::getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	return false;
 }

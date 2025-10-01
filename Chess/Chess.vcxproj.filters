@@ -69,19 +69,19 @@
     <ClCompile Include="getCurrentTime.cpp">
       <Filter>Исходные файлы\Main\RelatedFunction</Filter>
     </ClCompile>
-    <ClCompile Include="OutputMessage.cpp">
+    <ClCompile Include="outputMessage.cpp">
       <Filter>Исходные файлы\Main\RelatedFunction</Filter>
     </ClCompile>
-    <ClCompile Include="LoadFont.cpp">
+    <ClCompile Include="loadFont.cpp">
       <Filter>Исходные файлы\Main\RelatedFunction</Filter>
     </ClCompile>
     <ClCompile Include="FigureLocation.cpp">
       <Filter>Исходные файлы\Class\GameField</Filter>
     </ClCompile>
-    <ClCompile Include="SearchFile.cpp">
+    <ClCompile Include="searchFile.cpp">
       <Filter>Исходные файлы\Main\RelatedFunction</Filter>
     </ClCompile>
-    <ClCompile Include="CountdownTimer.cpp">
+    <ClCompile Include="countdownTimer.cpp">
       <Filter>Исходные файлы\Class\OtherClass</Filter>
     </ClCompile>
     <ClCompile Include="Pawn.cpp">

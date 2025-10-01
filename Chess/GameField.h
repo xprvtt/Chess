@@ -9,19 +9,19 @@ private:
 	/// <summary>
 	/// вектор с размещениями клеток (доска) 
 	/// </summary>
-	vector<vector<RectangleShape>> RectangleShapeOnField;
+	vector<vector<RectangleShape>> rectangleShapeOnField;
 
 	/// <summary>
 	/// вектор с отображением координат 
 	/// </summary>
-	vector<vector<Text>> FieldCoordinate;
+	vector<vector<Text>> fieldCoordinate;
 
 	/// <summary>
 	/// размер одной клетки на поле
 	/// </summary>
-	float SizeCell = 0.f;
+	float sizeCell = 0.f;
 
-	Font GameFieldFont;
+	Font gameFieldFont;
 	 
 public:
 	
@@ -36,56 +36,56 @@ public:
 	/// получаем текущий квадрат для отрисовки
 	/// </summary>
 	/// <returns>текуший квадрат</returns>
-	RectangleShape GetRectangleShapeOnField(size_t XPosition, size_t YPosition);
+	RectangleShape getRectangleShapeOnField(size_t XPosition, size_t YPosition);
 
 
 	/// <summary>
 	/// Получает текстовый вид координаты
 	/// </summary>
-	/// <param name="XPosition">позиция Х</param>
-	/// <param name="YPosition">позиция Y</param>
+	/// <param name="xPosition">позиция Х</param>
+	/// <param name="yPosition">позиция Y</param>
 	/// <param name="font">Шрифт</param>
 	/// <returns></returns>
-	Text GetFieldCoordinateOnField(size_t XPosition, size_t YPosition);
+	Text getFieldCoordinateOnField(size_t xPosition, size_t yPosition);
 
 	/// <summary>
 	/// Получаем колличество рядов
 	/// </summary>
 	/// <returns>колличество рядов</returns>
-	size_t GetCounRow();
+	size_t getCounRow();
 
 	/// <summary>
 	/// получаем колличество столбцов в ряду
 	/// </summary>
 	/// <param name="No"></param>
 	/// <returns></returns>
-	size_t GetCounColl(size_t No = 0);
+	size_t getCounColl(size_t No = 0);
 
 	/// <summary>
 	/// размер клетки тип float
 	/// </summary>
 	/// <returns></returns>
-	float GetSizeCell();
+	float getSizeCell();
 
 	/// <summary>
 	/// Выделяем клетки указанные в векторе
 	/// </summary>
-	/// <param name="Coordinate">вектор координат</param>
-	bool SelectCell(const vector<vector<bool>>& Coordinate, Color color);
+	/// <param name="coordinate">вектор координат</param>
+	bool selectCell(const vector<vector<bool>>& coordinate, Color color);
 
 	/// <summary>
 	/// выделяем клетку на позиции
 	/// </summary>
-	/// <param name="XPosition"></param>
-	/// <param name="YPosition"></param>
+	/// <param name="xPosition"></param>
+	/// <param name="yPosition"></param>
 	/// <returns></returns>
-	bool SelectCell(size_t XPosition, size_t YPosition, Color color);
+	bool selectCell(size_t xPosition, size_t yPosition, Color color);
 
 
 	/// <summary>
 	/// снять выделение с клеток
 	/// </summary>
 	/// <returns></returns>
-	bool UnSelectCell();
+	bool unSelectCell();
 };
 

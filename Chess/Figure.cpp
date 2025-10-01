@@ -10,77 +10,77 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Figure::Figure(int SIDE, bool INVULNERABLE, bool IMPORTANT, vector<tuple<int, string, bool, bool, bool>> VectorPROMOUTION )
+Figure::Figure(int SIDE, bool INVULNERABLE, bool IMPORTANT, vector<tuple<int, string, bool, bool, bool>> vectorPROMOUTION )
 {
 	this->SIDE               = SIDE;
 	this->INVULNERABLE       = INVULNERABLE; 
 	this->IMPORTANT          = IMPORTANT;
-	this->VectorPROMOUTION   = VectorPROMOUTION;
+	this->VECTOR_PROMOUTION   = vectorPROMOUTION;
 	
-	VectorPROMOUTION.empty() ? PROMOUTION = false : PROMOUTION = true;
+	vectorPROMOUTION.empty() ? PROMOUTION = false : PROMOUTION = true;
 }
 
 
-Figure::Figure(const Figure& OthreFigure)
+Figure::Figure(const Figure& othreFigure)
 {
-	this->SIDE			   = OthreFigure.SIDE;
-	this->ID_FIGURE		   = OthreFigure.ID_FIGURE;
-	this->INVULNERABLE     = OthreFigure.INVULNERABLE;
-	this->IMPORTANT		   = OthreFigure.IMPORTANT;
-	this->VectorPROMOUTION = OthreFigure.VectorPROMOUTION;
-	this->PROMOUTION       = OthreFigure.PROMOUTION;
+	this->SIDE			   = othreFigure.SIDE;
+	this->ID_FIGURE		   = othreFigure.ID_FIGURE;
+	this->INVULNERABLE     = othreFigure.INVULNERABLE;
+	this->IMPORTANT		   = othreFigure.IMPORTANT;
+	this->VECTOR_PROMOUTION = othreFigure.VECTOR_PROMOUTION;
+	this->PROMOUTION       = othreFigure.PROMOUTION;
 }
 
-bool Figure::CheckMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Figure::checkMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
-	return CheckMove(XPositionCurrent, YPositionCurrent, XPositionMove, YPositionMove, VectorLocationFigure);
+	return checkMove(xPositionCurrent, yPositionCurrent, xPositionMove, yPositionMove, vectorLocationFigure);
 }
 
 
-string Figure::Get_ID_FIGURE()
+string Figure::get_ID_FIGURE()
 {
 	if (ID_FIGURE.empty()) 
 	{ 
-		ID_FIGURE = Set_ID_FIGURE();
+		ID_FIGURE = set_ID_FIGURE();
 	}
 	return ID_FIGURE;
 }
 
-bool Figure::GetINVULNERABLE()
+bool Figure::get_INVULNERABLE()
 {
 	return INVULNERABLE;
 }
 
-bool Figure::GetIMPORTANT()
+bool Figure::get_IMPORTANT()
 {
 	return IMPORTANT;
 }
 
-bool Figure::GetPROMOUTION()
+bool Figure::get_PROMOUTION()
 {
 	return PROMOUTION;
 }
 
-int Figure::GetSIDE()
+int Figure::get_SIDE()
 {
 	return SIDE;
 }
 
-vector<tuple<int, string, bool, bool, bool>> Figure::GetVectorPROMOUTION()
+vector<tuple<int, string, bool, bool, bool>> Figure::get_VECTOR_PROMOUTION()
 {
-	return VectorPROMOUTION;
+	return VECTOR_PROMOUTION;
 } 
 
-bool Figure::GetPromoutionFigure(int SIDE, string ID_FIGURE,  bool INVULNERABLE, bool IMPORTANT, bool PROMOUTION)
+bool Figure::getPromoutionFigure(int SIDE, string ID_FIGURE,  bool INVULNERABLE, bool IMPORTANT, bool PROMOUTION)
 {
-	for (int it = 0; it < VectorPROMOUTION.size(); it++)
+	for (int it = 0; it < VECTOR_PROMOUTION.size(); it++)
 	{
 		// если находим такую фигуру, в которую можем превратиться
-		if (   get<0>(VectorPROMOUTION[it]) == SIDE
-			&& get<1>(VectorPROMOUTION[it]) == ID_FIGURE
-			&& get<2>(VectorPROMOUTION[it]) == INVULNERABLE
-			&& get<3>(VectorPROMOUTION[it]) == IMPORTANT
-			&& get<4>(VectorPROMOUTION[it]) == PROMOUTION
+		if (   get<0>(VECTOR_PROMOUTION[it]) == SIDE
+			&& get<1>(VECTOR_PROMOUTION[it]) == ID_FIGURE
+			&& get<2>(VECTOR_PROMOUTION[it]) == INVULNERABLE
+			&& get<3>(VECTOR_PROMOUTION[it]) == IMPORTANT
+			&& get<4>(VECTOR_PROMOUTION[it]) == PROMOUTION
 			)
 		{
 			return true;
@@ -94,21 +94,21 @@ bool Figure::GetPromoutionFigure(int SIDE, string ID_FIGURE,  bool INVULNERABLE,
 /// ВИРТУАЛЬНЫЕ ФУНКЦИИ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ 
 
 
-string Figure::Set_ID_FIGURE()
+string Figure::set_ID_FIGURE()
 {
 	//должна называться так же как и класс-наследник фигуры \\\\  требует переопределения
 	return "Figure";
 }
 
 
-vector<pair<size_t, size_t>> Figure::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+vector<pair<size_t, size_t>> Figure::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	// виртуальный метод, для фигуры Figure - нет условий, не может превратиться
 	return vector<pair<size_t, size_t>>();
 }
 
 
-bool Figure::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Figure::getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	// виртуальный метод, всегда false для фигуры Figure
 	// стандартная фигура не имеет условий для превращения в другую фигуру
@@ -116,7 +116,7 @@ bool Figure::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCu
 }
 
 
-bool Figure::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Figure::checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	// виртуальный метод, всегда false для фигуры Figure
 	// проверка ходов

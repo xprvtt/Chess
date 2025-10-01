@@ -1,7 +1,7 @@
 ﻿#include "Main.h"
 
 
-unordered_map<string, Texture> TextureMap;
+unordered_map<string, Texture> g_TextureMap;
 
 
 int main()
@@ -15,14 +15,14 @@ int main()
     ///////////////////////////////////////////////////////////////////////////////////
 
     /// высота окна, от нее зависит длина окна
-    unsigned int SizeWindowHeight = 1000;
+    unsigned int sizeWindowHeight = 1000;
 
     /// длина окна
-    unsigned int SizeWindowLength = static_cast<unsigned int>(round(SizeWindowHeight * 1.7));
+    unsigned int sizeWindowLength = static_cast<unsigned int>(round(sizeWindowHeight * 1.7));
     
     /// количество ИГРОВЫХ клеток на одной стороне + 2 клетки для координат
-    size_t CountCellOnLengthWindow = 8 + 2;
-    size_t CountCellOnHeightWindow = 8 + 2;
+    size_t countCellOnLengthWindow = 8 + 2;
+    size_t countCellOnHeightWindow = 8 + 2;
 
     ///////////////////////////////////////////////////////////////////////////////////
 
@@ -30,22 +30,22 @@ int main()
 
     ///////////////////////////////////  FONT   /////////////////////////////////////// 
     /// обнаруживаем все шрифты в папке 
-    vector<path> SearchFont = searchFile("Font/", ".ttf");
+    vector<path> searchFont = searchFile("Font/", ".ttf");
 
     /// если шрифтов не найдено вых
-    if (SearchFont.empty())
+    if (searchFont.empty())
     {
         OutputLog("Шрифт не найден, завершение");
         return -1;
     }
     // используем первый в списке шрифт
-    Font CurrentFont = loadFont(SearchFont[0]);
+    Font currentFont = loadFont(searchFont[0]);
 
     ///////////////////////////////////////////////////////////////////////////////////
 
     //// стандартные текстуры для инициализации игры ////
-    path PathToEmptyimage      = "Assets/Standart/Empty.png";
-    path PathToEmptyPawn       = "Assets/Standart/EmptyPawn.png";
+    path pathToEmptyimage      = "Assets/Standart/Empty.png";
+    path pathToEmptyPawn       = "Assets/Standart/EmptyPawn.png";
 
     /// vector textrue ///
 
@@ -56,33 +56,33 @@ int main()
 
     
     /// текст расположенный в первом ряду
-    Text TextInGameRow1(CurrentFont);
-    TextInGameRow1.setString(L"-");
-    TextInGameRow1.setCharacterSize(static_cast<unsigned int>(SizeWindowHeight / (CountCellOnLengthWindow * 3)));
-    TextInGameRow1.setFillColor(Color::Black);
-    TextInGameRow1.setPosition(Vector2f(static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow / 2 + SizeWindowHeight) , static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow)));
+    Text textInGameRow1(currentFont);
+    textInGameRow1.setString(L"-");
+    textInGameRow1.setCharacterSize(static_cast<unsigned int>(sizeWindowHeight / (countCellOnLengthWindow * 3)));
+    textInGameRow1.setFillColor(Color::Black);
+    textInGameRow1.setPosition(Vector2f(static_cast<float>(sizeWindowHeight / countCellOnLengthWindow / 2 + sizeWindowHeight) , static_cast<float>(sizeWindowHeight / countCellOnLengthWindow)));
 
     /// текст расположенный во втором ряду
-    Text TextInGameRow2(CurrentFont);
-    TextInGameRow2.setString(L"-");
-    TextInGameRow2.setCharacterSize(static_cast<unsigned int>(SizeWindowHeight / (CountCellOnLengthWindow * 3)));
-    TextInGameRow2.setFillColor(Color::Black);
-    TextInGameRow2.setPosition(Vector2f(static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow / 2 + SizeWindowHeight), static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow * 2)));
+    Text textInGameRow2(currentFont);
+    textInGameRow2.setString(L"-");
+    textInGameRow2.setCharacterSize(static_cast<unsigned int>(sizeWindowHeight / (countCellOnLengthWindow * 3)));
+    textInGameRow2.setFillColor(Color::Black);
+    textInGameRow2.setPosition(Vector2f(static_cast<float>(sizeWindowHeight / countCellOnLengthWindow / 2 + sizeWindowHeight), static_cast<float>(sizeWindowHeight / countCellOnLengthWindow * 2)));
 
     /// текст расположенный во 3 ряду
-    Text TextInGameRow3(CurrentFont);
-    TextInGameRow3.setString(L"-");
-    TextInGameRow3.setCharacterSize(static_cast<unsigned int>(SizeWindowHeight / (CountCellOnLengthWindow * 3)));
-    TextInGameRow3.setFillColor(Color::Black);
-    TextInGameRow3.setPosition(Vector2f(static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow / 2 + SizeWindowHeight), static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow * 3)));
+    Text textInGameRow3(currentFont);
+    textInGameRow3.setString(L"-");
+    textInGameRow3.setCharacterSize(static_cast<unsigned int>(sizeWindowHeight / (countCellOnLengthWindow * 3)));
+    textInGameRow3.setFillColor(Color::Black);
+    textInGameRow3.setPosition(Vector2f(static_cast<float>(sizeWindowHeight / countCellOnLengthWindow / 2 + sizeWindowHeight), static_cast<float>(sizeWindowHeight / countCellOnLengthWindow * 3)));
 
 
     /// текст расположенный во 4 ряду
-    Text TextInGameRow4(CurrentFont);
-    TextInGameRow4.setString(L"-");
-    TextInGameRow4.setCharacterSize(static_cast<unsigned int>(SizeWindowHeight / (CountCellOnLengthWindow * 3)));
-    TextInGameRow4.setFillColor(Color::Black);
-    TextInGameRow4.setPosition(Vector2f(static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow / 2 + SizeWindowHeight), static_cast<float>(SizeWindowHeight / CountCellOnLengthWindow * 4)));
+    Text textInGameRow4(currentFont);
+    textInGameRow4.setString(L"-");
+    textInGameRow4.setCharacterSize(static_cast<unsigned int>(sizeWindowHeight / (countCellOnLengthWindow * 3)));
+    textInGameRow4.setFillColor(Color::Black);
+    textInGameRow4.setPosition(Vector2f(static_cast<float>(sizeWindowHeight / countCellOnLengthWindow / 2 + sizeWindowHeight), static_cast<float>(sizeWindowHeight / countCellOnLengthWindow * 4)));
 
     ///////////////////////////////////////////////////////////////////////////////////
 
@@ -92,12 +92,12 @@ int main()
     // создаем окно игры
 
     /// Окно игры
-    RenderWindow window(VideoMode({ SizeWindowLength, SizeWindowHeight }), "Chess");
+    RenderWindow window(VideoMode({ sizeWindowLength, sizeWindowHeight }), "Chess");
     window.setFramerateLimit(60);
 
     /// основное игровое поле 
     /// содержит только конструкцию игрового поля
-    GameField ChessField(CountCellOnLengthWindow, SizeWindowHeight, CurrentFont, Color(140, 140, 140), Color::White, Color(152, 118, 84));
+    GameField chessField(countCellOnLengthWindow, sizeWindowHeight, currentFont, Color(140, 140, 140), Color::White, Color(152, 118, 84));
 
     OutputLog("Инициация Игрового поля закончено");
 
@@ -112,7 +112,7 @@ int main()
     /// для размещения фигур необходимо добавить уникальные фигуры -> AddUniqueFigure();
     /// в последствии можно установить фигуры на игровое поле-> SetFigure();
 
-    FigureLocation NewLocation(CountCellOnLengthWindow, CountCellOnHeightWindow, SizeWindowHeight, PathToEmptyimage, PathToEmptyimage, 0.5f);
+    FigureLocation newLocation(countCellOnLengthWindow, countCellOnHeightWindow, sizeWindowHeight, pathToEmptyimage, pathToEmptyimage, 0.5f);
 
 
     //// другие текстуры, такие как фигуры ///
@@ -120,7 +120,7 @@ int main()
 
 
     // превращения для пешки \ по умолчанию может превратиться в 4 стандартные фигуры
-    vector<tuple<int, string, bool, bool, bool>> PromoutionForPawn1 =
+    vector<tuple<int, string, bool, bool, bool>> promoutionForPawn1 =
     {
         make_tuple(1, "Rook", false, false, false),
         make_tuple(1, "Queen", false, false, false),
@@ -128,7 +128,7 @@ int main()
         make_tuple(1, "Bishop", false, false, false),
     };
     // превращения для пешки \ по умолчанию может превратиться в 4 стандартные фигуры
-    vector<tuple<int, string, bool, bool, bool>> PromoutionForPawn2 =
+    vector<tuple<int, string, bool, bool, bool>> promoutionForPawn2 =
     {
         make_tuple(2, "Rook", false, false, false),
         make_tuple(2, "Queen", false, false, false),
@@ -137,10 +137,10 @@ int main()
     };
 
 
-    vector<pair<shared_ptr<Figure>, path>> AddFigure =
+    vector<pair<shared_ptr<Figure>, path>> addFigure =
     {
-        make_pair(make_shared<Pawn>(1, false, false, PromoutionForPawn1), "Assets/pawn-white.png"),
-        make_pair(make_shared<Pawn>(2, false, false, PromoutionForPawn2), "Assets/pawn-black.png"),
+        make_pair(make_shared<Pawn>(1, false, false, promoutionForPawn1), "Assets/pawn-white.png"),
+        make_pair(make_shared<Pawn>(2, false, false, promoutionForPawn2), "Assets/pawn-black.png"),
         make_pair(make_shared<Rook>(1),                                   "Assets/rook-white.png"),
         make_pair(make_shared<Rook>(2),                                   "Assets/rook-black.png"),
         make_pair(make_shared<Queen>(1),                                  "Assets/queen-white.png"),
@@ -154,46 +154,46 @@ int main()
     };
 
 
-    for (const auto& Figure : AddFigure)
+    for (const auto& figure : addFigure)
     {
-        NewLocation.AddUniqueFigure(Figure.first, Figure.second);
+        newLocation.addUniqueFigure(figure.first, figure.second);
     }
 
     /// заполняем игровое поле пешками
 
     // колличество игроков (Сторон)
-    int CountPlayer = 2;
+    const int COUNT_PLAYER = 2;
 
-    for (size_t Row = 0; Row < CountCellOnHeightWindow; Row++)
+    for (size_t row = 0; row < countCellOnHeightWindow; row++)
     {
-        for (size_t Coll = 0; Coll < CountCellOnLengthWindow; Coll++)
+        for (size_t coll = 0; coll < countCellOnLengthWindow; coll++)
         {        
-            string Name = "Figure";
-            bool invulnerable = false;
-            bool Important = false;
+            string NAME = "figure";
+            bool INVULNERABLE = false;
+            bool IMPORTANT = false;
 
-            if      (Coll == 1 || Coll == CountCellOnLengthWindow - 2)   Name = "Rook";
-            else if (Coll == 2 || Coll == CountCellOnLengthWindow - 3)   Name = "Knight";
-            else if (Coll == 3 || Coll == CountCellOnLengthWindow - 4)   Name = "Bishop";
-            else if (Coll == 4)                                          Name = "Queen";
+            if      (coll == 1 || coll == countCellOnLengthWindow - 2)   NAME = "Rook";
+            else if (coll == 2 || coll == countCellOnLengthWindow - 3)   NAME = "Knight";
+            else if (coll == 3 || coll == countCellOnLengthWindow - 4)   NAME = "Bishop";
+            else if (coll == 4)                                          NAME = "Queen";
 
-            else if (Coll == 5) { Name = "King"; invulnerable = true; Important = true; }
+            else if (coll == 5) { NAME = "King"; INVULNERABLE = true; IMPORTANT = true; }
 
-            if (Row == 2)
+            if (row == 2)
             {   
-                NewLocation.SetFigure(Coll, Row, "Pawn", 2, false, false, PromoutionForPawn1);
+                newLocation.setFigure(coll, row, "Pawn", 2, false, false, promoutionForPawn1);
             }
-            else if (Row == CountCellOnHeightWindow -3)
+            else if (row == countCellOnHeightWindow -3)
             {
-                NewLocation.SetFigure(Coll, Row, "Pawn", 1, false, false, PromoutionForPawn2);
+                newLocation.setFigure(coll, row, "Pawn", 1, false, false, promoutionForPawn2);
             } 
-            else if (Row == 1)
+            else if (row == 1)
             {
-                NewLocation.SetFigure(Coll, Row, Name, 2, invulnerable, Important);
+                newLocation.setFigure(coll, row, NAME, 2, INVULNERABLE, IMPORTANT);
             }
-            else if (Row == CountCellOnHeightWindow - 2)
+            else if (row == countCellOnHeightWindow - 2)
             {
-                NewLocation.SetFigure(Coll, Row, Name, 1, invulnerable, Important);
+                newLocation.setFigure(coll, row, NAME, 1, INVULNERABLE, IMPORTANT);
             }
         }
     }
@@ -203,42 +203,42 @@ int main()
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
      
 
-    Vector2i PositionMouse;
-    Vector2f MouseWorldPos;
+    Vector2i positionMouse;
+    Vector2f mouseWorldPos;
 
 
-    CountdownTimer TimerCD1;
+    countdownTimer timerCD1;
 
 
-    vector<pair<size_t, size_t>>  SelectCellForMove;
+    vector<pair<size_t, size_t>>  selectCellForMove;
 
 
 
     //
-    vector<pair<size_t, size_t>> PositionEnemyFigure;
+    vector<pair<size_t, size_t>> positionEnemyFigure;
 
-    vector<pair<size_t, size_t>> PositionKing = { make_pair(0,0) };
+    vector<pair<size_t, size_t>> positionKing = { make_pair(0,0) };
     //
 
     // доступно ли превращение?
-    bool Promoution = false;
+    bool promoution = false;
 
-    int CurrentPlayer = 1;
-    bool Check = false;
+    int currentPlayer = 1;
+    bool check = false;
 
     // x / y
-    pair<int, int> OldPosition;
+    pair<int, int> oldPosition;
 
 
     while (window.isOpen())
     {
-        PositionMouse = Mouse::getPosition(window);
-        MouseWorldPos = window.mapPixelToCoords(PositionMouse);
+        positionMouse = Mouse::getPosition(window);
+        mouseWorldPos = window.mapPixelToCoords(positionMouse);
 
         // x / y
-        pair<int, int> CurrentPositionInGameField;
+        pair<int, int> currentPositionInGameField;
         // x / y
-        pair<int, int> CurrentgvPositionInUniqueFigureField;
+        pair<int, int> currentgvPositionInUniqueFigureField;
 
         
         
@@ -247,53 +247,53 @@ int main()
 
         //проводим проверку единожды для текущего игрока
 
-        if (!Check)
+        if (!check)
         {
             // считаем что проверку выполнили            
-            Check = true;
+            check = true;
 
             //получаем расположение важных ФИГУР ( "король" - могут быть и другие) текущего игрока
-            PositionKing = NewLocation.GetPositionsFigure(CurrentPlayer, true, 'M');
+            positionKing = newLocation.getPositionsFigure(currentPlayer, true, 'M');
 
 
             // получаем расположение фигур 
-            vector<vector<tuple<int, string, bool, bool, bool>>> LocationFigureInGame = NewLocation.GetVectorLocationFigure();
+            vector<vector<tuple<int, string, bool, bool, bool>>> locationFigureInGame = newLocation.getVectorLocationFigure();
 
 
             // => далее необходимо получить позиции фигур противников, которые могут угрожать королю, и выделяем их клетки в GameField
             // можно сделать аналогичные проверки для любых фигур
 
-            if (!PositionKing.empty())
+            if (!positionKing.empty())
             {
                 // стандартно существует единственый экземпляр ВАЖНЫХ ФИГУРЫ - король, на каждой стороне, но может быть и несколько :) -> проводим цикл
                 // так же королей может не быть и в цикл не входим т.к. вектор будет пустой
 
-                for (const auto& CurrentPosition : PositionKing)
+                for (const auto& currentPosition : positionKing)
                 {
                     // получаем позиции фигур противников которые "угрожают" текущей важной фигуре взятием
-                    PositionEnemyFigure = NewLocation.CheckThreatFigure(CurrentPosition.first, CurrentPosition.second, LocationFigureInGame);
+                    positionEnemyFigure = newLocation.checkThreatFigure(currentPosition.first, currentPosition.second, locationFigureInGame);
 
-                    for (const auto& CPosition : PositionEnemyFigure)
+                    for (const auto& cPosition : positionEnemyFigure)
                     {
                         // выделяем клетки на которых стоят эти фигуры
-                        ChessField.SelectCell(CPosition.first, CPosition.second, Color::Red);
-                        ChessField.SelectCell(CurrentPosition.first, CurrentPosition.second, Color::Red);
-                        TextInGameRow3.setString(L"поставлен шах");                   
+                        chessField.selectCell(cPosition.first, cPosition.second, Color::Red);
+                        chessField.selectCell(currentPosition.first, currentPosition.second, Color::Red);
+                        textInGameRow3.setString(L"поставлен шах");                   
                     }
 
 
                     // получаем позиции фигур которые могут защитить указанную (
-                    auto PositionFrendlyFigure = NewLocation.FigureCanProtectenCheckmateForFigure(CurrentPosition.first, CurrentPosition.second, LocationFigureInGame);
+                    auto positionFrendlyFigure = newLocation.figureCanProtectenCheckmateForFigure(currentPosition.first, currentPosition.second, locationFigureInGame);
                     
-                    for (const auto& CurrentPos : PositionFrendlyFigure)
+                    for (const auto& currentPos : positionFrendlyFigure)
                     {
-                        ChessField.SelectCell(CurrentPos.first, CurrentPos.second, Color::Green);
+                        chessField.selectCell(currentPos.first, currentPos.second, Color::Green);
                     }
 
-                    if (PositionFrendlyFigure.size() == 1 && PositionFrendlyFigure[0] == pair(size_t(0),size_t(0)))
+                    if (positionFrendlyFigure.size() == 1 && positionFrendlyFigure[0] == pair(size_t(0),size_t(0)))
                     {
-                        wstring CheckmatePlayer = L"поставлен мат игроку: " + to_wstring(CurrentPlayer);
-                        TextInGameRow4.setString(CheckmatePlayer);
+                        wstring checkmatePlayer = L"поставлен мат игроку: " + to_wstring(currentPlayer);
+                        textInGameRow4.setString(checkmatePlayer);
                     }
 
                 }
@@ -312,216 +312,217 @@ int main()
                 if (mouseButtonPressed->button == Mouse::Button::Left )
                 {
                     /// получаем координаты фигуры(клетки на игровом поле) по которой нажали
-                    CurrentPositionInGameField = NewLocation.GetPositionFigureWhenMousePressed(MouseWorldPos);
+                    currentPositionInGameField = newLocation.getPositionFigureWhenMousePressed(mouseWorldPos);
 
                     /// получаем координаты фигуры(клетки на поле с уникальными фигурами) по которой нажали
-                    CurrentgvPositionInUniqueFigureField = NewLocation.GetPositionUniqueFigureWhenMousePressed(MouseWorldPos);
+                    currentgvPositionInUniqueFigureField = newLocation.getPositionUniqueFigureWhenMousePressed(mouseWorldPos);
 
-                    if (!Promoution)
+                    if (!promoution)
                     {
 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // ВРЕМЕННОЕ
                         // выводим информацию о фигуре на игровом поле
-                        string Name = NewLocation.GetIDFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second) + "\t";
-                        string Coordinate = "X:" + to_string(CurrentPositionInGameField.first) + " \\ Y:" + to_string(CurrentPositionInGameField.second);
-                        string sideFigure = "\tSIDE: " + to_string(NewLocation.GetSideFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second));
+                        string name = newLocation.getIDFigure(currentPositionInGameField.first, currentPositionInGameField.second) + "\t";
+                        string coordinate = "X:" + to_string(currentPositionInGameField.first) + " \\ Y:" + to_string(currentPositionInGameField.second);
+                        string sideFigure = "\tSIDE: " + to_string(newLocation.getSideFigure(currentPositionInGameField.first, currentPositionInGameField.second));
+
 
                         string invulnerable = "\nInvulnerable:\t";
-                        NewLocation.GetInvulnerableFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second) ? invulnerable += "True" : invulnerable += "False";
+                        newLocation.getInvulnerableFigure(currentPositionInGameField.first, currentPositionInGameField.second) ? invulnerable += "True" : invulnerable += "False";
                         string Important = "\nImportant:\t\t";
-                        NewLocation.GetImportantFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second) ? Important += "True" : Important += "False";
+                        newLocation.getImportantFigure(currentPositionInGameField.first, currentPositionInGameField.second) ? Important += "True" : Important += "False";
 
-                        TextInGameRow1.setString(Name + Coordinate + sideFigure + invulnerable + Important);
+                        textInGameRow1.setString(name + coordinate + sideFigure + invulnerable + Important);
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
                         //сторона у выбранной фигуры
-                        int Side = NewLocation.GetSideFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
+                        int side = newLocation.getSideFigure(currentPositionInGameField.first, currentPositionInGameField.second);
 
                         /// выделяем ее или снимаем выделение, если выделено то ожидается передвижение фигуры
                         /// так же должна совпадать сторона игрока который сейчас ходит, для выделения
-                        if (!NewLocation.FiguresSelectedOrNot() && Side == CurrentPlayer)
+                        if (!newLocation.figuresSelectedOrNot() && side == currentPlayer)
                         {
                             //выделяем выбранную фигуру
-                            NewLocation.SeletcFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
+                            newLocation.seletcFigure(currentPositionInGameField.first, currentPositionInGameField.second);
 
                             // получаем вектор доступных ходов
-                            auto PositionSelectFigure = NewLocation.GetPositionSelectFigure();
+                            auto positionSelectFigure = newLocation.getPositionSelectFigure();
 
-                            SelectCellForMove = NewLocation.GetAvailableMovesForFigure(PositionSelectFigure.first, PositionSelectFigure.second);
+                            selectCellForMove = newLocation.getAvailableMovesForFigure(positionSelectFigure.first, positionSelectFigure.second);
 
                             // выделяем доступные ходы на доске
-                            for (const auto& OnePos : SelectCellForMove)
+                            for (const auto& onePos : selectCellForMove)
                             {
-                                ChessField.SelectCell(OnePos.first, OnePos.second, Color::Red);
+                                chessField.selectCell(onePos.first, onePos.second, Color::Red);
                             }  
                         }
-                        else if (NewLocation.FiguresSelectedOrNot())
+                        else if (newLocation.figuresSelectedOrNot())
                         {
                             // создаем копию фигуры на случай если ход выполнен в угрозу своим важным фигурам
-                            string TempIDold           = NewLocation.GetIDFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
-                            int    TempSideold         = NewLocation.GetSideFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
-                            bool   TempInvulnerableold = NewLocation.GetInvulnerableFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
-                            bool   TempImportantold    = NewLocation.GetImportantFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
+                            string tempIDold           = newLocation.getIDFigure(currentPositionInGameField.first, currentPositionInGameField.second);
+                            int    tempSideold         = newLocation.getSideFigure(currentPositionInGameField.first, currentPositionInGameField.second);
+                            bool   tempInvulnerableold = newLocation.getInvulnerableFigure(currentPositionInGameField.first, currentPositionInGameField.second);
+                            bool   tempImportantold    = newLocation.getImportantFigure(currentPositionInGameField.first, currentPositionInGameField.second);
 
                             // двигаем фигуру на выбранные координаты если возможно
-                            if (NewLocation.MoveSelectFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second))
+                            if (newLocation.moveSelectFigure(currentPositionInGameField.first, currentPositionInGameField.second))
                             {
                                 //передвинули
                                 //если что-то так же осталось угрожать важным фигурам откатываем передвижение
-                                bool Threat = false;
+                                bool threat = false;
 
 
                                 //получаем расположение ВАЖНЫХ ФИГУР ( "король" - могут быть и другие) текущего игрока
-                                PositionKing = NewLocation.GetPositionsFigure(CurrentPlayer, true, 'M');
+                                positionKing = newLocation.getPositionsFigure(currentPlayer, true, 'M');
 
 
-                                if (!PositionKing.empty())
+                                if (!positionKing.empty())
                                 {
-                                    for (int CountPosition = 0; CountPosition < PositionKing.size() && !Threat; CountPosition++)
+                                    for (int countPosition = 0; countPosition < positionKing.size() && !threat; countPosition++)
                                     {
                                         // получаем позиции фигур противников которые "угрожают" важной фигуре взятием
-                                        PositionEnemyFigure = NewLocation.CheckThreatFigure(PositionKing[CountPosition].first, PositionKing[CountPosition].second, NewLocation.GetVectorLocationFigure());
+                                        positionEnemyFigure = newLocation.checkThreatFigure(positionKing[countPosition].first, positionKing[countPosition].second, newLocation.getVectorLocationFigure());
 
                                         // если вектор не пуст значит угрозы есть
-                                        if (!PositionEnemyFigure.empty())
+                                        if (!positionEnemyFigure.empty())
                                         {
                                             // угроза есть
-                                            Threat = true;                                            
+                                            threat = true;                                            
                                         }                                                     
                                     }
                                 }
                                 //если угроза нашлась откатываем и не передаем ход
-                                if (Threat)
+                                if (threat)
                                 {
-                                    TextInGameRow3.setString(L"на эти координаты нельзя\nпередвинуть фигуру");
+                                    textInGameRow3.setString(L"на эти координаты нельзя\nпередвинуть фигуру");
 
-                                    auto PositionOld = NewLocation.GetPositionSelectFigure();
-                                    NewLocation.SetFigure(
-                                                             PositionOld.first, PositionOld.second,
-                                                             NewLocation.GetIDFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second),
-                                                             NewLocation.GetSideFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second),
-                                                             NewLocation.GetInvulnerableFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second),
-                                                             NewLocation.GetImportantFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second)
+                                    auto positionOld = newLocation.getPositionSelectFigure();
+                                    newLocation.setFigure(
+                                                             positionOld.first, positionOld.second,
+                                                             newLocation.getIDFigure(currentPositionInGameField.first, currentPositionInGameField.second),
+                                                             newLocation.getSideFigure(currentPositionInGameField.first, currentPositionInGameField.second),
+                                                             newLocation.getInvulnerableFigure(currentPositionInGameField.first, currentPositionInGameField.second),
+                                                             newLocation.getImportantFigure(currentPositionInGameField.first, currentPositionInGameField.second)
                                                          );
 
-                                    NewLocation.SetFigure(
-                                                            CurrentPositionInGameField.first, CurrentPositionInGameField.second,
-                                                            TempIDold,
-                                                            TempSideold,
-                                                            TempInvulnerableold,
-                                                            TempImportantold
+                                    newLocation.setFigure(
+                                                            currentPositionInGameField.first, currentPositionInGameField.second,
+                                                            tempIDold,
+                                                            tempSideold,
+                                                            tempInvulnerableold,
+                                                            tempImportantold
                                                          );
 
-                                    NewLocation.UnSeletcAllFigure();
+                                    newLocation.unSeletcAllFigure();
                                 }
                                 else
                                 {
                                     // если передвинули и угроз нет проверяем может ли фигура превратиться в другую
-                                    if (NewLocation.PromoutionFigureOnPosition(CurrentPositionInGameField.first, CurrentPositionInGameField.second))
+                                    if (newLocation.promoutionFigureOnPosition(currentPositionInGameField.first, currentPositionInGameField.second))
                                     {
-                                        OldPosition = CurrentPositionInGameField;
+                                        oldPosition = currentPositionInGameField;
 
-                                        NewLocation.SeletcFigure(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
-                                        NewLocation.SeletcUniqueFigureForPromoution(CurrentPositionInGameField.first, CurrentPositionInGameField.second);
+                                        newLocation.seletcFigure(currentPositionInGameField.first, currentPositionInGameField.second);
+                                        newLocation.seletcUniqueFigureForPromoution(currentPositionInGameField.first, currentPositionInGameField.second);
 
-                                        Promoution = true;
+                                        promoution = true;
                                     }
                                     // если не может превратиться снимаем выделение
                                     else
                                     {
-                                        NewLocation.UnSeletcAllFigure();
+                                        newLocation.unSeletcAllFigure();
                                     }
                                     //передаем ход следующему игроку
-                                    CurrentPlayer < CountPlayer ? CurrentPlayer++ : CurrentPlayer = 1;                               
-                                    TextInGameRow3.setString(L"");
+                                    currentPlayer < COUNT_PLAYER ? currentPlayer++ : currentPlayer = 1;                               
+                                    textInGameRow3.setString(L"");
                                 }
                             }
                             else
                             {
-                                NewLocation.UnSeletcAllFigure();
+                                newLocation.unSeletcAllFigure();
                             }   
-                            ChessField.UnSelectCell();
+                            chessField.unSelectCell();
 
                             // проводим проверку
-                            Check = false;
+                            check = false;
                         }
                     }
-                    else if (Promoution)
+                    else if (promoution)
                     {
 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // ВРЕМЕННОЕ
                         // выводим информацию о фигуре на игровом поле
-                        string Name = NewLocation.GetIDUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second) + "\t";
-                        string Coordinate = "X:" + to_string(CurrentgvPositionInUniqueFigureField.first) + " \\ Y:" + to_string(CurrentgvPositionInUniqueFigureField.second);
-                        string sideFigure = "\tSIDE: " + to_string(NewLocation.GetSideUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second));
+                        string name = newLocation.getIDUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second) + "\t";
+                        string coordinate = "X:" + to_string(currentgvPositionInUniqueFigureField.first) + " \\ Y:" + to_string(currentgvPositionInUniqueFigureField.second);
+                        string sideFigure = "\tSIDE: " + to_string(newLocation.getSideUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second));
                         
                         string invulnerable = "\nInvulnerable:\t";
-                        NewLocation.GetInvulnerableUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second) ? invulnerable += "True" : invulnerable += "False";
-                        string Important = "\nImportant:\t\t";
-                        NewLocation.GetImportantUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second) ? Important += "True" : Important += "False";
+                        newLocation.getInvulnerableUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second) ? invulnerable += "True" : invulnerable += "False";
+                        string important = "\nImportant:\t\t";
+                        newLocation.getImportantUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second) ? important += "True" : important += "False";
                         
-                        TextInGameRow1.setString(Name + Coordinate + sideFigure + invulnerable + Important);
+                        textInGameRow1.setString(name + coordinate + sideFigure + invulnerable + important);
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
                         // сторона передвинутой фигуры должно совпадать с выбранной
-                        if ( NewLocation.GetSideFigure(OldPosition.first, OldPosition.second) == NewLocation.GetSideUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second))
+                        if ( newLocation.getSideFigure(oldPosition.first, oldPosition.second) == newLocation.getSideUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second))
                         {
-                            if (NewLocation.PromoutionSelectFigure(
-                                                                    NewLocation.GetSideUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second),
-                                                                    NewLocation.GetIDUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second),
-                                                                    NewLocation.GetInvulnerableUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second),
-                                                                    NewLocation.GetImportantUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second),
-                                                                    NewLocation.GetPromoutionUniqueFigure(CurrentgvPositionInUniqueFigureField.first, CurrentgvPositionInUniqueFigureField.second)
+                            if (newLocation.PromoutionSelectFigure(
+                                                                    newLocation.getSideUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second),
+                                                                    newLocation.getIDUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second),
+                                                                    newLocation.getInvulnerableUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second),
+                                                                    newLocation.getImportantUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second),
+                                                                    newLocation.getPromoutionUniqueFigure(currentgvPositionInUniqueFigureField.first, currentgvPositionInUniqueFigureField.second)
                                                                    )
                             )
                             {                                
-                                NewLocation.UnSeletcUniqueFigure();
-                                NewLocation.UnSeletcAllFigure();
-                                Promoution = false;
-                                TextInGameRow3.setString(L"превращение выполнено");
+                                newLocation.unSeletcUniqueFigure();
+                                newLocation.unSeletcAllFigure();
+                                promoution = false;
+                                textInGameRow3.setString(L"превращение выполнено");
                             }
                             else
                             {
-                                TextInGameRow3.setString(L"превращение невозможно\nв эту фигуру");
+                                textInGameRow3.setString(L"превращение невозможно\nв эту фигуру");
                             }
                         }
                         else
                         {
-                            TextInGameRow3.setString(L"неверная фигура");
+                            textInGameRow3.setString(L"неверная фигура");
                         }
                     }
                 }
             }
         }
 
-        if (Promoution)
+        if (promoution)
         {
-            TextInGameRow3.setString(L"Превращение доступно");
+            textInGameRow3.setString(L"Превращение доступно");
         }
 
-        wstring Player = L"\nСейчас ход игрока #" + to_string(CurrentPlayer);
-        TextInGameRow2.setString(Player);
+        wstring player = L"\nСейчас ход игрока #" + to_string(currentPlayer);
+        textInGameRow2.setString(player);
 
         window.clear(Color::White);
         
-        window.draw(TextInGameRow1);
-        window.draw(TextInGameRow2);
-        window.draw(TextInGameRow3);
-        window.draw(TextInGameRow4);
+        window.draw(textInGameRow1);
+        window.draw(textInGameRow2);
+        window.draw(textInGameRow3);
+        window.draw(textInGameRow4);
 
-        for (size_t row = 0; row < CountCellOnLengthWindow; row++)
+        for (size_t row = 0; row < countCellOnLengthWindow; row++)
         {
-            for (size_t coll = 0; coll < CountCellOnLengthWindow; coll++)
+            for (size_t coll = 0; coll < countCellOnLengthWindow; coll++)
             {
-                window.draw(ChessField.GetRectangleShapeOnField(coll, row));
-                window.draw(ChessField.GetFieldCoordinateOnField(coll, row));
-                window.draw(NewLocation.GetRectangleShapeFigure(coll, row));
-                window.draw(NewLocation.GetRectangleShapeUniqueFigure(coll, row));
+                window.draw(chessField.getRectangleShapeOnField(coll, row));
+                window.draw(chessField.getFieldCoordinateOnField(coll, row));
+                window.draw(newLocation.getRectangleShapeFigure(coll, row));
+                window.draw(newLocation.getRectangleShapeUniqueFigure(coll, row));
             }
         } 
         window.display(); 

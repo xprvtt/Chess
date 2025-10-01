@@ -34,9 +34,9 @@ bool outputMessage(string message);
 /// <summary>
 /// Функция Загружает шрифт по пути
 /// </summary>
-/// <param name="PathToFont">путь до шрифта</param>
+/// <param name="pathToFont">путь до шрифта</param>
 /// <returns></returns>
-Font loadFont(path PathToFont);
+Font loadFont(path pathToFont);
 
 
 /// <summary>

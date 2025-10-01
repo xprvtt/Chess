@@ -1,13 +1,25 @@
 ﻿#include "Pawn.h"
 
-static bool CustomCheckMove1(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
-static bool CustomCheckMove2(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+static bool customCheckMoveSideTop(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
+static bool customCheckMoveSideDown(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
 
-static vector<pair<size_t, size_t>> AvailableMoveForFigure1(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
-static vector<pair<size_t, size_t>> AvailableMoveForFigure2(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+static vector<pair<size_t, size_t>> availableMoveForFigureSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+static vector<pair<size_t, size_t>> availableMoveForFigureSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
 
-static bool PossibilityPromotion1(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
-static bool PossibilityPromotion2(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+static bool possibilityPromotionSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
+static bool possibilityPromotionSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,29 +34,29 @@ static bool PossibilityPromotion2(size_t XPositionCurrent, size_t YPositionCurre
 //-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
 
 
-bool Pawn::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Pawn::checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 
-	switch (GetSIDE())
+	switch (get_SIDE())
 	{
 	case 1:
-		return CustomCheckMove1(XPositionCurrent, YPositionCurrent, XPositionMove, YPositionMove, VectorLocationFigure);
+		return customCheckMoveSideTop(xPositionCurrent, yPositionCurrent, xPositionMove, yPositionMove, vectorLocationFigure);
 	case 2:
-		return CustomCheckMove2(XPositionCurrent, YPositionCurrent, XPositionMove, YPositionMove, VectorLocationFigure);
+		return customCheckMoveSideDown(xPositionCurrent, yPositionCurrent, xPositionMove, yPositionMove, vectorLocationFigure);
 
 	default:
 		OutputLog("Игрок не определен проверьте линию -> Figure -> Pawn -> CheckMove() -> case");
 		return false;
 	}
 }
-static bool CustomCheckMove1(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+static bool customCheckMoveSideTop(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 
-	vector<pair<size_t, size_t>> VMove = AvailableMoveForFigure1(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+	vector<pair<size_t, size_t>> vMove = availableMoveForFigureSideTop(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 
-	for (const auto& Move : VMove)
+	for (const auto& move : vMove)
 	{
-		if (Move.first == XPositionMove && Move.second == YPositionMove)
+		if (move.first == xPositionMove && move.second == yPositionMove)
 		{
 			return true;
 		}
@@ -52,13 +64,13 @@ static bool CustomCheckMove1(size_t XPositionCurrent, size_t YPositionCurrent, s
 	return false;
 }
 
-static bool CustomCheckMove2(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+static bool customCheckMoveSideDown(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
-	vector<pair<size_t, size_t>> VMove = AvailableMoveForFigure2(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+	vector<pair<size_t, size_t>> vMove = availableMoveForFigureSideDown(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 
-	for (const auto& Move : VMove)
+	for (const auto& move : vMove)
 	{
-		if (Move.first == XPositionMove && Move.second == YPositionMove)
+		if (move.first == xPositionMove && move.second == yPositionMove)
 		{
 			return true;
 		}
@@ -70,18 +82,38 @@ static bool CustomCheckMove2(size_t XPositionCurrent, size_t YPositionCurrent, s
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
 
-vector<pair<size_t, size_t>> Pawn::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+vector<pair<size_t, size_t>> Pawn::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 
 	// движение пешки в зависимости от стороны игрока
-	switch (GetSIDE())
+	switch (get_SIDE())
 	{
 	case 1:
-		return AvailableMoveForFigure1(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+		return availableMoveForFigureSideTop(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 	case 2:
-		return AvailableMoveForFigure2(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+		return availableMoveForFigureSideDown(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 
 
 	default:
@@ -92,13 +124,13 @@ vector<pair<size_t, size_t>> Pawn::GetMoveForFigure(size_t XPositionCurrent, siz
 
 
 
-static vector<pair<size_t, size_t>> AvailableMoveForFigure1(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+static vector<pair<size_t, size_t>> availableMoveForFigureSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 
 	/// ИГРОК 1 НИЖНИЙ БЕЛЫЙ 
 
-	size_t Row = VectorLocationFigure.size();
-	size_t Col = VectorLocationFigure[0].size();
+	size_t row = vectorLocationFigure.size();
+	size_t col = vectorLocationFigure[0].size();
 
 	vector<pair<size_t, size_t>> result;
 
@@ -106,60 +138,64 @@ static vector<pair<size_t, size_t>> AvailableMoveForFigure1(size_t XPositionCurr
 	// просчитываем ход на пустую клетку
 	 
 	//если впереди пешки ничего нет то ход доступен
-	if (get<0>(VectorLocationFigure[YPositionCurrent - 1][XPositionCurrent]) == 0)
+	if (get<0>(vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent]) == 0)
 	{
-		result.push_back(make_pair(XPositionCurrent, YPositionCurrent - 1));
+		result.push_back(make_pair(xPositionCurrent, yPositionCurrent - 1));
 
 		//высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед, т.е. сразу на 2
-		if (YPositionCurrent == Row - 3 && get<0>(VectorLocationFigure[YPositionCurrent - 2][XPositionCurrent]) == 0)
+		if (yPositionCurrent == row - 3 && get<0>(vectorLocationFigure[yPositionCurrent - 2][xPositionCurrent]) == 0)
 		{
 			// добавляем возможный ход на 2 клетки вперед
-			result.push_back(make_pair(XPositionCurrent, YPositionCurrent - 2));
+			result.push_back(make_pair(xPositionCurrent, yPositionCurrent - 2));
 		}
 	}
 
 	// проситываем возможность взятие фигуры ПРОТИВНИКА справа и слева ИГРОКА 2
 	// фигура на клетке не должна быть пустой ( SIDE 0 ) не должна быть краем ( SIDE -1 ) и нельзя взять свою же фигуру 
-	if (get<0>(VectorLocationFigure[YPositionCurrent - 1][XPositionCurrent - 1]) > 0 && get<0>(VectorLocationFigure[YPositionCurrent - 1][XPositionCurrent - 1]) != get<0>(VectorLocationFigure[YPositionCurrent][XPositionCurrent]))
+	if (get<0>(vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent - 1]) > 0 && get<0>(vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent - 1]) != get<0>(vectorLocationFigure[yPositionCurrent][xPositionCurrent]))
 	{
-		result.push_back(make_pair(XPositionCurrent - 1, YPositionCurrent - 1));
+		result.push_back(make_pair(xPositionCurrent - 1, yPositionCurrent - 1));
 	}
-	if (get<0>(VectorLocationFigure[YPositionCurrent - 1][XPositionCurrent + 1]) > 0 && get<0>(VectorLocationFigure[YPositionCurrent - 1][XPositionCurrent + 1]) != get<0>(VectorLocationFigure[YPositionCurrent][XPositionCurrent]))
+	if (get<0>(vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent + 1]) > 0 && get<0>(vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent + 1]) != get<0>(vectorLocationFigure[yPositionCurrent][xPositionCurrent]))
 	{
-		result.push_back(make_pair(XPositionCurrent + 1, YPositionCurrent - 1));
+		result.push_back(make_pair(xPositionCurrent + 1, yPositionCurrent - 1));
 	}
 	return result;
 }
 
-static vector<pair<size_t, size_t>> AvailableMoveForFigure2(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+
+
+
+
+static vector<pair<size_t, size_t>> availableMoveForFigureSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	/// ИГРОК 2 ВЕРХНИЙ ЧЕРНЫЙ
-	size_t Row = VectorLocationFigure.size();
-	size_t Col = VectorLocationFigure[0].size();
+	size_t row = vectorLocationFigure.size();
+	size_t col = vectorLocationFigure[0].size();
 
 	vector<pair<size_t, size_t>> result;
 
 	//если впереди пешки ничего нет
-	if (get<0>(VectorLocationFigure[YPositionCurrent + 1][XPositionCurrent]) == 0)
+	if (get<0>(vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent]) == 0)
 	{
-		result.push_back(make_pair(XPositionCurrent, YPositionCurrent + 1));
+		result.push_back(make_pair(xPositionCurrent, yPositionCurrent + 1));
 
 		//высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед если она не занята
-		if (YPositionCurrent == 2 && get<0>(VectorLocationFigure[YPositionCurrent + 2][XPositionCurrent]) == 0)
+		if (yPositionCurrent == 2 && get<0>(vectorLocationFigure[yPositionCurrent + 2][xPositionCurrent]) == 0)
 		{
 			// добавляем возможный ход на 2 клетки вперед
-			result.push_back(make_pair(XPositionCurrent, YPositionCurrent + 2));
+			result.push_back(make_pair(xPositionCurrent, yPositionCurrent + 2));
 		}
 	}
 	// проситываем возможность взятие фигуры ПРОТИВНИКА справа и слева ИГРОКА 2
 	// фигура на клетке не должна быть пустой ( SIDE 0 ) не должна быть краем ( SIDE -1 ) и нельзя взять свою же фигуру 
-	if (get<0>(VectorLocationFigure[YPositionCurrent + 1][XPositionCurrent - 1]) > 0 && get<0>(VectorLocationFigure[YPositionCurrent + 1][XPositionCurrent - 1]) != get<0>(VectorLocationFigure[YPositionCurrent][XPositionCurrent]))
+	if (get<0>(vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent - 1]) > 0 && get<0>(vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent - 1]) != get<0>(vectorLocationFigure[yPositionCurrent][xPositionCurrent]))
 	{
-		result.push_back(make_pair(XPositionCurrent - 1, YPositionCurrent + 1));
+		result.push_back(make_pair(xPositionCurrent - 1, yPositionCurrent + 1));
 	}
-	if (get<0>(VectorLocationFigure[YPositionCurrent + 1][XPositionCurrent + 1]) > 0 && get<0>(VectorLocationFigure[YPositionCurrent + 1][XPositionCurrent + 1]) != get<0>(VectorLocationFigure[YPositionCurrent][XPositionCurrent]))
+	if (get<0>(vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent + 1]) > 0 && get<0>(vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent + 1]) != get<0>(vectorLocationFigure[yPositionCurrent][xPositionCurrent]))
 	{ 
-		result.push_back(make_pair(XPositionCurrent + 1, YPositionCurrent + 1));
+		result.push_back(make_pair(xPositionCurrent + 1, yPositionCurrent + 1));
 	}
 	return result;
 }
@@ -170,30 +206,41 @@ static vector<pair<size_t, size_t>> AvailableMoveForFigure2(size_t XPositionCurr
 
 
 
+
+
+
+
+
+
+
 //-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-bool Pawn::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Pawn::getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
-	switch (GetSIDE())
+	switch (get_SIDE())
 	{
 	case 1:
-		return PossibilityPromotion1(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+		return possibilityPromotionSideTop(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 	case 2:
-		return PossibilityPromotion2(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+		return possibilityPromotionSideDown(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 
 	default:
 		OutputLog("Игрок не определен проверьте линию -> Figure -> Pawn -> GetPossibilityPromotion() -> case");
 		return false;
 	}
 }
-static bool PossibilityPromotion1(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+
+
+static bool possibilityPromotionSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	/// игрок 1 белый нижний
-	return YPositionCurrent == 1 ? true : false;
+	return yPositionCurrent == 1 ? true : false;
 }
-static bool PossibilityPromotion2(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+
+
+static bool possibilityPromotionSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	/// игрок 2 черный верхний
-	return YPositionCurrent == VectorLocationFigure.size() - 2 ? true : false;
+	return yPositionCurrent == vectorLocationFigure.size() - 2 ? true : false;
 }
 //-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
 
@@ -201,8 +248,19 @@ static bool PossibilityPromotion2(size_t XPositionCurrent, size_t YPositionCurre
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 //-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-string Pawn::Set_ID_FIGURE()
+string Pawn::set_ID_FIGURE()
 {
 	return "Pawn";
 }

@@ -35,7 +35,7 @@ private:
 	/// <summary>
 	/// вектор "условий" фигур в которые может превратиться фигура
 	/// </summary>
-	vector<tuple<int, string, bool, bool, bool >> VectorPROMOUTION;
+	vector<tuple<int, string, bool, bool, bool >> VECTOR_PROMOUTION;
 
 public:
 
@@ -46,54 +46,54 @@ public:
 	/// <param name="Inulnerability">true = неуязвимость \ false = фигуру можно взять (убить) \\ по умолчанию false</param>
 	/// <param name="IMPORTANT">важная ли фигура? важные фигуры являются главными фигурами, по типу короля и определяют исход боя \\ по умолчанию - false</param>
 	/// <param name="PROMOUTION">вектор с указанными фигурами, в которые может превратиться фигура \\ по умолчанию пустой = ни во что не может превратиться</param>
-	Figure(int SIDE, bool INVULNERABLE = false, bool IMPORTANT = false, vector<tuple<int, string, bool, bool, bool>> VectorPROMOUTION = {});
+	Figure(int SIDE, bool INVULNERABLE = false, bool IMPORTANT = false, vector<tuple<int, string, bool, bool, bool>> VECTOR_PROMOUTION = {});
 
 	/// <summary>
 	/// Конструктор копирования
 	/// </summary>
-	/// <param name="OthreFigure"></param>
-	Figure(const Figure &OthreFigure);
+	/// <param name="othreFigure"></param>
+	Figure(const Figure &othreFigure);
 	
 	/// <summary>
 	/// Проверяем доступен ли ход на указанные координаты
 	/// </summary>
-	/// <param name="XPositionCurrent"></param>
-	/// <param name="YPositionCurrent"></param>
-	/// <param name="XPositionMove"></param>
-	/// <param name="YPositionMove"></param>
-	/// <param name="VectorLocationFigure"></param>
+	/// <param name="xPositionCurrent"></param>
+	/// <param name="yPositionCurrent"></param>
+	/// <param name="xPositionMove"></param>
+	/// <param name="yPositionMove"></param>
+	/// <param name="vectorLocationFigure"></param>
 	/// <returns></returns>
-	bool CheckMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+	bool checkMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
 
 	/// <summary>
 	/// Получить имя фигуры
 	/// </summary>
 	/// <returns>имя фигуры</returns>
-	string Get_ID_FIGURE();
+	string get_ID_FIGURE();
 
 	/// <summary>
 	/// Получаем сторону игрока у фигуры
 	/// </summary>
 	/// <returns>сторона игрока</returns>
-	int GetSIDE();
+	int get_SIDE();
 
 	/// <summary>
 	/// Неуязвима ли фигура?
 	/// </summary>
 	/// <returns>true = неуязвима \ false - можно убить</returns>
-	bool GetINVULNERABLE();
+	bool get_INVULNERABLE();
 
 	/// <summary>
 	/// важная ли фигура?
 	/// </summary>
 	/// <returns>true = важная \ false - не важная </returns>
-	bool GetIMPORTANT();
+	bool get_IMPORTANT();
 
 	/// <summary>
 	/// имеет ли возможность фигура превращаться?
 	/// </summary>
 	/// <returns></returns>
-	bool GetPROMOUTION();
+	bool get_PROMOUTION();
 
 
 	/// <summary>
@@ -104,19 +104,19 @@ public:
 	/// <param name="INVULNERABLE"></param>
 	/// <param name="IMPORTANT"></param>
 	/// <returns></returns>
-	bool GetPromoutionFigure(int SIDE, string ID_FIGURE, bool INVULNERABLE, bool IMPORTANT, bool PROMOUTION);
+	bool getPromoutionFigure(int SIDE, string ID_FIGURE, bool INVULNERABLE, bool IMPORTANT, bool PROMOUTION);
 
 
 	/// <summary>
 	/// Получить доступные превращения для фигуры
 	/// </summary>
 	/// <returns></returns>
-	vector<tuple<int, string, bool, bool, bool >> GetVectorPROMOUTION();
+	vector<tuple<int, string, bool, bool, bool >> get_VECTOR_PROMOUTION();
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	//																			  
-	// VectorLocationFigure -> для int должен имееть структуру =>
+	// vectorLocationFigure -> для int должен имееть структуру =>
 	// -1 == границы															  
 	// 0 == пустая клетка 														  
 	// 1+ == сторона игрока														  
@@ -131,21 +131,21 @@ public:
 	/// <summary>
 	/// получить доступные координаты для хода -> true - доступная координата
 	/// </summary>
-	/// <param name="XPositionCurrent"> текущая позиция фигуры Х</param>
-	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
+	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
+	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
+	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	virtual vector<pair<size_t, size_t>> GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+	virtual vector<pair<size_t, size_t>> getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
 
 
 	/// <summary>
 	/// проверка -> возможно ли превращение фигуры на указанной позиции?
 	/// </summary>
-	/// <param name="XPositionCurrent"> текущая позиция фигуры Х</param>
-	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
+	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
+	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
+	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns> логическое значение \ true - вревращение возможно</returns>
-	virtual bool GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+	virtual bool getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
 
 
 protected:
@@ -153,18 +153,18 @@ protected:
 	/// <summary>
 	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры
 	/// </summary>
-	/// <param name="XPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="YPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="XPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="YPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="VectorLocationFigure"></param>
+	/// <param name="xPositionCurrent">текущие координаты фигуры </param>
+	/// <param name="yPositionCurrent">текущие координаты фигуры </param>
+	/// <param name="xPositionMove"> координаты, на которые планируем переметиться</param>
+	/// <param name="yPositionMove"> координаты, на которые планируем переметиться</param>
+	/// <param name="vectorLocationFigure"></param>
 	/// <returns></returns>
-	virtual bool CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+	virtual bool checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
 
 	/// <summary>
 	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
 	/// ФИГУРА НЕ ДОЛЖНА НАЗЫВАТЬСЯ "ALL"
 	/// </summary>
-	virtual string Set_ID_FIGURE();
+	virtual string set_ID_FIGURE();
 };
 

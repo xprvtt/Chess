@@ -14,7 +14,7 @@ class Queen : public Figure
 	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
 	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	vector<pair<size_t, size_t>> GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
+	vector<pair<size_t, size_t>> getMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
 
 	/// <summary>
 	/// проверка -> возможно ли превращение фигуры на указанной позиции?
@@ -23,7 +23,7 @@ class Queen : public Figure
 	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
 	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns> логическое значение \ true - вревращение возможно</returns>
-	bool GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
+	bool getPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
 	 
 
 	/// <summary>
@@ -35,12 +35,12 @@ class Queen : public Figure
 	/// <param name="YPositionMove"> координаты, на которые планируем переметиться</param>
 	/// <param name="VectorLocationFigure"></param>
 	/// <returns></returns>
-	bool CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
+	bool checkMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
 
 	/// <summary>
 	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
 	/// ФИГУРА НЕ ДОЛЖНА НАЗЫВАТЬСЯ "ALL"
 	/// </summary>
-	string Set_ID_FIGURE() override;
+	string set_ID_FIGURE() override;
 
 };

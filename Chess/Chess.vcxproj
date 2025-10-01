@@ -147,12 +147,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="getCurrentTime.cpp" />
-    <ClCompile Include="OutputMessage.cpp" />
-    <ClCompile Include="LoadFont.cpp" />
+    <ClCompile Include="outputMessage.cpp" />
+    <ClCompile Include="loadFont.cpp" />
     <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Rook.cpp" />
-    <ClCompile Include="SearchFile.cpp" />
-    <ClCompile Include="CountdownTimer.cpp" />
+    <ClCompile Include="searchFile.cpp" />
+    <ClCompile Include="countdownTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bishop.h" />

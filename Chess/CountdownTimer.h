@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Core.h"
 
-class CountdownTimer 
+class countdownTimer 
 {
 private:
     Clock clock;         // Таймер
@@ -11,9 +11,9 @@ private:
 public:
 
 
-    CountdownTimer();
+    countdownTimer();
 
-    void SetTimer(float second);
+    void setTimer(float second);
 
-    bool TimerExpired();
+    bool timerExpired();
 };

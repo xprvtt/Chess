@@ -1,58 +1,64 @@
 ﻿#include "Bishop.h"
 
-static bool CheckCell(size_t XPos, size_t YPos, int Side, vector<pair<size_t, size_t>>& result, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure);
+static bool checkCell(size_t xPos, size_t yPos, int side, vector<pair<size_t, size_t>>& result, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
 
-string Bishop::Set_ID_FIGURE()
+
+
+string Bishop::set_ID_FIGURE()
 {
 	return "Bishop";
 }
 
-vector<pair<size_t, size_t>> Bishop::GetMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+vector<pair<size_t, size_t>> Bishop::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	vector<pair<size_t, size_t>> result;
 
-	size_t Row = VectorLocationFigure.size();
-	size_t Col = VectorLocationFigure[0].size(); 
+	size_t row = vectorLocationFigure.size();
+	size_t col = vectorLocationFigure[0].size(); 
 
-	int Side = GetSIDE();
+	int side = this->get_SIDE();
+
+
+
+
 	//// по диагонали 
 
 	//в правый низ от фигуры
-	for (size_t YPos = YPositionCurrent + 1, XPos = XPositionCurrent + 1; YPos < Row || XPos < Col; YPos++, XPos++)
+	for (size_t yPos = yPositionCurrent + 1, xPos = xPositionCurrent + 1; yPos < row || xPos < col; yPos++, xPos++)
 	{
-		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
+		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
 	}
 	// в правый верх от фигуры
-	for (size_t YPos = YPositionCurrent - 1, XPos = XPositionCurrent + 1; YPos > 0 || XPos < Col; YPos--, XPos++)
+	for (size_t yPos = yPositionCurrent - 1, xPos = xPositionCurrent + 1; yPos > 0 || xPos < col; yPos--, xPos++)
 	{
-		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
+		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
 	}
 	//левый верх от фигуры 
-	for (size_t YPos = YPositionCurrent - 1, XPos = XPositionCurrent - 1; YPos > 0 || XPos > 0; YPos--, XPos--)
+	for (size_t yPos = yPositionCurrent - 1, xPos = xPositionCurrent - 1; yPos > 0 || xPos > 0; yPos--, xPos--)
 	{
-		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
+		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
 	}
 	//левый низ от фигуры
-	for (size_t YPos = YPositionCurrent + 1, XPos = XPositionCurrent - 1; YPos < Row || XPos > 0; YPos++, XPos--)
+	for (size_t yPos = yPositionCurrent + 1, xPos = xPositionCurrent - 1; yPos < row || xPos > 0; yPos++, xPos--)
 	{
-		if (!CheckCell(XPos, YPos, Side, result, VectorLocationFigure))	{	break;	}
+		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
 	}
 	return result;
 }
 
-static bool CheckCell(size_t XPos, size_t YPos, int Side,  vector<pair<size_t, size_t>>& result, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+static bool checkCell(size_t xPos, size_t yPos, int side,  vector<pair<size_t, size_t>>& result, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	// продолжаем пока не встретим свою или чужую фигуру
-	if (get<0>(VectorLocationFigure[YPos][XPos]) == 0)
+	if (get<0>(vectorLocationFigure[yPos][xPos]) == 0)
 	{
-		result.push_back(make_pair(XPos, YPos));
+		result.push_back(make_pair(xPos, yPos));
 		return true;
 
 	}
 	// если встретим фигуру противника добавляем возможность взятия и выходим
-	else if (get<0>(VectorLocationFigure[YPos][XPos]) != Side && get<0>(VectorLocationFigure[YPos][XPos]) > 0)
+	else if (get<0>(vectorLocationFigure[yPos][xPos]) != side && get<0>(vectorLocationFigure[yPos][xPos]) > 0)
 	{
-		result.push_back(make_pair(XPos, YPos));
+		result.push_back(make_pair(xPos, yPos));
 		return false;
 	}
 	// иначе предполагаем что встретили фигуру своей стороны и так же выходим
@@ -62,13 +68,13 @@ static bool CheckCell(size_t XPos, size_t YPos, int Side,  vector<pair<size_t, s
 	}
 }
 
-bool Bishop::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Bishop::checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
-	vector<pair<size_t, size_t>> VMove = GetMoveForFigure(XPositionCurrent, YPositionCurrent, VectorLocationFigure);
+	vector<pair<size_t, size_t>> vMove = getMoveForFigure(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
 
-	for (const auto& Move : VMove)
+	for (const auto& move : vMove)
 	{
-		if (Move.first == XPositionMove && Move.second == YPositionMove)
+		if (move.first == xPositionMove && move.second == yPositionMove)
 		{
 			return true;
 		}
@@ -76,7 +82,7 @@ bool Bishop::CheckMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t 
 	return false;
 }
 
-bool Bishop::GetPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure)
+bool Bishop::getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure)
 {
 	return false;
 }
