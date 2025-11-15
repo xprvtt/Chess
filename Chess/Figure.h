@@ -1,59 +1,36 @@
 ﻿#pragma once
 
 #include "Core.h"
-
+#include "PropertiesFigure.h"
 
 class Figure
 {
-private:
-
-	/// <summary>
-	/// единый id для фигур этого типа должен быть по названию класса для удобства например для class Figure -> ID_FIGURE = "Figure"
-	/// </summary>
-	string ID_FIGURE;
-
-	/// <summary>
-	/// сторона игрока 1 - белый \ 2 - черный
-	/// </summary>
-	int SIDE;
-
-	/// <summary>
-	/// фигуру можно убить? 
-	/// </summary>
-	bool INVULNERABLE;
-	
-	/// <summary>
-	/// важные фигуры являются главными фигурами, по типу короля и определяют исход боя
-	/// </summary>
-	bool IMPORTANT;
-
-	/// <summary> 
-	/// имеет ли фигура возможность превращения
-	/// </summary>
-	bool PROMOUTION;
-
-	/// <summary>
-	/// вектор "условий" фигур в которые может превратиться фигура
-	/// </summary>
-	vector<tuple<int, string, bool, bool, bool >> VECTOR_PROMOUTION;
-
 public:
+
 
 	/// <summary>
 	/// определяем сторону игрока фигуры и уязвимость при инициализации
+	/// <para> если vectorPromoution is empty => promoution == false </para> 
+	/// 
 	/// </summary>
-	/// <param name="SIDE">сторона игрока</param>
+	/// <param name="side">сторона игрока</param>
 	/// <param name="Inulnerability">true = неуязвимость \ false = фигуру можно взять (убить) \\ по умолчанию false</param>
-	/// <param name="IMPORTANT">важная ли фигура? важные фигуры являются главными фигурами, по типу короля и определяют исход боя \\ по умолчанию - false</param>
-	/// <param name="PROMOUTION">вектор с указанными фигурами, в которые может превратиться фигура \\ по умолчанию пустой = ни во что не может превратиться</param>
-	Figure(int SIDE, bool INVULNERABLE = false, bool IMPORTANT = false, vector<tuple<int, string, bool, bool, bool>> VECTOR_PROMOUTION = {});
+	/// <param name="important">важная ли фигура? важные фигуры являются главными фигурами, по типу короля и определяют исход боя \\ по умолчанию - false</param>
+	/// <param name="promoution">вектор с указанными фигурами, в которые может превратиться фигура \\ по умолчанию пустой = ни во что не может превратиться</param>
+	Figure(int side, bool invulnerable = false, bool important = false, std::vector<PropertiesFigure> vectorPromoution = {});
+
+
+
 
 	/// <summary>
 	/// Конструктор копирования
 	/// </summary>
 	/// <param name="othreFigure"></param>
-	Figure(const Figure &othreFigure);
-	
+	Figure(const Figure& othreFigure);
+
+
+
+
 	/// <summary>
 	/// Проверяем доступен ли ход на указанные координаты
 	/// </summary>
@@ -63,71 +40,95 @@ public:
 	/// <param name="yPositionMove"></param>
 	/// <param name="vectorLocationFigure"></param>
 	/// <returns></returns>
-	bool checkMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
+	bool checkMoveForFigureOnPosition(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure);
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/// <summary>
 	/// Получить имя фигуры
 	/// </summary>
 	/// <returns>имя фигуры</returns>
-	string get_ID_FIGURE();
+	std::wstring getIdFigure();
+
+
 
 	/// <summary>
 	/// Получаем сторону игрока у фигуры
 	/// </summary>
 	/// <returns>сторона игрока</returns>
-	int get_SIDE();
+	int getSide() const noexcept;
+
+
 
 	/// <summary>
 	/// Неуязвима ли фигура?
 	/// </summary>
 	/// <returns>true = неуязвима \ false - можно убить</returns>
-	bool get_INVULNERABLE();
+	bool getInvulnerable() const noexcept;
+
+
 
 	/// <summary>
 	/// важная ли фигура?
 	/// </summary>
 	/// <returns>true = важная \ false - не важная </returns>
-	bool get_IMPORTANT();
+	bool getImportant() const noexcept;
+
+
 
 	/// <summary>
 	/// имеет ли возможность фигура превращаться?
 	/// </summary>
 	/// <returns></returns>
-	bool get_PROMOUTION();
+	bool getPromoution() const noexcept;
+
 
 
 	/// <summary>
 	/// проверка ->  ли мы превратиться в другую указанную фигуру?
 	/// </summary>
-	/// <param name="SIDE"></param>
-	/// <param name="ID_FIGURE"></param>
-	/// <param name="INVULNERABLE"></param>
-	/// <param name="IMPORTANT"></param>
+	/// <param name="side"></param>
+	/// <param name="idFigure"></param>
+	/// <param name="invulnerable"></param>
+	/// <param name="important"></param>
 	/// <returns></returns>
-	bool getPromoutionFigure(int SIDE, string ID_FIGURE, bool INVULNERABLE, bool IMPORTANT, bool PROMOUTION);
+	bool getPromoutionFigure(int side, std::wstring idFigure, bool invulnerable, bool important, bool promoution) const;
+
 
 
 	/// <summary>
 	/// Получить доступные превращения для фигуры
 	/// </summary>
 	/// <returns></returns>
-	vector<tuple<int, string, bool, bool, bool >> get_VECTOR_PROMOUTION();
-
-
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	//																			  
-	// vectorLocationFigure -> для int должен имееть структуру =>
-	// -1 == границы															  
-	// 0 == пустая клетка 														  
-	// 1+ == сторона игрока														  
-	//																	  
-	///////////////////////////////////////////////////////////////////////////////////////////////
+	std::vector<PropertiesFigure> getVectorPromoution() const;
 
 
 
-	/// ВСЕ ВИРТУАЛЬНЫЕ ФУНКЦИИ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ 
 
+
+
+
+
+
+
+
+
+
+
+	 
+	//////////////////////////////     ФУНКЦИИ НИЖЕ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ     /////////////////////////////////
 	
+		
 	/// <summary>
 	/// получить доступные координаты для хода -> true - доступная координата
 	/// </summary>
@@ -135,7 +136,8 @@ public:
 	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
 	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	virtual vector<pair<size_t, size_t>> getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
+	virtual std::vector<std::pair<size_t, size_t>> getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) = 0;
+
 
 
 	/// <summary>
@@ -145,10 +147,16 @@ public:
 	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
 	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns> логическое значение \ true - вревращение возможно</returns>
-	virtual bool getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
+	virtual bool getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) = 0;
+
+
+
 
 
 protected:
+
+	//////////////////////////////     ФУНКЦИИ НИЖЕ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ     /////////////////////////////////
+
 
 	/// <summary>
 	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры
@@ -159,12 +167,63 @@ protected:
 	/// <param name="yPositionMove"> координаты, на которые планируем переметиться</param>
 	/// <param name="vectorLocationFigure"></param>
 	/// <returns></returns>
-	virtual bool checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& vectorLocationFigure);
+	virtual bool checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure) = 0;
+
+
+
 
 	/// <summary>
 	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
-	/// ФИГУРА НЕ ДОЛЖНА НАЗЫВАТЬСЯ "ALL"
 	/// </summary>
-	virtual string set_ID_FIGURE();
+	virtual std::wstring setIdFigure() = 0;
+
+
+
+
+
+
+
+
+
+private:
+
+	/// <summary>
+	/// единый id для фигур этого типа должен быть по названию класса для удобства например для class Figure -> ID_FIGURE = "Figure"
+	/// </summary>
+	std::wstring idFigure;
+
+
+	/// <summary>
+	/// сторона игрока 1 - белый \ 2 - черный и тд при наличии
+	/// </summary>
+	int side;
+
+
+	/// <summary>
+	/// фигуру можно убить? 
+	/// </summary>
+	bool invulnerable;
+	
+
+	/// <summary>
+	/// важные фигуры являются главными фигурами, по типу короля и определяют исход боя
+	/// </summary>
+	bool important;
+
+
+	/// <summary> 
+	/// имеет ли фигура возможность превращения
+	/// </summary>
+	bool promoution;
+
+
+	/// <summary>
+	/// вектор "условий" фигур в которые может превратиться фигура
+	/// </summary>
+	std::vector<PropertiesFigure> vectorPromoution;
+
+
+
+
 };
 

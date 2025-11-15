@@ -4,44 +4,45 @@
 
 class Rook : public Figure
 {
-	//наследуем все конструкторы
+	///
+	/// наследуем все конструкторы
+	/// 
 	using Figure::Figure;
 
 
 	/// <summary>
 	/// получить доступные координаты для хода -> true - доступная координата
 	/// </summary>
-	/// <param name="XPositionCurrent"> текущая позиция фигуры Х</param>
-	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
+	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
+	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
+	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	vector<pair<size_t, size_t>> getMoveForFigure(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
+	std::vector<std::pair<size_t, size_t>> getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) override;
 
 	/// <summary>
 	/// проверка -> возможно ли превращение фигуры на указанной позиции?
 	/// </summary>
-	/// <param name="XPositionCurrent"> текущая позиция фигуры Х</param>
-	/// <param name="YPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="VectorLocationFigure">вектор с расположением фигур</param>
+	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
+	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
+	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
 	/// <returns> логическое значение \ true - вревращение возможно</returns>
-	bool getPossibilityPromotion(size_t XPositionCurrent, size_t YPositionCurrent, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
+	bool getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) override;
 	 
 
 	/// <summary>
 	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры
 	/// </summary>
-	/// <param name="XPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="YPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="XPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="YPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="VectorLocationFigure"></param>
+	/// <param name="xPositionCurrent">текущие координаты фигуры </param>
+	/// <param name="yPositionCurrent">текущие координаты фигуры </param>
+	/// <param name="xPositionMove"> координаты, на которые планируем переметиться</param>
+	/// <param name="yPositionMove"> координаты, на которые планируем переметиться</param>
+	/// <param name="vectorLocationFigure"></param>
 	/// <returns></returns>
-	bool checkMove(size_t XPositionCurrent, size_t YPositionCurrent, size_t XPositionMove, size_t YPositionMove, const vector<vector<tuple<int, string, bool, bool, bool>>>& VectorLocationFigure) override;
+	bool checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure) override;
 
 	/// <summary>
 	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
-	/// ФИГУРА НЕ ДОЛЖНА НАЗЫВАТЬСЯ "ALL"
 	/// </summary>
-	string set_ID_FIGURE() override;
+	std::wstring setIdFigure() override;
 
 };

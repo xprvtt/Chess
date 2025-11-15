@@ -1,14 +1,14 @@
 ﻿
 #include "Core.h"
 
-bool outputMessage(string message)
+bool outputMessage(std::string message)
 {		
-		ofstream out;
-		out.open("Log/log.txt", ios::app);
+		std::ofstream out;
+		out.open("Log/log.txt", std::ios::app);
 
 		if (out.is_open())
 		{
-			out << getCurrentTime() << message << endl;
+			out << getCurrentTime() << message << std::endl;
 			out.close();
 			return true;
 		}

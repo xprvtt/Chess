@@ -8,35 +8,45 @@
 #include "fstream"
 #include "filesystem"
 
-#include <SFML\Graphics.hpp>
+
+#pragma warning(disable: 4275)
+#include <SFML/Graphics.hpp>
+#pragma warning(default: 4275)
+
 
 #include "Define.h"
-
-using namespace std;
-using namespace sf;
-using namespace filesystem; 
 
 
 
 /// <summary>
-/// Функция возвращает строку веремени 
+/// Функция возвращает строку времени 
 /// </summary>
 /// <returns>дата и время</returns>
-string getCurrentTime();
+std::string getCurrentTime();
+
+/// <summary>
+/// Функция возвращает строку времени 
+/// </summary>
+/// <returns>дата и время</returns>
+std::wstring getCurrentTimeWstring();
+
 
 /// <summary>
 /// Функция выводит сообщение в файл Log/log.txt
 /// </summary>
 /// <param name="message">Сообщение которое необходимо вывести</param>
 /// <returns>true если выведен</returns>
-bool outputMessage(string message);
+bool outputMessage(std::string message);
+
+
 
 /// <summary>
-/// Функция Загружает шрифт по пути
+/// Функция Загружает шрифт из пути
 /// </summary>
 /// <param name="pathToFont">путь до шрифта</param>
 /// <returns></returns>
-Font loadFont(path pathToFont);
+sf::Font loadFont(std::filesystem::path pathToFont);
+
 
 
 /// <summary>
@@ -45,4 +55,5 @@ Font loadFont(path pathToFont);
 /// <param name="SearchInPath">путь</param>
 /// <param name="Extension">расширение файла(ов) / если не указано ищет всё </param>
 /// <returns>вектор</returns>
-vector<path> searchFile(path searchInPath, string extension);
+std::vector<std::filesystem::path> searchFile(std::filesystem::path searchInPath, std::string extension);
+

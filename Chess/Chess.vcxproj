@@ -104,14 +104,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib</AdditionalDependencies>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -123,9 +123,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\include</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -133,7 +134,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -141,18 +142,26 @@
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="FigureLocation.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GameEngine.h" />
     <ClCompile Include="GameField.cpp" />
+    <ClCompile Include="getVectorLocationFigure.cpp" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="save.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="getCurrentTime.cpp" />
     <ClCompile Include="outputMessage.cpp" />
     <ClCompile Include="loadFont.cpp" />
+    <ClCompile Include="propertiesGame.cpp" />
+    <ClCompile Include="propertiesGame.h" />
     <ClCompile Include="Queen.cpp" />
     <ClCompile Include="Rook.cpp" />
     <ClCompile Include="searchFile.cpp" />
     <ClCompile Include="countdownTimer.cpp" />
+    <ClCompile Include="Space.cpp" />
+    <ClCompile Include="startGameCycle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bishop.h" />
@@ -166,8 +175,10 @@
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="PropertiesFigure.h" />
     <ClInclude Include="Queen.h" />
     <ClInclude Include="Rook.h" />
+    <ClInclude Include="Space.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

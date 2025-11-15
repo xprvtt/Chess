@@ -1,7 +1,7 @@
 ﻿#include "GameField.h"
 
 
-GameField::GameField(size_t countCell, int windowHeight, const Font& font, Color outerSide, Color colorCellOne, Color colorCellTwo)
+GameField::GameField(size_t countCell, int windowHeight, const sf::Font& font, sf::Color outerSide, sf::Color colorCellOne, sf::Color colorCellTwo)
 {
 	sizeCell = static_cast<float>(windowHeight / countCell);
 
@@ -9,21 +9,21 @@ GameField::GameField(size_t countCell, int windowHeight, const Font& font, Color
 
 	for (int row = 0; row < countCell; row++)
 	{
-		vector<RectangleShape> tempVectorRectangLeShape;
-		vector<Text> tempVectorText;
+		std::vector<sf::RectangleShape> tempVectorRectangLeShape;
+		std::vector<sf::Text> tempVectorText;
 
 		for (int col = 0; col < countCell; col++)
 		{
-			RectangleShape cell;
-			cell.setSize(Vector2f(sizeCell, sizeCell));
-			cell.setPosition(Vector2f(static_cast<float>(sizeCell * col), static_cast<float>(sizeCell * row)));
-			cell.setOutlineColor(Color::Black);
+			sf::RectangleShape cell;
+			cell.setSize(sf::Vector2f(sizeCell, sizeCell));
+			cell.setPosition(sf::Vector2f(static_cast<float>(sizeCell * col), static_cast<float>(sizeCell * row)));
+			cell.setOutlineColor(sf::Color::Black);
 			cell.setOutlineThickness(-1);
 
-			Text textCoordinate(gameFieldFont, " ");
+			sf::Text textCoordinate(gameFieldFont, " ");
 			textCoordinate.setCharacterSize(static_cast<unsigned int>(sizeCell / 5));
-			textCoordinate.setFillColor(Color::Black);
-			textCoordinate.setPosition(Vector2f(static_cast<float>(sizeCell * col + sizeCell / 1.6), static_cast<float>(sizeCell * row + sizeCell / 1.4)));
+			textCoordinate.setFillColor(sf::Color::Black);
+			textCoordinate.setPosition(sf::Vector2f(static_cast<float>(sizeCell * col + sizeCell / 1.6), static_cast<float>(sizeCell * row + sizeCell / 1.4)));
 
 			if (row == 0 || row == countCell-1 || col == 0 || col == countCell-1)
 			{
@@ -31,7 +31,7 @@ GameField::GameField(size_t countCell, int windowHeight, const Font& font, Color
 
 				if (col > 0 && col < countCell-1)
 				{
-					textCoordinate.setString(to_string(col));
+					textCoordinate.setString(std::to_string(col));
 				}
 				else if (row > 0 && row < countCell-1)
 				{
@@ -41,24 +41,28 @@ GameField::GameField(size_t countCell, int windowHeight, const Font& font, Color
 			else if (col % 2 == 0 && row % 2 == 0 || col % 2 != 0 && row % 2 != 0)
 			{
 				cell.setFillColor(colorCellOne);
-				textCoordinate.setString(char((int)'A' - 1 + row) + to_string(col));
+				textCoordinate.setString(char((int)'A' - 1 + row) + std::to_string(col));
 			}
 			else
 			{
 				cell.setFillColor(colorCellTwo);
-				textCoordinate.setString(char((int)'A' - 1 + row) + to_string(col));
+				textCoordinate.setString(char((int)'A' - 1 + row) + std::to_string(col));
 			}
-			tempVectorText.push_back(textCoordinate);
-			tempVectorRectangLeShape.push_back(cell);
+			tempVectorText.emplace_back(textCoordinate);
+			tempVectorRectangLeShape.emplace_back(cell);
 		}
 
-		fieldCoordinate.push_back(tempVectorText);
-		rectangleShapeOnField.push_back(tempVectorRectangLeShape);
+		fieldCoordinate.emplace_back(tempVectorText);
+		rectangleShapeOnField.emplace_back(tempVectorRectangLeShape);
 
 	}
 }
 
-RectangleShape GameField::getRectangleShapeOnField(size_t xPosition, size_t yPosition)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+sf::RectangleShape GameField::getRectangleShapeOnField(size_t xPosition, size_t yPosition)
 {
 	if (xPosition < rectangleShapeOnField[yPosition].size() && yPosition < rectangleShapeOnField.size() && xPosition >= 0 && yPosition >= 0)
 	{
@@ -67,12 +71,16 @@ RectangleShape GameField::getRectangleShapeOnField(size_t xPosition, size_t yPos
 	else
 	{
 		OutputLog("Class -> GameField -> errorText xPosition or yPosition");
-		return RectangleShape();
+		return sf::RectangleShape();
 	}
 
 }
 
-Text GameField::getFieldCoordinateOnField(size_t xPosition, size_t yPosition)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+sf::Text GameField::getFieldCoordinateOnField(size_t xPosition, size_t yPosition)
 {
 	if (xPosition < fieldCoordinate[yPosition].size() && yPosition < fieldCoordinate.size() && xPosition >= 0 && yPosition >= 0)
 	{
@@ -81,30 +89,37 @@ Text GameField::getFieldCoordinateOnField(size_t xPosition, size_t yPosition)
 	else
 	{	
 		float temp = getSizeCell();
-		Text errorText(gameFieldFont, "errorText Text");
-		errorText.setPosition(Vector2f(temp * xPosition + temp / 2 , temp * yPosition + temp / 2));
-		errorText.setFillColor(Color::Black);
+		sf::Text errorText(gameFieldFont, "errorText Text");
+		errorText.setPosition(sf::Vector2f(temp * xPosition + temp / 2 , temp * yPosition + temp / 2));
+		errorText.setFillColor(sf::Color::Black);
 		errorText.setCharacterSize(static_cast<unsigned int>(temp / 5));
 		return errorText;
 	}
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 size_t GameField::getCounRow()
 {
 	return rectangleShapeOnField.size();
 }
 
-size_t GameField::getCounColl(size_t No)
+
+size_t GameField::getCounColl(size_t no)
 {
-	return rectangleShapeOnField[No].size();
+	return rectangleShapeOnField[no].size();
 }
 
-float GameField::getSizeCell()
+
+float GameField::getSizeCell() const
 {
 	return sizeCell;
 } 
 
-bool GameField::selectCell(const vector<vector<bool>>& coordinate, Color color)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool GameField::selectCell(const GridBoolCoordinate& coordinate, sf::Color color)
 {
 	size_t sizeCoordinate = coordinate.size();
 	size_t sizeRectangleShapeOnField = rectangleShapeOnField.size();
@@ -112,7 +127,7 @@ bool GameField::selectCell(const vector<vector<bool>>& coordinate, Color color)
 	if (sizeCoordinate != sizeRectangleShapeOnField)
 	{
 		OutputLog( "ERROR -> Class -> GameField -> selectCell -> несовпадение размеров поля:");
-		OutputLog(to_string(sizeCoordinate) + "\\" + to_string(sizeRectangleShapeOnField));
+		OutputLog(std::to_string(sizeCoordinate) + "\\" + std::to_string(sizeRectangleShapeOnField));
 		return false;
 	}
 
@@ -129,7 +144,13 @@ bool GameField::selectCell(const vector<vector<bool>>& coordinate, Color color)
 	}	
 	return true;
 }
-bool GameField::selectCell(size_t xPosition, size_t yPosition, Color color)
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+bool GameField::selectCell(size_t xPosition, size_t yPosition, sf::Color color)
 {
 	size_t sizeV = rectangleShapeOnField.size();
 	size_t sizeVV = rectangleShapeOnField[0].size();
@@ -137,7 +158,7 @@ bool GameField::selectCell(size_t xPosition, size_t yPosition, Color color)
 	if (xPosition < 1 || yPosition < 1 || xPosition > sizeVV - 1 || yPosition > sizeV - 1)
 	{
 		OutputLog("ERROR -> Class -> GameField -> selectCell -> выход за игровое поле или выделение границы:");
-		OutputLog(to_string(sizeV) + "\\" + to_string(sizeVV));
+		OutputLog(std::to_string(sizeV) + "\\" + std::to_string(sizeVV));
 		return false;
 	}
 
@@ -148,16 +169,20 @@ bool GameField::selectCell(size_t xPosition, size_t yPosition, Color color)
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool GameField::unSelectCell()
+
+bool GameField::unselectAllCell()
 {
 	for (int Row = 0; Row < rectangleShapeOnField.size(); Row++)
 	{
 		for (int Col = 0; Col < rectangleShapeOnField[0].size(); Col++)
 		{
 			rectangleShapeOnField[Row][Col].setOutlineThickness(-1);
-			rectangleShapeOnField[Row][Col].setOutlineColor(Color::Black);
+			rectangleShapeOnField[Row][Col].setOutlineColor(sf::Color::Black);
 		}
 	}
 	return true;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

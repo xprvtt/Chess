@@ -1,32 +1,32 @@
 ﻿#include "Core.h"
 
-vector<path> searchFile(path searchInPath, string extension)
+std::vector<std::filesystem::path> searchFile(std::filesystem::path searchInPath, std::string extension)
 {
-	vector<path> result;
+	std::vector<std::filesystem::path> result;
 	try
 	{
-		for (const auto& entry : directory_iterator(searchInPath))
+		for (const auto& entry : std::filesystem::directory_iterator(searchInPath))
 		{
 			if (extension == "")
 			{
 				if (entry.is_directory())
 				{
-					result.push_back(entry.path());
+					result.emplace_back(entry.path());
 				}
 			}
 			else
 			{
 				if (entry.is_regular_file() && entry.path().extension() == extension)
 				{
-					result.push_back(entry.path());
+					result.emplace_back(entry.path());
 				}
 			}
 		}
 	}
-	catch (const filesystem_error& error)
+	catch (const std::filesystem::filesystem_error&)
 	{
 		OutputLog("SearchFile -> Error");
-		return vector<path>();										
+		return std::vector<std::filesystem::path>();
 	}
 	return result;
 } 

@@ -4,14 +4,14 @@
 
 countdownTimer::countdownTimer()
 {
-    duration = seconds(0.0f);
+    duration = sf::seconds(0.0f);
     timeLeft = 0.0f;
     clock.restart();
 }
 
 void countdownTimer::setTimer(float second)
 {
-    duration = seconds(second);
+    duration = sf::seconds(second);
     timeLeft = second;
     clock.restart();
 }
