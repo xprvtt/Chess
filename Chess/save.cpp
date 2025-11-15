@@ -53,7 +53,7 @@ bool importSave(std::filesystem::path pathToSave, int numberSave)
 
         }
     }
-
+    return true;
 
 }
 
@@ -173,5 +173,5 @@ std::vector<PositionAndPropertiesFigure> fromJson_PositionAndPropertiesFigure(co
         result.emplace_back(pos.first, pos.second, currentPropertiesFigure, currentPromoutionFigure);
     }
 
-
+    return result;
 }
