@@ -498,7 +498,7 @@ void GameEngine::setCurrentPlayer(int currentPlayer)
 
 void GameEngine::nextPlayer()
 {
-    currentPlayer < propertiesGame::countPlayer ? currentPlayer++ : currentPlayer = 1;
+    currentPlayer <= propertiesGame::countPlayer ? currentPlayer++ : currentPlayer = 1;
 }
 
 
