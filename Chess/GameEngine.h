@@ -5,19 +5,13 @@
 #include "propertiesGame.h"
 
 
-
-/// <summary>
-/// основной движок игры
-/// </summary>
 class GameEngine
 {
 public:
-
-
 	GameEngine(std::unique_ptr<sf::RenderWindow> rWindow, std::unique_ptr<FigureLocation> location, std::unique_ptr<GameField> gameField);
 
 	/// <summary>
-	/// выполнить подсветку фигур (чаще при угрозе)
+	/// выполнить подсветку фигур, которые угрожают важным фигурам текущего игрока
 	/// </summary>
 	/// <returns></returns>
 	bool performBacklightThreat();
@@ -27,16 +21,10 @@ public:
 	/// </summary>
 	void performMovePlayer();
 
-
 	/// <summary>
 	/// выполнить превращение (если доступно)
 	/// </summary>
 	void performPromouten();
-
-
-
-
-
 
 	/// <summary>
 	/// получить положение мышки
@@ -50,38 +38,19 @@ public:
 	/// <returns></returns>
 	sf::Vector2f getWorldPositionMouse() const;
 
-
-
-
-
-
-
 	/// <summary>
 	/// есть ли какая-то угроза важным фигурам текущего игрока?
 	/// </summary>
 	/// <returns></returns>
+	[[nodiscard]]
 	bool isThreat();
-
-
-
-
-
-
-
 
 	/// <summary>
 	/// требуется ли превращение?
 	/// </summary>
 	/// <returns></returns>
+	[[nodiscard]]
 	bool promoution() const noexcept;
-
-
-
-
-
-
-
-
 
 	/// <summary>
 	/// вывести в текст на экране номер текущего игрока
@@ -92,6 +61,7 @@ public:
 	/// получить текущего игрока, которому пренадлежит ход
 	/// </summary>
 	/// <returns></returns>
+	[[nodiscard]]
 	int getCurrentPlayer() const noexcept;
 
 	/// <summary>
@@ -104,12 +74,6 @@ public:
 	/// передать ход следующему игроку
 	/// </summary>
 	void nextPlayer();
-
-
-
-
-
-
 
 	/// <summary>
 	/// получить текущий ивент с RenderWindow
@@ -126,54 +90,113 @@ public:
 	/// открыто ли окно игры?
 	/// </summary>
 	/// <returns></returns>
+	[[nodiscard]]
 	bool isOpen() const;
-
-
-
-
-
-
-
 
 	/// <summary>
 	/// получаем координаты фигуры на позиции мышки на игровой доске
 	/// </summary>
 	/// <returns></returns>
-	std::pair<size_t, size_t> getFigureOnPositionMouse()  const;
+	Position::Coordinates getFigureOnPositionMouse()  const;
 
 	/// <summary>
 	/// получаем коордитаны фигуры на позиции мышки на поле уникальный фигур
 	/// </summary>
 	/// <returns></returns>
-	std::pair<size_t, size_t> getUniqueFigureOnPositionMouse()  const;
-
-
-
+	Position::Coordinates getUniqueFigureOnPositionMouse()  const;
 
 	void setText1(std::wstring message);
-
 	void setText2(std::wstring message);
-
 	void setText3(std::wstring message);
-
 	void setText4(std::wstring message);
 
+	/// <summary>
+	/// Очистить окно 
+	/// </summary>
+	/// <param name="color"></param>
+	void clearWindowGame(sf::Color color = sf::Color::White);
 
-
-
-
-
-
-
-	void clearWindowGame(sf::Color color);
-
+	/// <summary>
+	/// Отрисовать окно
+	/// </summary>
 	void drawWindowGame();
 
+	/// <summary>
+	/// Отобразить окно
+	/// </summary>
 	void displayWindowGame();
 
-	
-
 private:
+
+	/// <summary>
+	/// позиции фигур нуждающихся в подсветке
+	/// </summary>
+	std::vector<Position::Coordinates> m_selectCellForMove = {};
+
+	/// <summary>
+	/// позиции фигур противника, которые угрожают фажным фигурам текущего игрока
+	/// </summary>
+	std::vector<Position::Coordinates> m_positionEnemyFigureThatThreaten = {};
+
+	/// <summary>
+	/// позиции важных фигур текущего игрока (currentPlayer)
+	/// </summary>
+	std::vector<Position::Coordinates> m_positionImportantFigure = {};
+
+	std::shared_ptr<sf::Text> m_ptrTextInGameRow1;
+	std::shared_ptr<sf::Text> m_ptrTextInGameRow2;
+	std::shared_ptr<sf::Text> m_ptrTextInGameRow3;
+	std::shared_ptr<sf::Text> m_ptrTextInGameRow4;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	Position::Coordinates m_currentPositionInGameField = { 0, 0 };
+
+	/// <summary>
+	/// 
+	/// </summary>
+	Position::Coordinates m_currentPositionInUniqueFigureField = { 0, 0 };
+
+	/// <summary>
+	/// координаты предыдущей позиции x / y
+	// </summary>
+	Position::Coordinates m_oldPosition = { 0, 0 };
+
+	/// <summary>
+	/// окно которым мы можем управлять
+	/// </summary>
+	std::unique_ptr<sf::RenderWindow> m_ptrRWindow;
+
+	/// <summary>
+	/// текущее реальное расположение фигур
+	/// </summary>
+	std::unique_ptr<FigureLocation> m_ptrLocation;
+
+	/// <summary>
+	/// конструкция игрового поля
+	/// </summary>
+	std::unique_ptr<GameField> m_ptrGameField;
+
+	/// <summary>
+	/// текущий игрок, выполняющий ход
+	/// </summary>
+	int m_currentPlayer = 1;
+
+	/// <summary>
+	/// необходимо превращение
+	/// </summary>
+	bool m_needPomoution = false;
+
+	/// <summary>
+	/// Требуется проверка угроз (?) при инициализации считаем - да
+	/// </summary>
+	bool m_needCheckThreat = true;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	bool m_threat = false;
 
 	/// <summary>
 	/// проверка угроз важным фигурам
@@ -191,91 +214,4 @@ private:
 	/// </summary>
 	/// <param name="threat"></param>
 	void setThreat(bool threat);
-
-
-
-
-	/// <summary>
-	/// окно которым мы можем управлять
-	/// </summary>
-	std::unique_ptr<sf::RenderWindow> rWindow;
-
-	/// <summary>
-	/// текущее реальное расположение фигур
-	/// </summary>
-	std::unique_ptr<FigureLocation> location;
-
-	/// <summary>
-	/// конструкция игрового поля
-	/// </summary>
-	std::unique_ptr<GameField> gameField;
-
-
-
-	std::shared_ptr<sf::Text> textInGameRow1;
-	std::shared_ptr<sf::Text> textInGameRow2;
-	std::shared_ptr<sf::Text> textInGameRow3;
-	std::shared_ptr<sf::Text> textInGameRow4;
-
-		
-	/// <summary>
-	/// позиции фигур нуждающихся в подсветке
-	/// </summary>
-	std::vector<std::pair<size_t, size_t>> selectCellForMove;
-
-	/// <summary>
-	/// позиции фигур противника, которые угрожают фажным фигурам текущего игрока
-	/// </summary>
-	std::vector<std::pair<size_t, size_t>> positionEnemyFigureThatThreaten;
-
-	/// <summary>
-	/// позиции важных фигур текущего игрока (currentPlayer)
-	/// </summary>
-	std::vector<std::pair<size_t, size_t>> positionImportantFigure;
-
-
-	/// <summary>
-	/// 
-	/// </summary>
-	std::pair<size_t, size_t> currentPositionInGameField;
-
-	/// <summary>
-	/// 
-	/// </summary>
-	std::pair<size_t, size_t> currentPositionInUniqueFigureField;
-
-
-	
-	/// <summary>
-	/// координаты предыдущей позиции x / y
-	/// </summary>
-	std::pair<size_t, size_t> oldPosition;
-
-	
-	/// <summary>
-	/// необходимо превращение
-	/// </summary>
-	bool needPomoution = false;
-
-
-	/// <summary>
-	/// текущий игрок, выполняющий ход
-	/// </summary>
-	int currentPlayer = 1;
-
-
-
-
-	/// <summary>
-	/// Требуется проверка угроз (?) при инициализации считаем - да
-	/// </summary>
-	bool needCheckThreat = true;
-
-
-
-	/// <summary>
-	/// 
-	/// </summary>
-	bool threat = false;
-
 };

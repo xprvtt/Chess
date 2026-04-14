@@ -1,7 +1,7 @@
 ﻿#include "Main.h"
 #include "json.hpp"
 
-std::vector<PositionAndPropertiesFigure> fromJson_PositionAndPropertiesFigure(const nlohmann::json& jV);
+std::vector<PositionAndPropertiesFigure> fromJsonPositionAndPropertiesFigure(const nlohmann::json& jV);
 
 bool importSave(std::filesystem::path pathToSave, int numberSave)
 {
@@ -9,7 +9,7 @@ bool importSave(std::filesystem::path pathToSave, int numberSave)
 
     if (!jFile.is_open())
     {
-        OutputLog("Не удалось открыть файл сохранения:\t" + pathToSave.string());
+        OUTPUT_LOG("Не удалось открыть файл сохранения:\t" + pathToSave.string());
         return false;
     }
 
@@ -21,8 +21,6 @@ bool importSave(std::filesystem::path pathToSave, int numberSave)
     {
         if (currentSave.contains("numberSave") && currentSave["numberSave"].get<int>() == numberSave)
         {
-            
-
             if (   currentSave.contains("v2CountCell")
                 && currentSave.contains("countPlayer")
                 && currentSave.contains("currnetPlayer")
@@ -31,76 +29,53 @@ bool importSave(std::filesystem::path pathToSave, int numberSave)
                 )
             {
                 propertiesGame::countPlayer = currentSave["countPlayer"].get<int>();
-
                 propertiesGame::currentPlayer = currentSave["currnetPlayer"].get<int>();
-
                 propertiesGame::currentParty = currentSave["party"].get<std::wstring>();
 
                 auto cc = currentSave["v2CountCell"].get<std::pair<size_t, size_t>>();
                 propertiesGame::countCellOnLengthWindow = cc.first;
                 propertiesGame::countCellOnHeightWindow = cc.second;
 
-
-                propertiesGame::currentVectorLocationFigure = fromJson_PositionAndPropertiesFigure(currentSave["vectorLocationFigure"]);
+                propertiesGame::currentVectorLocationFigure = fromJsonPositionAndPropertiesFigure(currentSave["vectorLocationFigure"]);
             }
             else
             {
                 return false;
             }
-            
-            
-
-
         }
     }
     return true;
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool exportSave()
 {
     return false;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-std::vector<PositionAndPropertiesFigure> fromJson_PositionAndPropertiesFigure(const nlohmann::json& jV)
+std::vector<PositionAndPropertiesFigure> fromJsonPositionAndPropertiesFigure(const nlohmann::json& jV)
 {
     std::vector<PositionAndPropertiesFigure> result;
 
     for (const auto& properties : jV)
     {
-        ///
-        /// координаты фигуры x \ y
-        /// 
-        std::pair<size_t, size_t> pos;
+        // координаты фигуры x \ y
+        Position::Coordinates pos;
         if (properties.contains("v2Coordinate"))
         {
-            pos = properties["v2Coordinate"].get< std::pair<size_t, size_t>>();
+            auto tmpPos = properties["v2Coordinate"].get<std::pair<size_t, size_t>>();
+            pos = { tmpPos.first, tmpPos.second };
         }
         else
         {
             return {};
         }
-
-
-
-
-
-
-
-        ///
-        /// свойства фигуры
-        /// 
+        
+        // свойства фигуры
         PropertiesFigure currentPropertiesFigure;
         if (   properties.contains("side")
             && properties.contains("idFigure")
@@ -109,32 +84,22 @@ std::vector<PositionAndPropertiesFigure> fromJson_PositionAndPropertiesFigure(co
             && properties.contains("promoution")
            )
         {
-            currentPropertiesFigure.side         = properties["v2Coordinate"].get<int>();
-            currentPropertiesFigure.idFigure     = properties["v2Coordinate"].get<std::wstring>();
-            currentPropertiesFigure.invulnerable = properties["v2Coordinate"].get<bool>();
-            currentPropertiesFigure.important    = properties["v2Coordinate"].get<bool>();
-            currentPropertiesFigure.promoution   = properties["v2Coordinate"].get<bool>();
+            currentPropertiesFigure.m_side         = properties["v2Coordinate"].get<int>();
+            currentPropertiesFigure.m_idFigure     = properties["v2Coordinate"].get<std::wstring>();
+            currentPropertiesFigure.m_invulnerable = properties["v2Coordinate"].get<bool>();
+            currentPropertiesFigure.m_important    = properties["v2Coordinate"].get<bool>();
+            currentPropertiesFigure.m_promoution   = properties["v2Coordinate"].get<bool>();
         }
         else
         {
             return {};
         }
 
-
-
-
-
-
-
-
-
-        ///
-        /// промоушен для текущей фигуры
-        /// 
+        // промоушен для текущей фигуры
         std::vector<PropertiesFigure> currentPromoutionFigure;
+
         if (properties.contains("vecPromoutionFigure"))
         {
-
             for (const auto& currentPropertiesForFigure : properties)
             {
                 PropertiesFigure currentPropertiesFigure;
@@ -146,11 +111,11 @@ std::vector<PositionAndPropertiesFigure> fromJson_PositionAndPropertiesFigure(co
                     && properties.contains("pr")
                    )
                 {
-                    currentPropertiesFigure.side         = properties["v2Coordinate"].get<int>();
-                    currentPropertiesFigure.idFigure     = properties["v2Coordinate"].get<std::wstring>();
-                    currentPropertiesFigure.invulnerable = properties["v2Coordinate"].get<bool>();
-                    currentPropertiesFigure.important    = properties["v2Coordinate"].get<bool>();
-                    currentPropertiesFigure.promoution   = properties["v2Coordinate"].get<bool>();
+                    currentPropertiesFigure.m_side         = properties["v2Coordinate"].get<int>();
+                    currentPropertiesFigure.m_idFigure     = properties["v2Coordinate"].get<std::wstring>();
+                    currentPropertiesFigure.m_invulnerable = properties["v2Coordinate"].get<bool>();
+                    currentPropertiesFigure.m_important    = properties["v2Coordinate"].get<bool>();
+                    currentPropertiesFigure.m_promoution   = properties["v2Coordinate"].get<bool>();
                 }
                 else
                 {
@@ -163,14 +128,7 @@ std::vector<PositionAndPropertiesFigure> fromJson_PositionAndPropertiesFigure(co
         {
             return {};
         }
-
-
-
-
-
-
-
-        result.emplace_back(pos.first, pos.second, currentPropertiesFigure, currentPromoutionFigure);
+        result.emplace_back(pos, currentPropertiesFigure, currentPromoutionFigure);
     }
 
     return result;

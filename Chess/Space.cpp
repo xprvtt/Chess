@@ -1,25 +1,32 @@
 ﻿#include "Space.h"
 
 
-std::wstring Space::setIdFigure()
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::wstring Space::setIdFigure() const noexcept
 {
 	return L"Space";
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<size_t, size_t>> Space::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
-{
-	return std::vector<std::pair<size_t, size_t>>();
-}
-
-
-bool Space::getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
+bool Space::getPossibilityPromotion([[maybe_unused]]  const Position::Coordinates& positionCurrent, [[maybe_unused]] const Grid<PropertiesFigure>& locationFigure) const
 {
 	return false;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool Space::checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure)
+bool Space::checkMove([[maybe_unused]] const Position::Coordinates& positionCurrent, [[maybe_unused]] const Position::Coordinates& positionMove, [[maybe_unused]] const Grid<PropertiesFigure>& locationFigure) const
 {
 	return false;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::vector<std::pair<inRowInt, inColInt>> Space::setAllMinimumMove() const
+{
+	return std::vector<std::pair<inRowInt, inColInt>>();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------

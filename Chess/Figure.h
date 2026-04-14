@@ -3,15 +3,15 @@
 #include "Core.h"
 #include "PropertiesFigure.h"
 
+using inRowInt = int;
+using inColInt = int;
+
 class Figure
 {
 public:
-
-
 	/// <summary>
 	/// определяем сторону игрока фигуры и уязвимость при инициализации
-	/// <para> если vectorPromoution is empty => promoution == false </para> 
-	/// 
+	/// <para> если vectorPromoution is empty => promoution == false </para>  
 	/// </summary>
 	/// <param name="side">сторона игрока</param>
 	/// <param name="Inulnerability">true = неуязвимость \ false = фигуру можно взять (убить) \\ по умолчанию false</param>
@@ -19,17 +19,11 @@ public:
 	/// <param name="promoution">вектор с указанными фигурами, в которые может превратиться фигура \\ по умолчанию пустой = ни во что не может превратиться</param>
 	Figure(int side, bool invulnerable = false, bool important = false, std::vector<PropertiesFigure> vectorPromoution = {});
 
-
-
-
 	/// <summary>
 	/// Конструктор копирования
 	/// </summary>
 	/// <param name="othreFigure"></param>
 	Figure(const Figure& othreFigure);
-
-
-
 
 	/// <summary>
 	/// Проверяем доступен ли ход на указанные координаты
@@ -38,29 +32,15 @@ public:
 	/// <param name="yPositionCurrent"></param>
 	/// <param name="xPositionMove"></param>
 	/// <param name="yPositionMove"></param>
-	/// <param name="vectorLocationFigure"></param>
+	/// <param name="locationFigure"></param>
 	/// <returns></returns>
-	bool checkMoveForFigureOnPosition(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure);
-
-
-
-
-
-
-
-
-
-
-
-
+	bool  checkMoveForFigureOnPosition(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const;
 
 	/// <summary>
 	/// Получить имя фигуры
 	/// </summary>
 	/// <returns>имя фигуры</returns>
-	std::wstring getIdFigure();
-
-
+	std::wstring getIdFigure() noexcept;
 
 	/// <summary>
 	/// Получаем сторону игрока у фигуры
@@ -68,31 +48,23 @@ public:
 	/// <returns>сторона игрока</returns>
 	int getSide() const noexcept;
 
-
-
 	/// <summary>
 	/// Неуязвима ли фигура?
 	/// </summary>
 	/// <returns>true = неуязвима \ false - можно убить</returns>
-	bool getInvulnerable() const noexcept;
-
-
+	bool isInvulnerable() const noexcept;
 
 	/// <summary>
 	/// важная ли фигура?
 	/// </summary>
 	/// <returns>true = важная \ false - не важная </returns>
-	bool getImportant() const noexcept;
-
-
+	bool isImportant() const noexcept;
 
 	/// <summary>
 	/// имеет ли возможность фигура превращаться?
 	/// </summary>
 	/// <returns></returns>
-	bool getPromoution() const noexcept;
-
-
+	bool isPromoution() const noexcept;
 
 	/// <summary>
 	/// проверка ->  ли мы превратиться в другую указанную фигуру?
@@ -102,128 +74,102 @@ public:
 	/// <param name="invulnerable"></param>
 	/// <param name="important"></param>
 	/// <returns></returns>
-	bool getPromoutionFigure(int side, std::wstring idFigure, bool invulnerable, bool important, bool promoution) const;
-
-
+	bool getPromoutionFigure(const PropertiesFigure& properties) const;
 
 	/// <summary>
-	/// Получить доступные превращения для фигуры
+	/// Получить доступные фигуры для превращения
 	/// </summary>
 	/// <returns></returns>
 	std::vector<PropertiesFigure> getVectorPromoution() const;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	 
-	//////////////////////////////     ФУНКЦИИ НИЖЕ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ     /////////////////////////////////
-	
 		
 	/// <summary>
-	/// получить доступные координаты для хода -> true - доступная координата
+	/// получить доступные координаты для хода, метод должен содержать описание передвижения фигуры
 	/// </summary>
 	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
 	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
+	/// <param name="locationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	virtual std::vector<std::pair<size_t, size_t>> getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) = 0;
-
-
+	std::vector<Position::Coordinates> getMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure) const;
 
 	/// <summary>
-	/// проверка -> возможно ли превращение фигуры на указанной позиции?
+	/// проверка -> возможно ли превращение фигуры на указанной позиции, с учетом расположения фигур на доске с их свойствами?
 	/// </summary>
 	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
 	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
+	/// <param name="locationFigure">вектор с расположением фигур</param>
 	/// <returns> логическое значение \ true - вревращение возможно</returns>
-	virtual bool getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) = 0;
-
-
-
-
+	virtual bool getPossibilityPromotion(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure) const = 0;
 
 protected:
-
-	//////////////////////////////     ФУНКЦИИ НИЖЕ ТРЕБУЮТ ПЕРЕОПРЕДЕЛНИЯ В НАСЛЕДНИКАХ     /////////////////////////////////
-
-
-	/// <summary>
-	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры
-	/// </summary>
-	/// <param name="xPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="yPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="xPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="yPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="vectorLocationFigure"></param>
-	/// <returns></returns>
-	virtual bool checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure) = 0;
-
-
-
-
-	/// <summary>
-	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
-	/// </summary>
-	virtual std::wstring setIdFigure() = 0;
-
-
-
-
-
-
-
-
-
-private:
 
 	/// <summary>
 	/// единый id для фигур этого типа должен быть по названию класса для удобства например для class Figure -> ID_FIGURE = "Figure"
 	/// </summary>
-	std::wstring idFigure;
-
+	std::wstring m_idFigure = L"";
 
 	/// <summary>
-	/// сторона игрока 1 - белый \ 2 - черный и тд при наличии
+	/// минимально возможный ход, для каждого направления с координаты
+	/// например король или ферзь имеют минимальный ход на 1 в любую сторону от себя следовательно 8 разных минимальных позиций от ( -1,-1 ) до ( 1, 1 )
+	/// пешка имеет специфический характер движения -> если не передвинута то может сходить на 2 клетки вперед иначе на 1
+	/// в связи с этим заполнение allMinimumMove бессмыслено, и требуется кастомное переопределение customMoveForFigure()
+	/// минимальные ходы не ограничиваются 1, 4 или 8 разными движениями, 
+	/// метод getMoveForFigure() проходится с каждым минимальным передвижением m_allMinimumMove до конца доски
+	/// после этого он добавляет результат из customMoveForFigure()
 	/// </summary>
-	int side;
+	std::vector<std::pair<inRowInt, inColInt>> m_allMinimumMove = {};
 
+	/// <summary>
+	/// вектор свойств фигур в которые может превратиться фигура
+	/// </summary>
+	std::vector<PropertiesFigure> m_allPromoution = {};
+
+	/// <summary>
+	/// сторона игрока 1 - белый \ 2 - черный, возможны и другие игроки
+	/// </summary>
+	int m_side = -2;
 
 	/// <summary>
 	/// фигуру можно убить? 
 	/// </summary>
-	bool invulnerable;
-	
+	bool m_invulnerable = false;
 
 	/// <summary>
 	/// важные фигуры являются главными фигурами, по типу короля и определяют исход боя
 	/// </summary>
-	bool important;
-
+	bool m_important = false;
 
 	/// <summary> 
 	/// имеет ли фигура возможность превращения
 	/// </summary>
-	bool promoution;
-
+	bool m_promoution = false;
 
 	/// <summary>
-	/// вектор "условий" фигур в которые может превратиться фигура
+	/// устанавливаем id для фигуры должна быть по названию класса для удобства
 	/// </summary>
-	std::vector<PropertiesFigure> vectorPromoution;
+	virtual std::wstring setIdFigure() const noexcept = 0;
 
+	/// <summary>
+	/// метод проверки возможности передвижения
+	/// </summary>
+	/// <param name="positionCurrent">текущие координаты</param>
+	/// <param name="positionMove">координаты, на которые планируем переметиться</param>
+	/// <param name="m_vectorLocationFigure"></param>
+	/// <returns></returns>
+	virtual bool checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const;
 
+	/// <summary>
+	/// кастомная реализация возможных движений с указанной позиции
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="locationFigure"></param>
+	/// <param name="sumResultMove"></param>
+	virtual std::vector<Position::Coordinates> customMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& locationFigure) const;
 
-
+	/// <summary>
+	/// установить все возможные минимальные ходы в любую сторону
+	/// </summary>
+	virtual std::vector<std::pair<inRowInt, inColInt>> setAllMinimumMove() const = 0;
 };
+
+
 

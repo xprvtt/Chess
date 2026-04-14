@@ -3,45 +3,34 @@
 
 class Space : public Figure
 {
-	///
 	/// наследуем все конструкторы
-	/// 
 	using Figure::Figure;
-
-
-	/// <summary>
-	/// получить доступные координаты для хода -> true - доступная координата
-	/// </summary>
-	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
-	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
-	/// <returns></returns>
-	std::vector<std::pair<size_t, size_t>> getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) override;
-
+	
 	/// <summary>
 	/// проверка -> возможно ли превращение фигуры на указанной позиции?
 	/// </summary>
-	/// <param name="xPositionCurrent"> текущая позиция фигуры Х</param>
-	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
-	/// <param name="vectorLocationFigure">вектор с расположением фигур</param>
-	/// <returns> логическое значение \ true - вревращение возможно</returns>
-	bool getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure) override;
-
-
+	/// <param name="positionCurrent">текущая позиция фигуры</param>
+	/// <param name="locationFigure"></param>
+	/// <returns>true - превращение возможно</returns>
+	bool getPossibilityPromotion(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure) const override;
+		
 	/// <summary>
 	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры
 	/// </summary>
-	/// <param name="xPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="yPositionCurrent">текущие координаты фигуры </param>
-	/// <param name="xPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="yPositionMove"> координаты, на которые планируем переметиться</param>
-	/// <param name="vectorLocationFigure"></param>
+	/// <param name="positionCurrent">текущие координаты фигуры</param>
+	/// <param name="positionMove">координаты, на которые планируется переметить фигуру</param>
+	/// <param name="locationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	bool checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure) override;
+	bool checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& locationFigure) const override;
 
 	/// <summary>
-	/// УСТАТАНАВЛИВАЕМ ID ДЛЯ ФИГУРЫ ДОЛЖНА БЫТЬ ПО НАЗВАНИЮ КЛАССА ДЛЯ УДОБСТВА
+	/// устанавливаем id для фигуры должна быть по названию класса для удобства
 	/// </summary>
-	std::wstring setIdFigure() override;
+	std::wstring setIdFigure() const noexcept override;
+
+	/// <summary>
+	/// установить все возможные минимальные ходы в любую сторону
+	/// </summary>
+	std::vector<std::pair<inRowInt, inColInt>> setAllMinimumMove() const override;
 
 };

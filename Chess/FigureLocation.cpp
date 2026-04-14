@@ -1,230 +1,136 @@
-﻿
-#include "FigureLocation.h"
+﻿#include "FigureLocation.h"
 
-
-
-
-FigureLocation::FigureLocation(size_t countCellOnXPosition, size_t countCellOnYPosition, int windowHeight, std::filesystem::path pathToEmptyTextureGameField, std::filesystem::path pathToEmptyTextureEdge, float precentSizeFigure)
+FigureLocation::FigureLocation(size_t countCellOninColum, size_t countCellOninRow, int windowHeight, std::filesystem::path pathToEmptyTextureGameField, std::filesystem::path pathToEmptyTextureEdge, float precentSizeFigure) : m_countColum(countCellOninColum), m_countRow(countCellOninRow), m_sizeCell(float(windowHeight / countCellOninColum)), m_precentSizeFigure(precentSizeFigure), m_sizeRectangInCell(m_sizeCell* precentSizeFigure)
 {
-	if (countCellOnXPosition < 3 || countCellOnYPosition < 3)
-	{
+	if (countCellOninColum < 3 || countCellOninRow < 3)	
+	{ 
+		OUTPUT_LOG_WARNING("[FigureLocation] -> конструктор -> неверный размер поля (<3)");
 		return;
-	}
+	}	
 
-	this->countCellOnXPosition  = countCellOnXPosition;
-	this->countCellOnYPosition  = countCellOnYPosition;
-	this->sizeCell              = float(windowHeight / countCellOnXPosition);
-	this->precentSizeFigure     = precentSizeFigure;
-	this->sizeRectangInCell     = sizeCell * precentSizeFigure;
+	precentSizeFigure <= 0 ? this->m_positionRectangInCell = 0 : this->m_positionRectangInCell = (m_sizeCell - m_sizeRectangInCell) / 2;
 
-	precentSizeFigure <= 0 ? this->positionRectangInCell = 0 : this->positionRectangInCell = (sizeCell - sizeRectangInCell) / 2;
+	// РАЗМЕРЫ 	
+	m_dataLocalFigure.resize(countCellOninRow, std::vector<DataFigure>(countCellOninColum)); // ДЛЯ ФИГУР НА ДОСКЕ 
 
-	vectorLocationFigure.resize(countCellOnXPosition, std::vector<PropertiesFigure>(countCellOnXPosition));
+	// FIXME: 
+	// потенциальная проблема когда уникальных фигур может быть больше чем игровая доска 
+	m_uniqueFigureLocationRectangleShape.resize(countCellOninRow, std::vector< std::pair<size_t, sf::RectangleShape >>(countCellOninColum)); // ДЛЯ УНИКАЛЬНЫХ ФИГУР
 
+	// край - уникальная фигура
+	m_dataUniqueFigure.emplace_back(std::make_shared<Space>(-1, true, false), std::make_shared<sf::Texture>(pathToEmptyTextureEdge));
+	// пустая клетка - уникальная фигура
+	m_dataUniqueFigure.emplace_back(std::make_shared<Space>(0), std::make_shared<sf::Texture>(pathToEmptyTextureGameField));
 
-
-
-	///
-	/// РАЗМЕРЫ 
-	///
-	
-	//--//--//--//--//--//--//--//--//--//    ДЛЯ ФИГУР НА ДОСКЕ   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//
-																													
-	locationClassFigure.resize(   countCellOnYPosition, std::vector<std::shared_ptr<Figure>>     (countCellOnXPosition));
-	locationTexture.resize(       countCellOnYPosition, std::vector<std::shared_ptr<sf::Texture>>(countCellOnXPosition));
-	locationRectangleShape.resize(countCellOnYPosition, std::vector<sf::RectangleShape>          (countCellOnXPosition));
-
-
-
-
-
-	 
-	//--//--//--//--//--//--//--//--//--//  ДЛЯ УНИКАЛЬНЫХ ФИГУР   //--//--//--//--//--//--//--//--//--//--//--//--//--//--//
-																															
-	uniqueFigureLocationRectangleShape.resize(countCellOnYPosition,std::vector<std::pair<size_t, sf::RectangleShape>>(countCellOnXPosition));	
-	
-	///
-	/// край
-	/// 
-	uniqueFigureLocationClassFigure.push_back(std::make_shared<Space>(-1, true, false));
-	uniqueFigureLocationTexture.push_back(std::make_shared<sf::Texture>(pathToEmptyTextureEdge));
-
-	///
-	/// пустая клетка
-	/// 
-	uniqueFigureLocationClassFigure.push_back(std::make_shared<Space>(0));
-	uniqueFigureLocationTexture.push_back(std::make_shared<sf::Texture>(pathToEmptyTextureGameField));
-
-
-
-
-
-
-
-
-
-
-
-
-
-	for (size_t yPosition = 0; yPosition < countCellOnYPosition; yPosition++)
+	for (size_t inRow = 0; inRow < countCellOninRow; inRow++)
 	{
-		for (size_t xPosition = 0; xPosition < countCellOnXPosition; xPosition++)
+		for (size_t inColum = 0; inColum < countCellOninColum; inColum++)
 		{
-			int U; // итератор расположение уникального класса и уникальную текстуру в векторах
+			auto& dataLocal = m_dataLocalFigure[inRow][inColum];
+			auto& dataUniqLocation = m_uniqueFigureLocationRectangleShape[inRow][inColum];
 
-			///
-			/// если край то используем фигуру-край == Side -1
-			/// 
-			if (xPosition == 0 || yPosition == 0 || xPosition == countCellOnXPosition - 1 || yPosition == countCellOnYPosition - 1)
+			// если край то используем фигуру-край == Side -1
+			if (inColum == 0 || inRow == 0 || inColum == countCellOninColum - 1 || inRow == countCellOninRow - 1)
 			{
-				U = 0; // итератор на край 
+				const auto& dataUniqueFigure = m_dataUniqueFigure[0]; // итератор на фигуру - край 
 
-				locationClassFigure[yPosition][xPosition] = uniqueFigureLocationClassFigure[U];
-				locationTexture[yPosition][xPosition] = uniqueFigureLocationTexture[U];
+				dataLocal.m_locationClassFigure = dataUniqueFigure.m_uniqueFigureLocationClassFigure;
+				dataLocal.m_locationTexture = dataUniqueFigure.m_uniqueFigureLocationTexture;
+				dataLocal.m_locationRectangleShape.setTexture(dataUniqueFigure.m_uniqueFigureLocationTexture.get(), true);
+				dataLocal.m_locationRectangleShape.setTexture(dataUniqueFigure.m_uniqueFigureLocationTexture.get(), true);
 
-				locationRectangleShape[yPosition][xPosition].setTexture(uniqueFigureLocationTexture[U].get(), true);
-
-				uniqueFigureLocationRectangleShape[yPosition][xPosition].second.setTexture(uniqueFigureLocationTexture[U].get(), true);
-				uniqueFigureLocationRectangleShape[yPosition][xPosition].first = U;
+				dataUniqLocation.second.setTexture(dataUniqueFigure.m_uniqueFigureLocationTexture.get(), true);
+				dataUniqLocation.first = 0;
 			}
-
-			///
-			/// в противном случае считаем как пустая клетка == Side 0
-			/// 
-			else
-
+			else // в противном случае считаем как пустая клетка == Side 0
 			{
-				U = 1; // итератор на пустую клетку (фигуру)
+				const auto& dataUniqueFigure = m_dataUniqueFigure[1]; // итератор на пустую фигуру space
 
-				locationClassFigure[yPosition][xPosition] = uniqueFigureLocationClassFigure[U];
-				locationTexture[yPosition][xPosition] = uniqueFigureLocationTexture[U];
+				dataLocal.m_locationClassFigure = dataUniqueFigure.m_uniqueFigureLocationClassFigure;
+				dataLocal.m_locationTexture = dataUniqueFigure.m_uniqueFigureLocationTexture;
+				dataLocal.m_locationRectangleShape.setTexture(dataUniqueFigure.m_uniqueFigureLocationTexture.get(), true);
 
-				locationRectangleShape[yPosition][xPosition].setTexture(uniqueFigureLocationTexture[U].get(), true);
-
-				uniqueFigureLocationRectangleShape[yPosition][xPosition].second.setTexture(uniqueFigureLocationTexture[U].get(), true);
+				dataUniqLocation.second.setTexture(dataUniqueFigure.m_uniqueFigureLocationTexture.get(), true);
 			}
-
-
-
-
-
-
-
+			
 			//--//--//--//--//--//--//--//--//--//   ДЛЯ ФИГУР НА ДОСКЕ  //--//--//--//--//--//--//--//--//--//--//--//--//--//-//
-																																
-			locationRectangleShape[yPosition][xPosition].setSize(sf::Vector2f(sizeCell, sizeCell));										
-			locationRectangleShape[yPosition][xPosition].setPosition(sf::Vector2f(xPosition * sizeCell, yPosition * sizeCell));
-
+			dataLocal.m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell, m_sizeCell));
+			dataLocal.m_locationRectangleShape.setPosition(sf::Vector2f(inColum * m_sizeCell, inRow * m_sizeCell));
 
 
 			//--//--//--//--//--//--//--//--//--//     ДЛЯ УНИКАЛЬНЫХ ФИГУР   //--//--//--//--//--//--//--//--//--//--//--//--//--//
+			dataUniqLocation.second.setSize(sf::Vector2f(m_sizeCell * precentSizeFigure, m_sizeCell * precentSizeFigure));
+			dataUniqLocation.second.setPosition(sf::Vector2f(inColum * m_sizeCell * precentSizeFigure + windowHeight, inRow * m_sizeCell * precentSizeFigure + windowHeight / 2 ));
+			dataUniqLocation.second.setOutlineColor(sf::Color::Black);
 
-			uniqueFigureLocationRectangleShape[yPosition][xPosition].second.setSize(sf::Vector2f(sizeCell * precentSizeFigure, sizeCell * precentSizeFigure));
-			uniqueFigureLocationRectangleShape[yPosition][xPosition].second.setPosition(sf::Vector2f(xPosition * sizeCell * precentSizeFigure + windowHeight, yPosition * sizeCell * precentSizeFigure + windowHeight / 2 ));
-			uniqueFigureLocationRectangleShape[yPosition][xPosition].second.setOutlineColor(sf::Color::Black);
-
-
-
-
-
-
-			vectorLocationFigure[yPosition][xPosition].side         = locationClassFigure[yPosition][xPosition]->getSide();
-			vectorLocationFigure[yPosition][xPosition].idFigure     = locationClassFigure[yPosition][xPosition]->getIdFigure();
-			vectorLocationFigure[yPosition][xPosition].invulnerable = locationClassFigure[yPosition][xPosition]->getInvulnerable();
-			vectorLocationFigure[yPosition][xPosition].important    = locationClassFigure[yPosition][xPosition]->getImportant();
-			vectorLocationFigure[yPosition][xPosition].promoution   = locationClassFigure[yPosition][xPosition]->getPromoution();
-
+			m_vectorLocationFigure[inRow][inColum].m_side = dataLocal.m_locationClassFigure->getSide();
+			m_vectorLocationFigure[inRow][inColum].m_idFigure = dataLocal.m_locationClassFigure->getIdFigure();
+			m_vectorLocationFigure[inRow][inColum].m_invulnerable = dataLocal.m_locationClassFigure->isInvulnerable();
+			m_vectorLocationFigure[inRow][inColum].m_important = dataLocal.m_locationClassFigure->isImportant();
+			m_vectorLocationFigure[inRow][inColum].m_promoution = dataLocal.m_locationClassFigure->isPromoution();
 		}
 	}
 }
 
-
-
-
-
-
-
-
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 //--//--//--//--//--//--//--//--//--//    ДЛЯ ФИГУР НА ДОСКЕ   //--//--//--//--//--//--//--//--//--//--//--//--//
 
-
-
-/// 
-/// установка по сухим параметрам устаревает => апнуть полноценную замену =>
-/// bool FigureLocation::setFigure(size_t xPosition, size_t yPosition, PropertiesFigure pF)
-/// 
-
-bool FigureLocation::setFigure(size_t xPosition, size_t yPosition, std::wstring idFigure, int side, bool invulnerable, bool important, std::vector<PropertiesFigure> vectorPromoution /* нет проверки (!) */)
+// установка по сухим параметрам устаревает => апнуть полноценную замену =>
+// bool FigureLocation::setFigure(Position::Coordinates position, PropertiesFigure pF)
+//[[deprecated]]
+bool FigureLocation::setFigure(Position::Coordinates position, std::wstring idFigure, int side, bool invulnerable, bool important, [[maybe_unused]] std::vector<PropertiesFigure> vectorPromoution /* нет проверки (!) */)
 {
-
-	if (locationClassFigure.size() <= yPosition || locationClassFigure[yPosition].size() <= xPosition)
+	if (m_dataLocalFigure.size() <= position.inRow || m_dataLocalFigure[position.inRow].size() <= position.inColum)
 	{
-		OutputLog("ERROR -> Class -> FigureLocation -> SetFigure -> попытка установить ЗА границу");
+		OUTPUT_LOG_ERROR("Class -> FigureLocation -> SetFigure -> попытка установить ЗА границу");
 		return false;		
 	}
 
-	if (locationClassFigure[yPosition][xPosition]->getSide() == -1)
+	if (m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide() == -1)
 	{
-		OutputLog("ERROR -> Class -> FigureLocation -> SetFigure -> попытка установить НА границу");
+		OUTPUT_LOG_ERROR("Class -> FigureLocation -> SetFigure -> попытка установить НА границу");
 		return false;
 	}
 
-
-
-
-	for (int it = 0; it < uniqueFigureLocationClassFigure.size(); it++)
+	for (int it = 0; it < m_dataUniqueFigure.size(); it++)
 	{
-		///
-		/// находим итератор указанной финугы
-		/// 
-		if (   uniqueFigureLocationClassFigure[it]->getSide()          == side
-			&& uniqueFigureLocationClassFigure[it]->getIdFigure()      == idFigure
-			&& uniqueFigureLocationClassFigure[it]->getInvulnerable()  == invulnerable
-			&& uniqueFigureLocationClassFigure[it]->getImportant()     == important
+		// находим итератор указанной финугы
+		if (   m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide()         == side
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure()     == idFigure
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isInvulnerable()  == invulnerable
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isImportant()     == important
 		   )
 		{
-			///
-			/// станавливаем текстуру фигуры на поле
-			/// 
-			locationTexture[yPosition][xPosition] = uniqueFigureLocationTexture[it];
+			// станавливаем текстуру фигуры на поле
+			m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture = m_dataUniqueFigure[it].m_uniqueFigureLocationTexture;
 
-			///
-			/// устанавливаем позицию и размер фигуры -> меньше чем пустая клетка или край
-			///
-			locationRectangleShape[yPosition][xPosition].setSize(sf::Vector2f(sizeCell * precentSizeFigure, sizeCell * precentSizeFigure));
-			locationRectangleShape[yPosition][xPosition].setPosition(sf::Vector2f(xPosition * sizeCell + positionRectangInCell, yPosition * sizeCell + positionRectangInCell));
+			// устанавливаем позицию и размер фигуры -> меньше чем пустая клетка или край
+			m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell * m_precentSizeFigure, m_sizeCell * m_precentSizeFigure));
+			m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(position.inColum * m_sizeCell + m_positionRectangInCell, position.inRow * m_sizeCell + m_positionRectangInCell));
 
-			///
-			/// передаем установленную текстуру
-			/// 
-			locationRectangleShape[yPosition][xPosition].setTexture(locationTexture[yPosition][xPosition].get(), true);
+			// передаем установленную текстуру
+			m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture.get());
 
-			///
-			/// ставим класс фигуры на поле
-			/// 
-			locationClassFigure[yPosition][xPosition] = uniqueFigureLocationClassFigure[it];
+			// ставим класс фигуры на поле
+			m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure;
 
 			return true;
 		}
 	}
-	OutputLog("ERROR -> Class -> FigureLocation -> SetFigure -> фигура не найдена, сначала ее необходимо добавить -> AddUniqueFigure()");
+	OUTPUT_LOG_ERROR("Class -> FigureLocation -> SetFigure -> фигура не найдена, сначала ее необходимо добавить -> AddUniqueFigure()");
 	return false;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-bool FigureLocation::setFigure(size_t xPosition, size_t yPosition, PropertiesFigure pF)
+bool FigureLocation::setFigure(Position::Coordinates position, PropertiesFigure pF, const std::vector<PropertiesFigure>& vectorPromoution)
 {
-	return setFigure(xPosition, yPosition, pF.idFigure, pF.side, pF.invulnerable, pF.important, {} /* ДОБАВИТЬ vectorPromoution В PropertiesFigure*/);
+	return setFigure(position, pF.m_idFigure, pF.m_side, pF.m_invulnerable, pF.m_important, vectorPromoution);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool FigureLocation::setFigureVector(const std::vector<PositionAndPropertiesFigure>& locationFigure)
 {
@@ -232,18 +138,11 @@ bool FigureLocation::setFigureVector(const std::vector<PositionAndPropertiesFigu
 
 	for (const auto& currentFigure : locationFigure)
 	{		
-		if (!setFigure( currentFigure.xPosition,
-			            currentFigure.yPosition,
-			            currentFigure.propertions.idFigure,
-			            currentFigure.propertions.side,
-			            currentFigure.propertions.invulnerable,
-			            currentFigure.propertions.important,
-			            currentFigure.vectorPromoution
-		              )
+		if (!setFigure( currentFigure.m_position, currentFigure.m_propertions, currentFigure.m_gridPromoution  )
 		   )
 		{
-			std::wstring ws = currentFigure.propertions.idFigure;			
-			OutputLog("ERROR -> Class -> FigureLocation -> setFigureVector -> фигура не размещена или размещена с ошибкой координат: \t" + std::string(ws.begin(), ws.end()) + "\t" + std::to_string(currentFigure.xPosition) + " " + std::to_string(currentFigure.yPosition));
+			std::wstring ws = currentFigure.m_propertions.m_idFigure;			
+			OUTPUT_LOG("ERROR -> Class -> FigureLocation -> setFigureVector -> фигура не размещена или размещена с ошибкой координат: \t" + std::filesystem::path(ws).string() + "\tряд " + std::to_string(currentFigure.m_position.inRow) + ", столбец " + std::to_string(currentFigure.m_position.inColum));
 
 			result = false;
 		}
@@ -253,147 +152,89 @@ bool FigureLocation::setFigureVector(const std::vector<PositionAndPropertiesFigu
 	return result;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool FigureLocation::PromoutionSelectFigure(int side, std::wstring idFigure, bool invulnerable, bool important, bool promoution)
+bool FigureLocation::promoutionSelectFigure(const PropertiesFigure& properties)
 {
-
-	///
-	/// фигура может превратиться в указанную фигуру???.........
-	/// 
-	if (locationClassFigure[positionSelectFigure.second][positionSelectFigure.first]->getPromoutionFigure(side, idFigure, invulnerable, important, promoution))
+	// фигура может превратиться в указанную фигуру?.........
+	if (m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure->getPromoutionFigure(properties))
 	{
-		for (int it = 0; it < uniqueFigureLocationClassFigure.size(); it++)
+		for (int it = 0; it < m_dataLocalFigure.size(); it++)
 		{
-			if ( uniqueFigureLocationClassFigure[it]->getIdFigure() == idFigure && 
-				 uniqueFigureLocationClassFigure[it]->getSide() == locationClassFigure[positionSelectFigure.second][positionSelectFigure.first]->getSide()
+			if ( m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure() == properties.m_idFigure &&
+				 m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide() == m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure->getSide()
 			   )
 			{
-				///
-				/// заменяем текстуру
-				/// 
-				locationTexture[positionSelectFigure.second][positionSelectFigure.first] = uniqueFigureLocationTexture[it];
+				// заменяем текстуру
+				m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture = m_dataUniqueFigure[it].m_uniqueFigureLocationTexture;
 
-				///
-				/// передаем установленную текстуру
-				/// 
-				locationRectangleShape[positionSelectFigure.second][positionSelectFigure.first].setTexture(locationTexture[positionSelectFigure.second][positionSelectFigure.first].get(), true);
+				// передаем установленную текстуру
+				m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture.get());
 
-				///
-				/// ставим класс фигуры на поле
-				/// 
-				locationClassFigure[positionSelectFigure.second][positionSelectFigure.first] = uniqueFigureLocationClassFigure[it];
+				// ставим класс фигуры на поле
+				m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure;
 
 				return true;
 			}
 		}
-
-		OutputLog("Error -> Class -> FigureLocation -> PromoutionSelectFigure() -> не найден итератор");
+		OUTPUT_LOG("Error -> Class -> FigureLocation -> promoutionSelectFigure() -> не найден итератор");
 	}
 	else
 	{
-		OutputLog("Error -> Class -> FigureLocation -> PromoutionSelectFigure() -> невозможно превратиться в эту фигуру");
+		OUTPUT_LOG("Error -> Class -> FigureLocation -> promoutionSelectFigure() -> невозможно превратиться в эту фигуру");
 	}
 
 	return false;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool FigureLocation::PromoutionSelectFigure(PropertiesFigure pF)
-{
-	return PromoutionSelectFigure(pF.side, pF.idFigure, pF.invulnerable, pF.important, pF.promoution);
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool FigureLocation::addUniqueFigure(std::shared_ptr<Figure> newFigureOrHeirs, std::filesystem::path currentTextureFigure)
 {
-
-	///
-	/// изначально считаем что фигура уникальная 
-	/// проверяем есть ли такие фигуры у нас еще?
-	/// начинаем с 2 т.к. 0 и 1 слоты заняты заранее "краем" и пустой фигурой (видимой как пустая клетка) соответственно
-	/// 
-	size_t Size = uniqueFigureLocationClassFigure.size();
-
-
-
-
-
-	for (int it = 2; it < Size; it++)
+	// изначально считаем что фигура уникальная 
+	// проверяем есть ли такие фигуры у нас еще?
+	// начинаем с 2 т.к. 0 и 1 слоты заняты заранее "краем" и пустой фигурой (видимой как пустая клетка) соответственно
+	for (int it = 2; it < m_dataUniqueFigure.size(); it++)
 	{
-		///
-		/// если поля совпадают значит не уникальна и не добавляем
-		/// 
-		if (   uniqueFigureLocationClassFigure[it].get()->getIdFigure()          == newFigureOrHeirs.get()->getIdFigure()
-			&& uniqueFigureLocationClassFigure[it].get()->getSide()              == newFigureOrHeirs.get()->getSide()
-			&& uniqueFigureLocationClassFigure[it].get()->getInvulnerable()      == newFigureOrHeirs.get()->getInvulnerable()
-			&& uniqueFigureLocationClassFigure[it].get()->getImportant()         == newFigureOrHeirs.get()->getImportant()
-			&& uniqueFigureLocationClassFigure[it].get()->getVectorPromoution()  == newFigureOrHeirs.get()->getVectorPromoution()
+		// если поля совпадают значит не уникальна и не добавляем
+		if (   m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getIdFigure()          == newFigureOrHeirs.get()->getIdFigure()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getSide()              == newFigureOrHeirs.get()->getSide()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->isInvulnerable()      == newFigureOrHeirs.get()->isInvulnerable()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->isImportant()         == newFigureOrHeirs.get()->isImportant()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getVectorPromoution()  == newFigureOrHeirs.get()->getVectorPromoution()
 		   )
 		{			
 			return false;
 		}	
 	}
+	// иначе, если поля отличаются добавляем
+	m_dataUniqueFigure.emplace_back(newFigureOrHeirs, std::make_shared<sf::Texture>(currentTextureFigure));
 
-
-
-
-
-	///
-	/// иначе, если поля отличаются добавляем
-	/// 
-	uniqueFigureLocationClassFigure.push_back(newFigureOrHeirs);
-	uniqueFigureLocationTexture.push_back(std::make_shared<sf::Texture>(currentTextureFigure));
-
-	for (size_t row = 1; row < countCellOnYPosition - 1; row++)
+	for (size_t row = 1; row < m_countRow - 1; row++)
 	{
-		for (size_t col = 1; col < countCellOnXPosition - 1; col++)
+		for (size_t col = 1; col < m_countColum - 1; col++)
 		{
-			///
-			/// если клетка пустая то сразу же размещаем никальную фигуру на поле уникальных фигур
-			/// 
-			if (uniqueFigureLocationRectangleShape[row][col].first == 0)
+			// если клетка пустая то сразу же размещаем никальную фигуру на поле уникальных фигур
+			if (m_uniqueFigureLocationRectangleShape[row][col].first == 0)
 			{
-				size_t latestElement = uniqueFigureLocationTexture.size() - 1;
+				size_t latestElement = m_dataUniqueFigure.size() - 1;
 
-				///
-				/// ставим текстуру
-				/// 
-				uniqueFigureLocationRectangleShape[row][col].second.setTexture(uniqueFigureLocationTexture[latestElement].get(), true);
-				uniqueFigureLocationRectangleShape[row][col].second.setOutlineThickness(-2);
-				uniqueFigureLocationRectangleShape[row][col].second.setOutlineColor(sf::Color::Black);
+				// ставим текстуру
+				m_uniqueFigureLocationRectangleShape[row][col].second.setTexture(m_dataUniqueFigure[latestElement].m_uniqueFigureLocationTexture.get());
+				m_uniqueFigureLocationRectangleShape[row][col].second.setOutlineThickness(-2);
+				m_uniqueFigureLocationRectangleShape[row][col].second.setOutlineColor(sf::Color::Black);
 
-				///
-				/// ставим итератор откуда привязали
-				/// 
-				uniqueFigureLocationRectangleShape[row][col].first = latestElement;
+				// ставим итератор откуда привязали
+				m_uniqueFigureLocationRectangleShape[row][col].first = latestElement;
 				return true;
 			}
 		}
 	}	
-
-
 	return false;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool FigureLocation::addUniqueVectorFigure(std::vector<std::pair<std::shared_ptr<Figure>, std::filesystem::path>> vectorUniqueFigure)
 {
@@ -403,8 +244,8 @@ bool FigureLocation::addUniqueVectorFigure(std::vector<std::pair<std::shared_ptr
 	{
 		if (!addUniqueFigure(figure, path))
 		{
-			std::wstring ws = figure.get()->getIdFigure();
-			OutputLog("Error -> Class -> FigureLocation -> addUniqueVectorFigure -> фигура не добавлена:\t" + std::string(ws.begin(), ws.end()));
+			std::string id = std::filesystem::path(figure.get()->getIdFigure()).string();
+			OUTPUT_LOG("Error -> Class -> FigureLocation -> addUniqueVectorFigure -> фигура не добавлена:\t" + id);
 			result = false;
 		}
 	}
@@ -412,24 +253,17 @@ bool FigureLocation::addUniqueVectorFigure(std::vector<std::pair<std::shared_ptr
 	return result;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-bool FigureLocation::moveSelectFigure(size_t xPositionMove, size_t yPositionMove)
+bool FigureLocation::moveSelectFigure(Position::Coordinates position)
 {
-	auto availableMove = getAvailableMovesForFigure(positionSelectFigure.first, positionSelectFigure.second);
+	auto availableMove = getAvailableMovesForFigure(m_positionSelectFigure);
 
 	bool exists = false;
 
 	for (const auto& move : availableMove)
 	{ 
-		if (move.first == xPositionMove && move.second == yPositionMove)
+		if (move.inColum == position.inColum && move.inRow == position.inRow)
 		{
 			exists = true;
 		}
@@ -437,79 +271,60 @@ bool FigureLocation::moveSelectFigure(size_t xPositionMove, size_t yPositionMove
 
 	if (!exists)
 	{
-		OutputLog("ход невозможен");
+		OUTPUT_LOG("ход невозможен");
 		return false;
 	}
 
-	if (locationClassFigure[yPositionMove][xPositionMove]->getSide() == 0)
+	if (m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide() == 0)
 	{
-		swap(locationClassFigure[positionSelectFigure.second][positionSelectFigure.first], locationClassFigure[yPositionMove][xPositionMove]);
-		swap(locationTexture[positionSelectFigure.second][positionSelectFigure.first], locationTexture[yPositionMove][xPositionMove]);
+		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure, m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure);
+		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture, m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture);
 
-		///
-		/// изменяем размер и положение
-		/// 
-		locationRectangleShape[positionSelectFigure.second][positionSelectFigure.first].setSize(sf::Vector2f(sizeCell, sizeCell));
-		locationRectangleShape[positionSelectFigure.second][positionSelectFigure.first].setPosition(sf::Vector2f(sizeCell * positionSelectFigure.first, sizeCell * positionSelectFigure.second));
+		// изменяем размер и положение
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell, m_sizeCell));
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * m_positionSelectFigure.inColum, m_sizeCell * m_positionSelectFigure.inRow));
 
-		///
-		/// установили тестуры т.к. они свапнуты
-		/// 
-		locationRectangleShape[positionSelectFigure.second][positionSelectFigure.first].setTexture(locationTexture[positionSelectFigure.second][positionSelectFigure.first].get(), true);
+		// установили тестуры т.к. они свапнуты
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture.get());
 
-		///
-		/// изменяем размер и положение
-		/// 
-		locationRectangleShape[yPositionMove][xPositionMove].setSize(sf::Vector2f(sizeCell * precentSizeFigure, sizeCell * precentSizeFigure));
-		locationRectangleShape[yPositionMove][xPositionMove].setPosition(sf::Vector2f(sizeCell * xPositionMove + positionRectangInCell, sizeCell * yPositionMove + positionRectangInCell));
+		// изменяем размер и положение
+		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell * m_precentSizeFigure, m_sizeCell * m_precentSizeFigure));
+		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * position.inColum + m_positionRectangInCell, m_sizeCell * position.inRow + m_positionRectangInCell));
 
-		///
-		/// установили тестуры т.к. они свапнуты
-		/// 
-		locationRectangleShape[yPositionMove][xPositionMove].setTexture(locationTexture[yPositionMove][xPositionMove].get(), true);
+		// установили тестуры т.к. они свапнуты
+		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture.get());
 
 		return true;
 	}
 	else
 	{	
-		///
-		/// если клетка не пустая предполагается что там фигура другого игрока
-		/// 
+		// если клетка не пустая предполагается что там фигура другого игрока
 
-		///
-		/// Фигура должна быть доступна для взятия т.е. Invulnerability = false
-		/// 		
-		if (locationClassFigure[yPositionMove][xPositionMove]->getInvulnerable())
+		// Фигура должна быть доступна для взятия т.е. Invulnerability = false
+		if (m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->isInvulnerable())
 		{
-			OutputLog("ERROR -> class -> FigureLocation -> moveSelectFigure() -> фигура неуязвима");
+			OUTPUT_LOG("ERROR -> class -> FigureLocation -> moveSelectFigure() -> фигура неуязвима");
 			return false;
 		}
 
-		swap(locationClassFigure[positionSelectFigure.second][positionSelectFigure.first], locationClassFigure[yPositionMove][xPositionMove]);
-		swap(locationTexture[positionSelectFigure.second][positionSelectFigure.first], locationTexture[yPositionMove][xPositionMove]);
+		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure, m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure);
+		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture, m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture);
+		
+		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell * m_precentSizeFigure, m_sizeCell * m_precentSizeFigure));
+		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * position.inColum + m_positionRectangInCell, m_sizeCell * position.inRow + m_positionRectangInCell));
 
+		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture.get());
 		
-		locationRectangleShape[yPositionMove][xPositionMove].setSize(sf::Vector2f(sizeCell * precentSizeFigure, sizeCell * precentSizeFigure));
-		locationRectangleShape[yPositionMove][xPositionMove].setPosition(sf::Vector2f(sizeCell * xPositionMove + positionRectangInCell, sizeCell * yPositionMove + positionRectangInCell));
-		
+		// 1 - пустая текстура		
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture = m_dataUniqueFigure[1].m_uniqueFigureLocationTexture;
 
-		locationRectangleShape[yPositionMove][xPositionMove].setTexture(locationTexture[yPositionMove][xPositionMove].get(), true);
+		// 1 - пустая фигура (клетка)
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure = m_dataUniqueFigure[1].m_uniqueFigureLocationClassFigure;
 		
-
-		///
-		/// 1 - пустая текстура		
-		/// 
-		locationTexture[positionSelectFigure.second][positionSelectFigure.first] = uniqueFigureLocationTexture[1];
-
-		///
-		/// 1 - пустая фигура (клетка)
-		/// 
-		locationClassFigure[positionSelectFigure.second][positionSelectFigure.first] = uniqueFigureLocationClassFigure[1]; 
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell, m_sizeCell));
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * m_positionSelectFigure.inColum, m_sizeCell * m_positionSelectFigure.inRow));
 		
-		locationRectangleShape[positionSelectFigure.second][positionSelectFigure.first].setSize(sf::Vector2f(sizeCell, sizeCell));
-		locationRectangleShape[positionSelectFigure.second][positionSelectFigure.first].setPosition(sf::Vector2f(sizeCell * positionSelectFigure.first, sizeCell * positionSelectFigure.second));
-		
-		locationRectangleShape[positionSelectFigure.second][positionSelectFigure.first].setTexture(locationTexture[positionSelectFigure.second][positionSelectFigure.first].get(), true);
+		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture.get());
 
 		return true;
 	}
@@ -517,313 +332,204 @@ bool FigureLocation::moveSelectFigure(size_t xPositionMove, size_t yPositionMove
 	return false;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-std::pair<size_t, size_t> FigureLocation::getPositionFigureWhenMousePressed(sf::Vector2f positonMouse)  const
+Position::Coordinates FigureLocation::getPositionFigureWhenMousePressed(sf::Vector2f positonMouse)  const
 {
-	for (size_t yPosition = 0; yPosition < countCellOnXPosition; yPosition++)
+	for (size_t row = 0; row < m_countColum; row++)
 	{
-		for (size_t xPosition = 0; xPosition < countCellOnXPosition; xPosition++)
+		for (size_t colum = 0; colum < m_countColum; colum++)
 		{
 			// если задели фигуру на игровом поле
-			if (locationRectangleShape[yPosition][xPosition].getGlobalBounds().contains(positonMouse))
+			if (m_dataLocalFigure[row][colum].m_locationRectangleShape.getGlobalBounds().contains(positonMouse))
 			{
-				return { xPosition, yPosition };
+				return { row, colum };
 			}
 		}
 	}
-	return { 0, 0 };
+	return {0, 0};
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool FigureLocation::seletcFigure(size_t xPositionFigure, size_t yPositionFigure)
+bool FigureLocation::seletcFigure(Position::Coordinates position)
 {
-	int sideFigure = locationClassFigure[yPositionFigure][xPositionFigure]->getSide();
+	int sideFigure = m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide();
 
 	if (sideFigure == 0 || sideFigure == -1)
 	{
 		return false;
 	}
-	if (selectFigure)
+	if (m_selectFigure)
 	{
 		unseletcAllFigure();
 	}
 
-	locationRectangleShape[yPositionFigure][xPositionFigure].setOutlineThickness(-3);
-	locationRectangleShape[yPositionFigure][xPositionFigure].setOutlineColor(sf::Color::Red);
+	m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setOutlineThickness(-3);
+	m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setOutlineColor(sf::Color::Red);
 
-	positionSelectFigure = { static_cast<int>(xPositionFigure), static_cast<int>(yPositionFigure) };
-	selectFigure = true;
+	m_positionSelectFigure = position; 
+	m_selectFigure = true;
 
-	return selectFigure;
+	return m_selectFigure;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool FigureLocation::unseletcAllFigure()
 {
-	for (size_t yPosition = 0; yPosition < countCellOnXPosition; yPosition++)
+	for (auto& row : m_dataLocalFigure)
 	{
-		for (size_t xPosition = 0; xPosition < countCellOnXPosition; xPosition++)
+		for (auto& cell : row)
 		{
-			locationRectangleShape[yPosition][xPosition].setOutlineThickness(0);
+			cell.m_locationRectangleShape.setOutlineThickness(0);
 		}
 	}
-	positionSelectFigure = std::make_pair(0, 0);
-	selectFigure = false;
+
+	m_positionSelectFigure = { 0, 0 };
+	m_selectFigure = false;
 
 	return true;
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool FigureLocation::figuresSelectedOrNot() const noexcept
 {
-	return selectFigure;
+	return m_selectFigure;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-std::pair<size_t, size_t> FigureLocation::getPositionSelectFigure() const
+Position::Coordinates FigureLocation::getPositionSelectFigure() const
 {
-	return positionSelectFigure;
+	return m_positionSelectFigure;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::getAvailableMovesForFigure(size_t xPositionFigure, size_t yPositionFigure)
+std::vector<Position::Coordinates> FigureLocation::getAvailableMovesForFigure(Position::Coordinates position)
 {
-	return locationClassFigure[yPositionFigure][xPositionFigure]->getMoveForFigure(xPositionFigure, yPositionFigure, getVectorLocationFigure());
+	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getMoveForFigure(position, getLocationFigure());
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-bool FigureLocation::promoutionFigureOnPosition(size_t xPositionFigure, size_t yPositionFigure)
+bool FigureLocation::isPromoutionFigureOnPosition(Position::Coordinates position)
 {
-	return locationClassFigure[yPositionFigure][xPositionFigure]->getPossibilityPromotion(xPositionFigure, yPositionFigure, getVectorLocationFigure());
+	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getPossibilityPromotion(position, getLocationFigure());
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-GridPropertiesFigure  FigureLocation::getVectorLocationFigure()
+Grid<PropertiesFigure> FigureLocation::getLocationFigure()
 {
-	updateVectorLocationFigure();
-	return vectorLocationFigure;
+	updateLocationFigure();
+	return m_vectorLocationFigure;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-void FigureLocation::updateVectorLocationFigure()
+void FigureLocation::updateLocationFigure()
 {
-	for (size_t yPosition = 0; yPosition < countCellOnXPosition; yPosition++)
+	for (size_t inRow = 0; inRow < m_countColum; inRow++)
 	{
-		for (size_t xPosition = 0; xPosition < countCellOnXPosition; xPosition++)
+		for (size_t inColum = 0; inColum < m_countColum; inColum++)
 		{
-			vectorLocationFigure[yPosition][xPosition].side         = locationClassFigure[yPosition][xPosition]->getSide();
-			vectorLocationFigure[yPosition][xPosition].idFigure     = locationClassFigure[yPosition][xPosition]->getIdFigure();
-			vectorLocationFigure[yPosition][xPosition].invulnerable = locationClassFigure[yPosition][xPosition]->getInvulnerable();
-			vectorLocationFigure[yPosition][xPosition].important    = locationClassFigure[yPosition][xPosition]->getImportant();
-			vectorLocationFigure[yPosition][xPosition].promoution   = locationClassFigure[yPosition][xPosition]->getPromoution();
+			m_vectorLocationFigure[inRow][inColum].m_side         = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->getSide();
+			m_vectorLocationFigure[inRow][inColum].m_idFigure     = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->getIdFigure();
+			m_vectorLocationFigure[inRow][inColum].m_invulnerable = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->isInvulnerable();
+			m_vectorLocationFigure[inRow][inColum].m_important    = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->isImportant();
+			m_vectorLocationFigure[inRow][inColum].m_promoution   = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->isPromoution();
 		}
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-std::wstring FigureLocation::getIdFigure(size_t xPosition, size_t yPosition) const
+std::wstring FigureLocation::getIdFigure(Position::Coordinates position) const
 {
-	return locationClassFigure[yPosition][xPosition]->getIdFigure();
+	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getIdFigure();
 }
 
-
-
-int FigureLocation::getSideFigure(size_t xPosition, size_t yPosition) const
+int FigureLocation::getSideFigure(Position::Coordinates position) const
 {
-	return locationClassFigure[yPosition][xPosition]->getSide();
+	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide();
 }
 
-
-
-const sf::RectangleShape& FigureLocation::getRectangleShapeFigure(size_t xPosition, size_t yPosition) const
+const sf::RectangleShape& FigureLocation::getRectangleShapeFigure(Position::Coordinates position) const
 {
-	return locationRectangleShape[yPosition][xPosition];
+	return m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape;
 }
 
-
-
-bool FigureLocation::getInvulnerableFigure(size_t xPosition, size_t yPosition) const
+bool FigureLocation::getInvulnerableFigure(Position::Coordinates position) const
 {
-	return locationClassFigure[yPosition][xPosition]->getInvulnerable();
+	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->isInvulnerable();
 }
 
-
-
-bool FigureLocation::getImportantFigure(size_t xPosition, size_t yPosition) const
+bool FigureLocation::getImportantFigure(Position::Coordinates position) const
 {
-	return locationClassFigure[yPosition][xPosition]->getImportant();
+	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->isImportant();
 }
 
-
-PropertiesFigure FigureLocation::getPropertiesFigure(size_t xPosition, size_t yPosition)
+PropertiesFigure FigureLocation::getPropertiesFigure(Position::Coordinates position)
 {	
-	
-	return { getSideFigure(xPosition, yPosition),
-			 getIdFigure(xPosition, yPosition),
-			 getInvulnerableFigure(xPosition, yPosition),
-			 getImportantFigure(xPosition, yPosition),
-			 getUniquePromoutionFigure(xPosition, yPosition)
-		   };
+	return { getIdFigure(position), getSideFigure(position), getInvulnerableFigure(position), getImportantFigure(position), isPromoutionUniqueFigire(position) };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //--//--//--//--//--//--//--//--//--//      ДЛЯ ПОЛЕ УНИКАЛЬНЫХ ФИГУР     //--//--//--//--//--//--//--//--//--//--//--//-//
 
-bool FigureLocation::getUniqueInvulnerableFigure(size_t xPosition, size_t yPosition)
+bool FigureLocation::isInvulnerableUniqueFigire(const Position::Coordinates& position)
 {
-	size_t it = getIteratorUniqueFigure(xPosition, yPosition);
-	return uniqueFigureLocationClassFigure[it]->getInvulnerable();
+	size_t it = getIteratorUniqueFigure(position);
+	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isInvulnerable();
 }
 
-
-
-std::wstring FigureLocation::getUniqueIdFigure(size_t xPosition, size_t yPosition)
+std::wstring FigureLocation::geIdUniqueFigure(const Position::Coordinates& position)
 {
-	size_t it = getIteratorUniqueFigure(xPosition, yPosition);
-	return uniqueFigureLocationClassFigure[it]->getIdFigure();
+	size_t it = getIteratorUniqueFigure(position);
+	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure();
 }
 
-
-
-int FigureLocation::getUniqueSideFigure(size_t xPosition, size_t yPosition)
+int FigureLocation::getSideUniqueFigure(const Position::Coordinates& position)
 {
-	size_t it = getIteratorUniqueFigure(xPosition, yPosition);
-	return uniqueFigureLocationClassFigure[it]->getSide();
+	size_t it = getIteratorUniqueFigure(position);
+	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide();
 }
 
-
-
-bool FigureLocation::getUniqueImportantFigure(size_t xPosition, size_t yPosition)
+bool FigureLocation::isImportantUniqueFigire(const Position::Coordinates& position)
 {
-	size_t it = getIteratorUniqueFigure(xPosition, yPosition);
-	return uniqueFigureLocationClassFigure[it]->getImportant();
+	size_t it = getIteratorUniqueFigure(position);
+	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isImportant();
 }
 
-
-
-bool FigureLocation::getUniquePromoutionFigure(size_t xPosition, size_t yPosition)
+bool FigureLocation::isPromoutionUniqueFigire(const Position::Coordinates& position)const
 {
-	size_t it = getIteratorUniqueFigure(xPosition, yPosition);
-	return uniqueFigureLocationClassFigure[it]->getPromoution();
+	size_t it = getIteratorUniqueFigure(position);
+	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isPromoution();
 }
 
-
-
-const sf::RectangleShape& FigureLocation::getUniqueRectangleShapeFigure(size_t xPosition, size_t yPosition)
+const sf::RectangleShape& FigureLocation::getRectangleShapeUniqueFigure(const Position::Coordinates& position)const
 {
-	return uniqueFigureLocationRectangleShape[yPosition][xPosition].second;
+	return m_uniqueFigureLocationRectangleShape[position.inRow][position.inColum].second;
 }
 
-
-
-
-size_t FigureLocation::getIteratorUniqueFigure(size_t xPosition, size_t yPosition)
+size_t FigureLocation::getIteratorUniqueFigure(Position::Coordinates position)const
 {
-	return uniqueFigureLocationRectangleShape[yPosition][xPosition].first;
+	return m_uniqueFigureLocationRectangleShape[position.inRow][position.inColum].first;
 }
 
-
-
-
-size_t FigureLocation::getIteratorUniqueFigure(PropertiesFigure otherFigure)
+size_t FigureLocation::getIteratorUniqueFigure(PropertiesFigure otherFigure) const
 {
-	for (size_t it = 0; it < uniqueFigureLocationClassFigure.size(); it++)
+	for (size_t it = 0; it < m_dataUniqueFigure.size(); it++)
 	{
-		///
-		/// если находим такую фигуру то возвращаем итератор
-		/// 
-		if (   uniqueFigureLocationClassFigure[it]->getIdFigure()      == otherFigure.idFigure
-			&& uniqueFigureLocationClassFigure[it]->getSide()          == otherFigure.side
-			&& uniqueFigureLocationClassFigure[it]->getInvulnerable()  == otherFigure.invulnerable
-			&& uniqueFigureLocationClassFigure[it]->getImportant()     == otherFigure.important
-			&& uniqueFigureLocationClassFigure[it]->getPromoution()    == otherFigure.promoution
+		// если находим такую фигуру то возвращаем итератор
+		if (m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure() == otherFigure.m_idFigure
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide() == otherFigure.m_side
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isInvulnerable() == otherFigure.m_invulnerable
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isImportant() == otherFigure.m_important
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isPromoution() == otherFigure.m_promoution
 			)
 		{
 			return it;
@@ -832,51 +538,35 @@ size_t FigureLocation::getIteratorUniqueFigure(PropertiesFigure otherFigure)
 	return -1;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-//bool FigureLocation::checkMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure)
+//bool FigureLocation::checkMoveForFigure(size_t inColumCurrent, size_t inRowCurrent, size_t inColumMove, size_t inRowMove, const GridPropertiesFigure& m_vectorLocationFigure)
 //{
 //	return false;
 //}
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-bool FigureLocation::seletcUniqueFigureForPromoution(size_t xPositionFigure, size_t yPositionFigure)
+bool FigureLocation::selectForPromoutionUniqueFigure(const Position::Coordinates& position)
 {
-	///
-	/// выделяем фигуры в которые может превратиться фигура
-	/// 
+	// выделяем фигуры в которые может превратиться фигура
 
-	///
-	/// получаем сторону текущего игрока
-	/// 
-	int sideFigure = locationClassFigure[yPositionFigure][xPositionFigure]->getSide();
+	const auto& localFigure = m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure;
 
-	for ( auto& vectorRectangleShape : uniqueFigureLocationRectangleShape)
+	for ( auto& vectorRectangleShape : m_uniqueFigureLocationRectangleShape)
 	{
 		for ( auto& rectangleShape : vectorRectangleShape)
 		{
 			size_t it = rectangleShape.first;
+			const auto& uniqueFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure;
 
-			///
-			/// если фигура той же стороны
-			/// 
-			if (uniqueFigureLocationClassFigure[it]->getSide() == sideFigure)
+			// если фигура той же стороны
+			if (uniqueFigure->getSide() == localFigure->getSide())
 			{
-				///
-				/// и может превратиться в указанную фигуру???... 
-				/// 
-				if (locationClassFigure[yPositionFigure][xPositionFigure]->getPromoutionFigure( uniqueFigureLocationClassFigure[it]->getSide(),
-					                                                                            uniqueFigureLocationClassFigure[it]->getIdFigure(),
-					                                                                            uniqueFigureLocationClassFigure[it]->getInvulnerable(),
-					                                                                            uniqueFigureLocationClassFigure[it]->getImportant(),
-																							    uniqueFigureLocationClassFigure[it]->getPromoution()
-																							  )
-				   )
+				// и может превратиться в указанную фигуру???...
+				if (localFigure->getPromoutionFigure({ uniqueFigure->getIdFigure(),uniqueFigure->getSide(),uniqueFigure->isInvulnerable(),uniqueFigure->isImportant(),uniqueFigure->isPromoution() }) )
 				{
-					///
-					/// подсвечиваем фигуру
-					/// 
+					// подсвечиваем фигуру
 					rectangleShape.second.setOutlineColor(sf::Color::Red);
 				}
 			}
@@ -885,10 +575,11 @@ bool FigureLocation::seletcUniqueFigureForPromoution(size_t xPositionFigure, siz
 	return true;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool FigureLocation::unseletcUniqueFigure()
+bool FigureLocation::unselectUniqueFigure()
 {
-	for (auto& vectorRectangleShape : uniqueFigureLocationRectangleShape)
+	for (auto& vectorRectangleShape : m_uniqueFigureLocationRectangleShape)
 	{
 		for (auto& rectangleShape : vectorRectangleShape)
 		{
@@ -898,170 +589,142 @@ bool FigureLocation::unseletcUniqueFigure()
 	return true;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::pair<int, int> FigureLocation::getUniquePositionFigureWhenMousePressed(sf::Vector2f positonMouse)
+Position::Coordinates FigureLocation::getPositionOnMousePositionUniqueFigire(const sf::Vector2f& positonMouse)
 {
-	for (size_t yPosition = 0; yPosition < countCellOnYPosition; yPosition++)
+	for (size_t inRow = 0; inRow < m_countRow; inRow++)
 	{
-		for (size_t xPosition = 0; xPosition < countCellOnXPosition; xPosition++)
+		for (size_t inColum = 0; inColum < m_countColum; inColum++)
 		{
-			///
-			/// если задели фигуру на поле уникальных фигур возвращаем позицию в минусе
-			/// 
-			if (uniqueFigureLocationRectangleShape[yPosition][xPosition].second.getGlobalBounds().contains(positonMouse))
+			// если задели фигуру на поле уникальных фигур возвращаем позицию в минусе
+			if (m_uniqueFigureLocationRectangleShape[inRow][inColum].second.getGlobalBounds().contains(positonMouse))
 			{
-				return { static_cast<int>(xPosition), static_cast<int>(yPosition) };
+				return  { inRow, inColum };
 			}
 		}
 	}
 	return { 0, 0 };
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::checkThreatFigure( size_t xPositionOnVectorLocationFigure, 
-																		  size_t yPositionOnVectorLocationFigure, 
-																		  const  GridPropertiesFigure& vectorLocationFigure
-																		)
+std::vector<Position::Coordinates> FigureLocation::checkThreatForFigure(const Position::Coordinates position, const  Grid<PropertiesFigure>& m_vectorLocationFigure)
 {
-	std::vector<std::pair<size_t, size_t>> resultPositionEnemyFigure;
+	const auto sideCurrentFigure = m_vectorLocationFigure[position.inRow][position.inColum].m_side;
 
+	size_t maxSize = m_countRow * m_countColum;
 
-	///
-	/// получаем сторону текущего игрока, у которого будет проверяться фигура
-	/// 
-	int  sideCurrentFigure;
+	//std::vector<std::future<std::vector<Position::Coordinates>>> threadForCalculate;
+	//threadForCalculate.reserve(maxSize);
 
-	sideCurrentFigure = vectorLocationFigure[yPositionOnVectorLocationFigure][xPositionOnVectorLocationFigure].side;
-	
-	///
-	/// проверяем все фигуры на переданном игровом поле у других игроков, которые могу "угрожать взятием"
-	/// 
-	for (size_t Ypos = 0; Ypos < countCellOnYPosition; Ypos++)
+	//size_t maxThread = std::thread::hardware_concurrency(); 
+	//if (!maxThread) { maxThread = 1; }
+
+	//const size_t countOpcOnThread = static_cast<size_t>(maxSize / maxThread); // колличество операций на поток
+
+	std::vector<Position::Coordinates> resultPositionEnemyFigure;
+
+	// проверяем все фигуры на переданном игровом поле у других игроков, которые могу "угрожать взятием"
+	for (size_t rowPosition = 0; rowPosition < m_countRow; rowPosition++)
 	{
-		for (size_t Xpos = 0; Xpos < countCellOnXPosition; Xpos++)
-		{
+		//threadForCalculate.emplace_back(std::thread(std::launch::deferred, [=] {
+		for (size_t colPosition = 0; colPosition < m_countColum; colPosition++)
+		{			
+			const auto figure = m_vectorLocationFigure[rowPosition][colPosition];
 
-			///
-			/// если у фигуры на позиции другая сторона, то проверяем далее....
-			/// 
-			if (    vectorLocationFigure[Ypos][Xpos].side != sideCurrentFigure	
-				 && vectorLocationFigure[Ypos][Xpos].side != -1                    // не учитываем край 
-				 && vectorLocationFigure[Ypos][Xpos].side != 0	                  // не учитываем пустые клетки (фигуры)
-			   )
+			//std::vector<Position::Coordinates>  resultThreadPos;
+			//resultThreadPos.reserve(m_countColum);
+
+			// если у фигуры на позиции другая сторона, то проверяем далее....
+			if (figure.m_side != sideCurrentFigure && figure.m_side > 0)
 			{
-				
-				size_t it = getIteratorUniqueFigure({vectorLocationFigure[Ypos][Xpos].side,
-												     vectorLocationFigure[Ypos][Xpos].idFigure,
-												     vectorLocationFigure[Ypos][Xpos].invulnerable,
-												     vectorLocationFigure[Ypos][Xpos].important,
-												     vectorLocationFigure[Ypos][Xpos].promoution
-												   });
+				size_t it = getIteratorUniqueFigure({ figure.m_idFigure, figure.m_side,figure.m_invulnerable,figure.m_important,figure.m_promoution });
 
-				///
-				/// получаем ходы на которые может сходить фигура
-				/// 
-				auto moveForFigure = uniqueFigureLocationClassFigure[it]->getMoveForFigure(Xpos, Ypos, vectorLocationFigure);
+				// ходы на которые может сходить фигура
+				auto allMovePosFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getMoveForFigure({ rowPosition, colPosition }, m_vectorLocationFigure);
 
-
-				///
-				/// если фигура может сходить на позицию проверяемой фигуры ("угрожать взятием"), то добавляем эту фигуру в вектор, она угрожает
-				/// 
-				for (const auto& Move : moveForFigure)
-				{
-					if (Move.first == xPositionOnVectorLocationFigure && Move.second == yPositionOnVectorLocationFigure)
+				for (const auto& movePosFigure : allMovePosFigure) {
+					if (movePosFigure == position)
 					{
-						resultPositionEnemyFigure.emplace_back(Xpos, Ypos);
+						resultPositionEnemyFigure.emplace_back(rowPosition, colPosition);
 					}
 				}
 			}
+
 		}
-	}	
+	}
+
+	//for (const auto& allMove : distribAllMove)
+	//{
+	//	for (const auto& move :  allMove)
+	//	{
+	//		resultPositionEnemyFigure.push_back(move);
+	//	}
+	//}	
+
 	return resultPositionEnemyFigure;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::getPositionFigure(int side, std::wstring idFigure, bool invulnerable, bool important, bool promoution) 
+std::vector<Position::Coordinates> FigureLocation::getPositionFigure(int side, std::wstring idFigure, bool invulnerable, bool important, bool promoution)
 {
 	return positionFigure(side, idFigure, invulnerable, important, promoution);
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::getPositionFigure(int side, std::wstring idFigure)  
+std::vector<Position::Coordinates> FigureLocation::getPositionFigure(int side, std::wstring idFigure)
 {
-	return positionFigure(side, idFigure, numException, numException, numException);
+	return positionFigure(side, idFigure, m_numException, m_numException, m_numException);
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::getPositionFigure(int side) 
+std::vector<Position::Coordinates> FigureLocation::getPositionFigure(int side)
 {
-	return positionFigure(side, wsExceprion, numException, numException, numException);
+	return positionFigure(side, m_wsExceprion, m_numException, m_numException, m_numException);
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::getPositionsFigure(int side, bool invulnerableOrImportantOrPromoution , char IMP ) 
+std::vector<Position::Coordinates> FigureLocation::getPositionsFigure(int side, bool invulnerableOrImportantOrPromoution , char IMP )
 {
 	switch (IMP)
 	{
 	case 'I':
-		return positionFigure(side, wsExceprion, invulnerableOrImportantOrPromoution, numException, numException);
+		return positionFigure(side, m_wsExceprion, invulnerableOrImportantOrPromoution, m_numException, m_numException);
 
 	case 'M':
-		return positionFigure(side, wsExceprion, numException, invulnerableOrImportantOrPromoution, numException);
+		return positionFigure(side, m_wsExceprion, m_numException, invulnerableOrImportantOrPromoution, m_numException);
 
 	case 'P':
-		return positionFigure(side, wsExceprion, numException, numException, invulnerableOrImportantOrPromoution);
+		return positionFigure(side, m_wsExceprion, m_numException, m_numException, invulnerableOrImportantOrPromoution);
 
 	default:
-		return std::vector<std::pair<size_t, size_t>>();
+		return std::vector<Position::Coordinates>();
 	}	
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::positionFigure(int side, std::wstring idFigure, int invulnerable, int important, int promoution)
+std::vector<Position::Coordinates> FigureLocation::positionFigure(int side, std::wstring idFigure, int invulnerable, int important, int promoution)
 {
-	std::vector<std::pair<size_t, size_t>> position;
+	std::vector<Position::Coordinates> position;
 
-	for (size_t yPos = 0; yPos < countCellOnYPosition; yPos++)
+	for (size_t yPos = 0; yPos < m_countRow; yPos++)
 	{
-		for (size_t xPos = 0; xPos < countCellOnXPosition; xPos++)
+		for (size_t xPos = 0; xPos < m_countColum; xPos++)
 		{
-			///
-			/// если поля совпадают то добавляем
-			/// 
+			// если поля совпадают то добавляем
 
-			///
-			/// если передан параметр numException значение не учитывается, так же и wsExceprion 
-			/// 
-			if (    (  idFigure     == wsExceprion  || ( locationClassFigure[yPos][xPos]->getIdFigure()                       == idFigure     && idFigure != wsExceprion) )
-				 && (  side         == numException || ( static_cast<int>(locationClassFigure[yPos][xPos]->getSide())         == side         && side != numException   ) )
-				 && (  invulnerable == numException || ( static_cast<int>(locationClassFigure[yPos][xPos]->getInvulnerable()) == invulnerable && side != numException   ) )
-				 && (  important    == numException || ( static_cast<int>(locationClassFigure[yPos][xPos]->getImportant())    == important    && side != numException   ) )
-				 && (  promoution   == numException || ( static_cast<int>(locationClassFigure[yPos][xPos]->getPromoution())   == promoution   && side != numException   ) )
+			// если передан параметр numException значение не учитывается, так же и wsExceprion 
+			if (    (  idFigure     == m_wsExceprion  || ( m_dataLocalFigure[yPos][xPos].m_locationClassFigure->getIdFigure()                       == idFigure     && idFigure != m_wsExceprion) )
+				 && (  side         == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->getSide())         == side         && side != m_numException   ) )
+				 && (  invulnerable == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->isInvulnerable()) == invulnerable && side != m_numException   ) )
+				 && (  important    == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->isImportant())    == important    && side != m_numException   ) )
+				 && (  promoution   == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->isPromoution())   == promoution   && side != m_numException   ) )
 			   )
 			{
 				position.emplace_back(xPos, yPos);
@@ -1071,13 +734,13 @@ std::vector<std::pair<size_t, size_t>> FigureLocation::positionFigure(int side, 
 	return position;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-bool FigureLocation::checkmateForFigure(size_t xPosition, size_t yPosition, const GridPropertiesFigure& vectorLocationFigure)
+bool FigureLocation::isCheckmateForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure)
 {
-	auto tempResult = figureCanProtectenCheckmateForFigure(xPosition, yPosition, vectorLocationFigure);
+	auto tempResult = getPositionFigureCanProtectedIndicatedFigure(position, m_vectorLocationFigure);
 
-	if (tempResult.size() == 1 && tempResult[0].first == NULL && tempResult[0].second == NULL)
+	if (tempResult.size() == 1 && tempResult.front() == Position::Coordinates( 0, 0 ))
 	{
 		return true;
 	}
@@ -1085,137 +748,78 @@ bool FigureLocation::checkmateForFigure(size_t xPosition, size_t yPosition, cons
 	return false;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-std::vector<std::pair<size_t, size_t>> FigureLocation::figureCanProtectenCheckmateForFigure(size_t xPosition, size_t yPosition, const GridPropertiesFigure& vectorLocationFigure)
+std::vector<Position::Coordinates> FigureLocation::getPositionFigureCanProtectedIndicatedFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure)
 {
+	int currentSideFigure = m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide();
 	
-	int current_SIDE = locationClassFigure[yPosition][xPosition]->getSide();
-
-	///
-	/// позиции фигур которые могут защитить
-	/// 
-	std::vector<std::pair<size_t, size_t>> resultPositionFigure;
-
-
-	///
-	/// край и пустую клетку не проверяем, нет смысла
-	/// 
-	if (current_SIDE == 0 || current_SIDE == -1)
-	{
-		// возвращаем пустой ничего не угрожает
-		return std::vector<std::pair<size_t, size_t>>();
+	// край и пустую клетку не проверяем, нет смысла
+	if (currentSideFigure == 0 || currentSideFigure == -1) 
+	{		
+		return std::vector<Position::Coordinates>(); // возвращаем пустой ничего не угрожает
 	}
 
-	///
-	/// получаем расположение фигур на игровом поле, которые урожают этой фигуре
-	/// 
-	auto locationThreatFigure = checkThreatFigure(xPosition, yPosition, vectorLocationFigure);
-
-	///
-	/// если фигур, которые угрожают == 0, то логично, что ничего ему не угрожает
-	/// 
-	if (locationThreatFigure.empty())
-	{
-		///
-		/// возвращаем пустой ничего не угрожает
-		/// 
-		return std::vector<std::pair<size_t, size_t>>();
+	// если фигур, которые угрожают == 0, то логично, что ничего ему не угрожает
+	if (checkThreatForFigure(position, m_vectorLocationFigure).empty())
+	{		
+		return std::vector<Position::Coordinates>(); // возвращаем пустой ничего не угрожает
 	}
 
-	///
-	/// позиции всех фигур текущего игрока Х / У
-	/// 
-	auto positionAllFigureForPlayer = getPositionFigure(current_SIDE);
+	// позиции всех фигур текущего игрока
+	auto positionAllFigureForPlayer = getPositionFigure(currentSideFigure);
 
 
-
-
-	///
-	/// проверяем может ли какая-то фигура текущего игрока куда-то передвинуться, чтобы исключить шах 
-	/// проходимся по каждой фигуре 
-	///
 	
-	///
-	/// позиция фигуры  Х / У
-	/// 
+	// позиции фигур которые могут защитить
+	std::vector<Position::Coordinates> resultPositionFigure;
+
+
+	// проверяем может ли какая-то фигура текущего игрока куда-то передвинуться, чтобы исключить шах 
+	// проходимся по каждой фигуре 
 	for (const auto& curentPosFigure : positionAllFigureForPlayer)
 	{
-		///
-		/// получаем доступные ходы для текущей фигуры
-		/// 
-		auto moveForFigure = locationClassFigure[curentPosFigure.second][curentPosFigure.first]->getMoveForFigure(curentPosFigure.first, curentPosFigure.second, vectorLocationFigure);
+		// получаем доступные ходы для текущей фигуры
+		auto moveForFigure = m_dataLocalFigure[curentPosFigure.inRow][curentPosFigure.inColum].m_locationClassFigure->getMoveForFigure(curentPosFigure, m_vectorLocationFigure);
 
-		///
-		/// проходимся по всему вектору ходов
-		///
+		// проходимся по всему вектору ходов
 		for (const auto& move : moveForFigure)
 		{
-			///
-			/// создаем фиктивное расположение фигур
-			/// 
-			GridPropertiesFigure imaginaryLocation = vectorLocationFigure;
+			// создаем фиктивное расположение фигур
+			auto imaginaryLocation = m_vectorLocationFigure;
 			
-			///
-			/// создаем фиктивный ход 
-			/// свапаем "передвигая" фигуру
-			/// 
-			PropertiesFigure tempPropertiesFigure = imaginaryLocation[curentPosFigure.second][curentPosFigure.first];
-			imaginaryLocation[curentPosFigure.second][curentPosFigure.first] = imaginaryLocation[move.second][move.first];
-			imaginaryLocation[move.second][move.first] = tempPropertiesFigure;
+			// создаем фиктивный ход 
+			// свапаем "передвигая" фигуру
+			PropertiesFigure tempPropertiesFigure = imaginaryLocation[curentPosFigure.inRow][curentPosFigure.inColum];
+			imaginaryLocation[curentPosFigure.inRow][curentPosFigure.inColum] = imaginaryLocation[move.inRow][move.inColum];
+			imaginaryLocation[move.inRow][move.inColum] = tempPropertiesFigure;
 
 			//swap(imaginaryLocation[curentPosFigure.second][curentPosFigure.first], imaginaryLocation[move.second][move.first]);
 
+			// устанавливаем пустую фигуру (клетку) на бывшую позицию 
+			imaginaryLocation[curentPosFigure.inRow][curentPosFigure.inColum] = { L"Figure", 0, false, false, false };
 
+			// начальная позиция проверяемой фигуры х \ у
+			Position::Coordinates currentPositionCheckedFigure = position;
 
-			///
-			/// устанавливаем пустую фигуру (клетку) на бывшую позицию 
-			/// 
-			imaginaryLocation[curentPosFigure.second][curentPosFigure.first] = { 0, L"Figure", false, false, false };
-
-
-
-
-			///
-			/// начальная позиция проверяемой фигуры х \ у
-			///
-			std::pair <size_t, size_t> currentPositionCheckedFigure = std::make_pair(xPosition, yPosition);
-
-
-			///
-			/// если мы дошли до проверки ходов у изначально проверяемой фигуры
-			/// 
+			// если мы дошли до проверки ходов у изначально проверяемой фигуры
 			if (currentPositionCheckedFigure == curentPosFigure)
 			{
-				///
-				/// устанавливаем новое фиктивное положение для ПРОВЕРЯЕМОЙ фигуры
-				/// 
+				// устанавливаем новое фиктивное положение для ПРОВЕРЯЕМОЙ фигуры
 				currentPositionCheckedFigure = move;
 			}
-
+			// проверяем угрозу с фиктивным расположением
+			auto thFigure = checkThreatForFigure(currentPositionCheckedFigure, imaginaryLocation);
 		
-			///
-			/// проверяем угрозу с фиктивным расположением
-			/// 
-			auto thFigure = checkThreatFigure(currentPositionCheckedFigure.first, currentPositionCheckedFigure.second, imaginaryLocation);
-		
-
-			///
-			/// считаем колличество фигур которые могут угрожать на этом ходу
-			/// если колличество угрожающих фигур == 0, то мата нет, фигура может закрыть важную фигуру или убить своим ходом
-			/// 
+			// считаем колличество фигур которые могут угрожать на этом ходу
+			// если колличество угрожающих фигур == 0, то мата нет, фигура может закрыть важную фигуру или убить своим ходом
 			if (thFigure.size() == 0)
 			{
-				resultPositionFigure.emplace_back(curentPosFigure.first, curentPosFigure.second);
-			}
-			
-		}
-		
+				resultPositionFigure.emplace_back(curentPosFigure);
+			}			
+		}		
 	}
 
-	///
-	/// возвращаем 0,0 позицию, если угрозу не избежать // пустой если угроз не найдено // или заполенный фигурами, которые могут задефать
-	/// 
-	return resultPositionFigure.empty() ? std::vector<std::pair<size_t, size_t>>(1, { 0, 0 } ) : resultPositionFigure;
+	// возвращаем 0,0 позицию, если угрозу не избежать // пустой если угроз не найдено // или заполенный фигурами, которые могут задефать
+	return resultPositionFigure.empty() ? std::vector<Position::Coordinates>(1, { 0, 0 } ) : resultPositionFigure;
 }

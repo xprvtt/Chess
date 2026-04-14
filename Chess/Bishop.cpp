@@ -1,114 +1,60 @@
 ﻿#include "Bishop.h"
 
-static bool checkCell(size_t xPos, size_t yPos, int side, std::vector<std::pair<size_t, size_t>>& result, const GridPropertiesFigure& vectorLocationFigure);
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-std::wstring Bishop::setIdFigure()
+std::wstring Bishop::setIdFigure() const noexcept
 {
 	return L"Bishop";
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<size_t, size_t>> Bishop::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
+//std::vector<Position::Coordinates> Bishop::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
+//{
+//	std::vector<Position::Coordinates> result;
+//
+//	size_t row = m_vectorLocationFigure.size();
+//	size_t col = m_vectorLocationFigure[0].size(); 
+//
+//	int side = this->getSide();
+//
+//	// по диагонали 
+//	// в правый низ от фигуры
+//	for (size_t yPos = yPositionCurrent + 1, xPos = xPositionCurrent + 1; yPos < row || xPos < col; yPos++, xPos++)
+//	{
+//		if (!checkCell(xPos, yPos, side, result, m_vectorLocationFigure))	{	break;	}
+//	}
+//
+//	// в правый верх от фигуры
+//	for (size_t yPos = yPositionCurrent - 1, xPos = xPositionCurrent + 1; yPos > 0 || xPos < col; yPos--, xPos++)
+//	{
+//		if (!checkCell(xPos, yPos, side, result, m_vectorLocationFigure))	{	break;	}
+//	}
+//
+//	// левый верх от фигуры 
+//	for (size_t yPos = yPositionCurrent - 1, xPos = xPositionCurrent - 1; yPos > 0 || xPos > 0; yPos--, xPos--)
+//	{
+//		if (!checkCell(xPos, yPos, side, result, m_vectorLocationFigure))	{	break;	}
+//	}
+//
+//	// левый низ от фигуры
+//	for (size_t yPos = yPositionCurrent + 1, xPos = xPositionCurrent - 1; yPos < row || xPos > 0; yPos++, xPos--)
+//	{
+//		if (!checkCell(xPos, yPos, side, result, m_vectorLocationFigure))	{	break;	}
+//	}
+//	return result;
+//}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::vector<std::pair<inRowInt, inColInt>> Bishop::setAllMinimumMove() const
 {
-	std::vector<std::pair<size_t, size_t>> result;
-
-	size_t row = vectorLocationFigure.size();
-	size_t col = vectorLocationFigure[0].size(); 
-
-	int side = this->getSide();
-
-	///
-	/// по диагонали 
-	///
-	
-	///
-	/// в правый низ от фигуры
-	/// 
-	for (size_t yPos = yPositionCurrent + 1, xPos = xPositionCurrent + 1; yPos < row || xPos < col; yPos++, xPos++)
-	{
-		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
-	}
-
-	///
-	/// в правый верх от фигуры
-	/// 
-	for (size_t yPos = yPositionCurrent - 1, xPos = xPositionCurrent + 1; yPos > 0 || xPos < col; yPos--, xPos++)
-	{
-		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
-	}
-
-	///
-	/// левый верх от фигуры 
-	/// 
-	for (size_t yPos = yPositionCurrent - 1, xPos = xPositionCurrent - 1; yPos > 0 || xPos > 0; yPos--, xPos--)
-	{
-		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
-	}
-
-	///
-	/// левый низ от фигуры
-	/// 
-	for (size_t yPos = yPositionCurrent + 1, xPos = xPositionCurrent - 1; yPos < row || xPos > 0; yPos++, xPos--)
-	{
-		if (!checkCell(xPos, yPos, side, result, vectorLocationFigure))	{	break;	}
-	}
-	return result;
+	return { {-1, -1}, {-1, 1}, {1, 1}, {1, -1}, };
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-static bool checkCell(size_t xPos, size_t yPos, int side, std::vector<std::pair<size_t, size_t>>& result, const GridPropertiesFigure& vectorLocationFigure)
-{
-	///
-	/// продолжаем пока не встретим свою или чужую фигуру
-	/// 
-	if (vectorLocationFigure[yPos][xPos].side == 0)
-	{
-		result.emplace_back(xPos, yPos);
-		return true;
-	}
-
-	///
-	/// если встретим фигуру противника добавляем возможность взятия и выходим
-	/// 
-	else if (vectorLocationFigure[yPos][xPos].side != side && vectorLocationFigure[yPos][xPos].side > 0)
-	{
-		result.emplace_back(xPos, yPos);
-		return false;
-	}
-
-	///
-	/// иначе предполагаем что встретили фигуру своей стороны и так же выходим
-	/// 
-	else
-	{
-		return false;
-	}
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-bool Bishop::checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure)
-{
-	std::vector<std::pair<size_t, size_t>> vMove = getMoveForFigure(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
-
-	for (const auto& move : vMove)
-	{
-		if (move.first == xPositionMove && move.second == yPositionMove)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool Bishop::getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
+bool Bishop::getPossibilityPromotion([[maybe_unused]] const Position::Coordinates& positionCurrent, [[maybe_unused]] const Grid<PropertiesFigure>& locationFigure) const 
 {
 	return false;
 }

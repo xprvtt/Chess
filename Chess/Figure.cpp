@@ -1,109 +1,152 @@
 ﻿#include "Figure.h"
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-///////////////////////////////////////////////////////////////
-// 
-// PropertiesFigure.side должен имееть структуру => 	  
-// -1 == границы															  
-// 0 == пустая клетка 														  
-// 1+ == сторона игрока										  
-// 
-///////////////////////////////////////////////////////////////
-
-Figure::Figure(int side, bool invulnerable, bool important, std::vector<PropertiesFigure> vectorPromoution) :
-	side(side),
-	invulnerable(invulnerable),
-	important(important),
-	vectorPromoution(vectorPromoution)
+Figure::Figure(int side, bool invulnerable, bool important, std::vector<PropertiesFigure> vectorPromoution) :	m_side(side),	m_invulnerable(invulnerable),	m_important(important),	m_allPromoution(vectorPromoution)
 {
-	vectorPromoution.empty() ? promoution = false : promoution = true;
+	vectorPromoution.empty() ? m_promoution = false : m_promoution = true;
+	m_idFigure = setIdFigure();
+	m_allMinimumMove = setAllMinimumMove();	
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Figure::Figure(const Figure& othreFigure) : m_side(othreFigure.m_side),	m_idFigure(othreFigure.m_idFigure),	m_invulnerable(othreFigure.m_invulnerable),	m_important(othreFigure.m_important),	m_allPromoution(othreFigure.m_allPromoution),	m_promoution(othreFigure.m_promoution) {}
 
-Figure::Figure(const Figure& othreFigure) :
-	side(othreFigure.side),
-	idFigure(othreFigure.idFigure),
-	invulnerable(othreFigure.invulnerable),
-	important(othreFigure.important),
-	vectorPromoution(othreFigure.vectorPromoution),
-	promoution(othreFigure.promoution)
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+bool  Figure::checkMoveForFigureOnPosition(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
 {
-
+	return checkMove(positionCurrent, positionMove, m_vectorLocationFigure);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-bool  Figure::checkMoveForFigureOnPosition(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure)
+std::wstring Figure::getIdFigure() noexcept
 {
-	return checkMove(xPositionCurrent, yPositionCurrent, xPositionMove, yPositionMove, vectorLocationFigure);
+	return m_idFigure;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::wstring Figure::getIdFigure()
+bool Figure::isInvulnerable() const noexcept
 {
-	if (idFigure.empty())
-	{
-		idFigure = setIdFigure();
-	}
-	return idFigure;
+	return m_invulnerable;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-bool Figure::getInvulnerable() const noexcept
+bool Figure::isImportant() const noexcept
 {
-	return invulnerable;
+	return m_important;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool Figure::getImportant() const noexcept
+bool Figure::isPromoution() const noexcept
 {
-	return important;
+	return m_promoution;
 }
 
-
-bool Figure::getPromoution() const noexcept
-{
-	return promoution;
-}
-
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 int Figure::getSide() const noexcept
 {
-	return side;
+	return m_side;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 std::vector<PropertiesFigure> Figure::getVectorPromoution() const
 {
-	return vectorPromoution;
+	return m_allPromoution;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-bool Figure::getPromoutionFigure(int side, std::wstring idFigure, bool invulnerable, bool important, bool promoution) const
+bool Figure::getPromoutionFigure(const PropertiesFigure& propertiesOther) const
 {
-	for (int it = 0; it < vectorPromoution.size(); it++)
+	for (const auto& properties : m_allPromoution)
 	{
-		///
-		/// если находим такую фигуру, в которую можем превратиться
-		/// 
-		if (   vectorPromoution[it].side         == side
-			&& vectorPromoution[it].idFigure     == idFigure
-			&& vectorPromoution[it].invulnerable == invulnerable
-			&& vectorPromoution[it].important    == important
-			&& vectorPromoution[it].promoution   == promoution
-			)
-		{
+		// если находим такую фигуру, в которую можем превратиться
+		if (properties == propertiesOther)
+		{	
 			return true;
 		}
 	}
 	return false;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/// <summary>
+/// функция проверки позиции, проверяет можно ли идти на позицию, и(или) идти дальше по траектории
+/// </summary>
+/// <param name="position">позиция</param>
+/// <param name="side"></param>
+/// <param name="mediumResult"></param>
+/// <param name="figure"></param>
+/// <returns> можем ли мы продолжать идти дальше?</returns>
+__forceinline static bool checkCell(const Position::Coordinates& position, int side, std::vector<Position::Coordinates>& result, const PropertiesFigure& figure)
+{
+	if (figure.m_side == 0) [[likely]]
+	{
+		result.emplace_back(position);
+		return true;
+	}
+	else if (figure.m_side > 0 && figure.m_side != side) // фигура противника добавляем возможность взятия и выходим
+	{
+		result.emplace_back(position);
+		return false;
+	}
+	// фигура своей стороны или край
+	return false;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::vector<Position::Coordinates> Figure::getMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
+{
+	Position::Coordinates maxMoveCoordinate = { m_vectorLocationFigure.size(), m_vectorLocationFigure.front().size() };
+	Position::Coordinates minMoveCoordinate = { 0, 0 };
+
+	std::vector<Position::Coordinates> result;
+	result.reserve((maxMoveCoordinate.inColum + maxMoveCoordinate.inColum) * 2); // приблизительное колличество возможных ходов на основе ферьзя стоящего в центе доски
+
+	for (const auto& minMove : m_allMinimumMove)
+	{
+		for (auto positionMove = position + minMove; positionMove < maxMoveCoordinate || positionMove > minMoveCoordinate; positionMove + minMove)
+		{
+			checkCell(positionMove, m_side, result, m_vectorLocationFigure[positionMove.inRow][positionMove.inColum]);
+		}
+	}
+	auto customMove = customMoveForFigure(position, m_vectorLocationFigure);
+	result.insert(result.end(), customMove.begin(), customMove.end());
+	return result;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+bool Figure::checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
+{
+	const std::vector<Position::Coordinates> allMove = getMoveForFigure(positionCurrent, m_vectorLocationFigure);
+
+	for (const auto& move : allMove)
+	{
+		if (move == positionMove) { return true; }
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::vector<Position::Coordinates> Figure::customMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& locationFigure) const
+{
+	// Ваша реализация ходов если проверка по минимальному ходу вам не подходит (рассмотрен пример с пешкой m_allMinimumMove) 
+	// position изначальная позиция 
+	// locationFigure полное расположение фигур на доске с их свойствами
+
+	return std::vector<Position::Coordinates>();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
