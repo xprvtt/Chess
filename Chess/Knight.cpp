@@ -10,7 +10,7 @@ std::wstring Knight::setIdFigure() const noexcept
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<inRowInt, inColInt>> Knight::setAllMinimumMove() const
+std::vector<std::pair<int, int>> Knight::setAllMinimumMove() const
 {
 	return { { -2, -1 }, { -2, 1 }, { -1, -2 }, { -1, 2 }, { 1, -2 }, { 1, 2 }, { 2, -1 }, { 2, 1 } };
 }

@@ -17,7 +17,7 @@ bool Queen::getPossibilityPromotion(const Position::Coordinates& positionCurrent
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<inRowInt, inColInt>> Queen::setAllMinimumMove() const
+std::vector<std::pair<int, int>> Queen::setAllMinimumMove() const
 {
 	/* * * * * * * * * * * * *
 	*		|		 |

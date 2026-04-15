@@ -16,7 +16,7 @@ bool Rook::getPossibilityPromotion(const Position::Coordinates& positionCurrent,
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<inRowInt, inColInt>> Rook::setAllMinimumMove() const
+std::vector<std::pair<int, int>> Rook::setAllMinimumMove() const
 {
 	/* * * * * * * * * * * * *
 	*		|		 |

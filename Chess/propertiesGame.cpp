@@ -114,20 +114,20 @@ std::vector<PositionAndPropertiesFigure> propertiesGame::currentVectorLocationFi
             // располагаем пешки
             if (row == 2)
             {
-                currentVectorLocationFigure.emplace_back(coll, row, PropertiesFigure{ L"Pawn", 2, false, false, true }, promoutionForPawnPlayerOne);
+                currentVectorLocationFigure.emplace_back(Position::Coordinates( coll, row ), PropertiesFigure{ L"Pawn", 2, false, false, true }, promoutionForPawnPlayerOne);
             }
             // располагаем пешки
             else if (row == 10 - 3)
             {
-                currentVectorLocationFigure.emplace_back(coll, row, PropertiesFigure{  L"Pawn", 1, false, false, true }, promoutionForPawnPlayerTwo);
+                currentVectorLocationFigure.emplace_back(Position::Coordinates( coll, row), PropertiesFigure{  L"Pawn", 1, false, false, true }, promoutionForPawnPlayerTwo);
             }
             else if (row == 1)
             {
-                currentVectorLocationFigure.emplace_back(coll, row, PropertiesFigure{  name, 2, invulnerable, important, false }, std::vector<PropertiesFigure>{} );
+                currentVectorLocationFigure.emplace_back(Position::Coordinates( coll, row), PropertiesFigure{  name, 2, invulnerable, important, false }, std::vector<PropertiesFigure>{} );
             }
             else if (row == 10 - 2)
             {
-                currentVectorLocationFigure.emplace_back(coll, row, PropertiesFigure{ name, 1, invulnerable, important, false }, std::vector<PropertiesFigure>{} );
+                currentVectorLocationFigure.emplace_back(Position::Coordinates(coll, row), PropertiesFigure{ name, 1, invulnerable, important, false }, std::vector<PropertiesFigure>{} );
             }
 
             // else => none 

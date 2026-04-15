@@ -135,9 +135,9 @@ void GameEngine::performMovePlayer()
 
                 auto tempPositionOld = m_ptrLocation.get()->getPositionSelectFigure();
 
-                m_ptrLocation.get()->setFigure(tempPositionOld, m_ptrLocation.get()->getPropertiesFigure(m_currentPositionInGameField) );
+                m_ptrLocation.get()->setFigure(tempPositionOld, m_ptrLocation.get()->getPropertiesFigure(m_currentPositionInGameField), {});
 
-                m_ptrLocation.get()->setFigure(m_currentPositionInGameField, tempOldPF  );
+                m_ptrLocation.get()->setFigure(m_currentPositionInGameField, tempOldPF, {});
                 m_ptrLocation.get()->unseletcAllFigure();
             }
             else // если передвинули и угроз нет проверяем может ли фигура превратиться в другую

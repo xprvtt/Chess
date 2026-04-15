@@ -19,9 +19,10 @@ namespace Position {
 		/// позиция столбец
 		/// </summary>
 		size_t inColum = 0;
+		
+		Coordinates() = default;
 
 		Coordinates(size_t y, size_t x) : inRow(y), inColum(x) {};
-		Coordinates() : inRow(0), inColum(0) {};
 
 		void moveRight() { inColum++; }
 		void moveLeft() { inColum == 0 ? inColum = 0 : inColum--; }
@@ -70,90 +71,40 @@ namespace Position {
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>offsetLeftBy(unsigned short step = 1) { return { 0, -step }; }
+	inline std::pair<int, int>offsetLeftBy(unsigned short step = 1) { return { 0, -step }; }
 
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>OffsetRightBy(unsigned short  step = 1) { return{ 0, step }; }
+	inline std::pair<int, int>OffsetRightBy(unsigned short  step = 1) { return{ 0, step }; }
 
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>OffsetUpBy(unsigned short  step = 1) { return { -step, 0 }; }
+	inline std::pair<int, int>OffsetUpBy(unsigned short  step = 1) { return { -step, 0 }; }
 
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>OffsetDownBy(unsigned short  step = 1) { return  { step, 0 }; }
+	inline std::pair<int, int>OffsetDownBy(unsigned short  step = 1) { return  { step, 0 }; }
 
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>OffsetDiagUpLeftBy(unsigned short  step = 1) { return { -step, -step }; }
+	inline std::pair<int, int>OffsetDiagUpLeftBy(unsigned short  step = 1) { return { -step, -step }; }
 
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>OffsetDiagUpRightBy(unsigned short  step = 1) { return { -step, step }; }
+	inline std::pair<int, int>OffsetDiagUpRightBy(unsigned short  step = 1) { return { -step, step }; }
 
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>OffsetDiagDownLeftBy(unsigned short  step = 1) { return { step, -step }; }
+	inline std::pair<int, int>OffsetDiagDownLeftBy(unsigned short  step = 1) { return { step, -step }; }
 
 	/// <summary>
 	/// переменная "сдвиг" для Coordinates { inRow, inColum }
 	/// </summary>
-	std::pair<int, int>OffsetDiagDownRightBy(unsigned short  step = 1) { return { step, step }; }
-
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetLeft = { 0, -1 };
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetRight = { 0, 1 };
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetUp = { -1, 0 };
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetDown = { 1, 0 };
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetDiagUpLeft = { -1, -1 };
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetDiagUpRight = { -1, 1 };
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetDiagDownLeft = { 1, -1 };
-
-	/// <summary>
-	/// переменная "сдвиг" для Coordinates { inRow, inColum }
-	/// </summary>
-	[[deprecated]]
-	inline constexpr std::pair<int, int>OffsetDiagDownRight = { 1, 1 };
-
+	inline std::pair<int, int>OffsetDiagDownRightBy(unsigned short  step = 1) { return { step, step }; }
 }

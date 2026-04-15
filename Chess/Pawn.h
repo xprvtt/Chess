@@ -16,15 +16,6 @@ class Pawn : public Figure
 	bool getPossibilityPromotion(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure) const override;
 
 	/// <summary>
-	/// Проверка -> доступен ли ход на указанные координаты, определяется для каждой фигуры
-	/// </summary>
-	/// <param name="positionCurrent">текущие координаты фигуры</param>
-	/// <param name="positionMove">координаты, на которые планируется переметить фигуру</param>
-	/// <param name="locationFigure">вектор с расположением фигур</param>
-	/// <returns></returns>
-	bool checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& locationFigure) const override;
-
-	/// <summary>
 	/// устанавливаем id для фигуры должна быть по названию класса для удобства
 	/// </summary>
 	std::wstring setIdFigure() const noexcept override;
@@ -41,5 +32,5 @@ class Pawn : public Figure
 	/// <summary>
 	/// установить все возможные минимальные ходы в любую сторону
 	/// </summary>
-	std::vector<std::pair<inRowInt, inColInt>> setAllMinimumMove() const override;
+	std::vector<std::pair<int, int>> setAllMinimumMove() const override;
 };

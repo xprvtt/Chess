@@ -127,6 +127,13 @@ std::vector<Position::Coordinates> Figure::getMoveForFigure(const Position::Coor
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
+std::wstring Figure::setIdFigure() const noexcept
+{
+	return std::wstring();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 bool Figure::checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
 {
 	const std::vector<Position::Coordinates> allMove = getMoveForFigure(positionCurrent, m_vectorLocationFigure);
@@ -147,6 +154,13 @@ std::vector<Position::Coordinates> Figure::customMoveForFigure(const Position::C
 	// locationFigure полное расположение фигур на доске с их свойствами
 
 	return std::vector<Position::Coordinates>();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::vector<std::pair<int, int>> Figure::setAllMinimumMove() const
+{
+	return std::vector<std::pair<int, int>>();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------

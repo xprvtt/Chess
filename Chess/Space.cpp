@@ -17,16 +17,9 @@ bool Space::getPossibilityPromotion([[maybe_unused]]  const Position::Coordinate
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool Space::checkMove([[maybe_unused]] const Position::Coordinates& positionCurrent, [[maybe_unused]] const Position::Coordinates& positionMove, [[maybe_unused]] const Grid<PropertiesFigure>& locationFigure) const
+std::vector<std::pair<int, int>> Space::setAllMinimumMove() const
 {
-	return false;
-}
-
-//------------------------------------------------------------------------------------------------------------------------------------------------------
-
-std::vector<std::pair<inRowInt, inColInt>> Space::setAllMinimumMove() const
-{
-	return std::vector<std::pair<inRowInt, inColInt>>();
+	return std::vector<std::pair<int, int>>();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------

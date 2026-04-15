@@ -23,6 +23,5 @@ class Bishop : public Figure
 	/// <summary>
 	/// установить все возможные минимальные ходы в любую сторону
 	/// </summary>
-	std::vector<std::pair<inRowInt, inColInt>> setAllMinimumMove() const override;
-
+	std::vector<std::pair<int, int>> setAllMinimumMove() const override;
 };

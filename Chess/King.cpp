@@ -86,7 +86,7 @@ std::wstring King::setIdFigure() const noexcept
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<inRowInt, inColInt>> King::setAllMinimumMove() const
+std::vector<std::pair<int, int>> King::setAllMinimumMove() const
 {
 	/* * * * * * * * * * * * *
 	*		|		 |
@@ -102,7 +102,7 @@ std::vector<std::pair<inRowInt, inColInt>> King::setAllMinimumMove() const
 	*		|		 |
 	*/
 
-	return { {-1,0}, {0,1}, {0,-1}, {1,0}, {-1,-1},{-1,1},{1,-1},{1,1} };
+	return { std::pair{-1,0}, std::pair{0,1}, std::pair{0,-1}, std::pair{1,0}, std::pair{-1,-1}, std::pair{-1,1},std::pair{1,-1},std::pair{1,1} };
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------

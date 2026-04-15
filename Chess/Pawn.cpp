@@ -12,20 +12,20 @@ static bool possibilityPromotionSideDown(const Position::Coordinates& positionCu
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool Pawn::checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& locationFigure) const
-{
-	switch (m_side)
-	{
-	case 1:
-		return customCheckMoveSideTop(positionCurrent, positionMove, locationFigure);
-	case 2:
-		return customCheckMoveSideDown(positionCurrent, positionMove, locationFigure);
-
-	default:
-		OUTPUT_LOG_ERROR("Не определенный Игрок проверьте линию -> Figure -> Pawn -> CheckMove -> case");
-		return false;
-	}
-}
+//bool Pawn::customMoveForFigure(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& locationFigure) const
+//{
+//	switch (m_side)
+//	{
+//	case 1:
+//		return customCheckMoveSideTop(positionCurrent, positionMove, locationFigure);
+//	case 2:
+//		return customCheckMoveSideDown(positionCurrent, positionMove, locationFigure);
+//
+//	default:
+//		OUTPUT_LOG_ERROR("Не определенный Игрок проверьте линию -> Figure -> Pawn -> CheckMove -> case");
+//		return false;
+//	}
+//}
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -71,9 +71,9 @@ std::wstring Pawn::setIdFigure() const noexcept
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<inRowInt, inColInt>> Pawn::setAllMinimumMove() const
+std::vector<std::pair<int, int>> Pawn::setAllMinimumMove() const
 {
-	return std::vector<std::pair<inRowInt, inColInt>>();
+	return std::vector<std::pair<int, int>>();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------

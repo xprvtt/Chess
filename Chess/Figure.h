@@ -3,8 +3,6 @@
 #include "Core.h"
 #include "PropertiesFigure.h"
 
-using inRowInt = int;
-using inColInt = int;
 
 class Figure
 {
@@ -116,7 +114,7 @@ protected:
 	/// метод getMoveForFigure() проходится с каждым минимальным передвижением m_allMinimumMove до конца доски
 	/// после этого он добавляет результат из customMoveForFigure()
 	/// </summary>
-	std::vector<std::pair<inRowInt, inColInt>> m_allMinimumMove = {};
+	std::vector<std::pair<int, int>> m_allMinimumMove = {};
 
 	/// <summary>
 	/// вектор свойств фигур в которые может превратиться фигура
@@ -168,7 +166,7 @@ protected:
 	/// <summary>
 	/// установить все возможные минимальные ходы в любую сторону
 	/// </summary>
-	virtual std::vector<std::pair<inRowInt, inColInt>> setAllMinimumMove() const = 0;
+	virtual std::vector<std::pair<int, int>> setAllMinimumMove() const = 0;
 };
 
 
