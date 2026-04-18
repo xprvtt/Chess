@@ -108,7 +108,7 @@ public:
 	void setText1(std::wstring message);
 	void setText2(std::wstring message);
 	void setText3(std::wstring message);
-	void setText4(std::wstring message);
+	void setTextDebug(std::wstring message);
 
 	/// <summary>
 	/// Очистить окно 
@@ -141,7 +141,7 @@ private:
 	/// <summary>
 	/// позиции важных фигур текущего игрока (currentPlayer)
 	/// </summary>
-	std::vector<Position::Coordinates> m_positionImportantFigure = {};
+	std::vector<Position::Coordinates> m_allPositionImportantFigures = {};
 
 	std::shared_ptr<sf::Text> m_ptrTextInGameRow1;
 	std::shared_ptr<sf::Text> m_ptrTextInGameRow2;
@@ -201,6 +201,7 @@ private:
 	/// <summary>
 	/// проверка угроз важным фигурам
 	/// </summary>
+	/// <returns>true - угрозы есть </returns>
 	bool checkThreat();
 
 	/// <summary>

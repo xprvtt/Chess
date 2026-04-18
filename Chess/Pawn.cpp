@@ -71,9 +71,9 @@ std::wstring Pawn::setIdFigure() const noexcept
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<int, int>> Pawn::setAllMinimumMove() const
+std::vector<std::pair<MinimumMoveRowColInt, HowMany>> Pawn::setAllMinimumMove() const
 {
-	return std::vector<std::pair<int, int>>();
+	return std::vector<std::pair<MinimumMoveRowColInt, HowMany>>();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -129,15 +129,20 @@ static std::vector<Position::Coordinates> availableMoveForFigureSideDown(const P
 	std::vector<Position::Coordinates> result;
 
 	// если впереди пешки ничего нет
-	if (locationFigure[(positionCurrent + Position::OffsetDownBy()).inRow][positionCurrent.inColum].m_side == 0)
+	auto pos1 = positionCurrent + Position::OffsetDownBy(1);
+	if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
 	{
-		result.emplace_back(positionCurrent + Position::OffsetDownBy());
+		result.emplace_back(pos1);
 
 		// высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед если она не занята
-		if (positionCurrent.inRow == 2 ) // на начальной позиции Side Down 
+		if (positionCurrent.inRow == 2) // на начальной позиции Side Down 
 		{
-			// добавляем возможный ход на 2 клетки вперед
-			result.emplace_back(positionCurrent + Position::OffsetDownBy(2));
+			pos1.moveDown();
+			if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
+			{
+				// добавляем возможный ход на 2 клетки вперед
+				result.emplace_back(pos1);	
+			}
 		}
 	}
 
@@ -170,15 +175,21 @@ static std::vector<Position::Coordinates> availableMoveForFigureSideTop(const Po
 	// просчитываем ход на пустую клетку
 	// если впереди пешки ничего нет то ход доступен
 
-	if (locationFigure[(positionCurrent + Position::OffsetDownBy()).inRow][positionCurrent.inColum].m_side == 0)
+	// если впереди пешки ничего нет
+	auto pos1 = positionCurrent + Position::OffsetUpBy(1);
+	if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
 	{
-		result.emplace_back(positionCurrent + Position::OffsetDownBy());
+		result.emplace_back(pos1);
 
 		// высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед если она не занята
 		if (positionCurrent.inRow == row - 3) // на начальной позиции Side Down 
 		{
-			// добавляем возможный ход на 2 клетки вперед
-			result.emplace_back(positionCurrent + Position::OffsetUpBy(2));
+			pos1.moveUp();
+			if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
+			{
+				// добавляем возможный ход на 2 клетки вперед
+				result.emplace_back(pos1);
+			}
 		}
 	}
 
@@ -197,3 +208,5 @@ static std::vector<Position::Coordinates> availableMoveForFigureSideTop(const Po
 	}
 	return result;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------

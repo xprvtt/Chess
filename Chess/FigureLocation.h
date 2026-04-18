@@ -183,7 +183,7 @@ public:
 	/// Есть ли хоть одна выделеная фигура?
 	/// </summary>
 	/// <returns>true - если фигура выделена</returns>
-	bool figuresSelectedOrNot() const noexcept;
+	bool hasSelectedFigure() const noexcept;
 
 	/// <summary>
 	/// получаем вектор доступных ходов для выделенной фигуры
@@ -284,12 +284,19 @@ public:
 	///--///--///--///--///--///--///--///--///--///--///--///     ДЛЯ УНИКАЛЬНЫХ ФИГУР   ///--///--///--///--///--///--///--///--///--///--///--///
 
 	/// <summary>
+	/// PropertiesFigure уникальной фигуры с поля уникальных фигур
+	/// </summary>
+	/// <param name="position">position</param>
+	/// <returns>PropertiesFigure</returns>
+	PropertiesFigure getPropertiesUniqueFigure(const Position::Coordinates& position);
+
+	/// <summary>
 	/// Получить ID уникальной фигуры с поля уникальных фигур
 	/// </summary>
 	/// <param name="xPosition"></param>
 	/// <param name="yPosition"></param>
 	/// <returns></returns>
-	std::wstring geIdUniqueFigure(const Position::Coordinates& position);
+	std::wstring getIdUniqueFigure(const Position::Coordinates& position);
 
 	/// <summary>
 	/// Получить Сторону у уникальной фигуры
@@ -388,6 +395,8 @@ private:
 	/// </summary>
 	Grid<DataFigure> m_dataLocalFigure = {} ;
 
+	Grid<PropertiesFigure> m_vectorLocationFigure;
+
 	/// <summary>
 	/// информация о уникальных фигурах
 	/// </summary>
@@ -402,8 +411,6 @@ private:
 	//std::vector<std::vector<std::pair<size_t, sf::rectangleshape>>>  m_uniquefigurelocationrectangleshape;
 
 	Grid<std::pair<size_t, sf::RectangleShape>>  m_uniqueFigureLocationRectangleShape;
-
-	Grid<PropertiesFigure> m_vectorLocationFigure;
 
 	/// <summary>
 	/// координаты выделенной фигуры

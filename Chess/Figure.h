@@ -3,6 +3,9 @@
 #include "Core.h"
 #include "PropertiesFigure.h"
 
+using HowMany = uint8_t;
+
+using MinimumMoveRowColInt = std::pair<int, int>;
 
 class Figure
 {
@@ -32,7 +35,7 @@ public:
 	/// <param name="yPositionMove"></param>
 	/// <param name="locationFigure"></param>
 	/// <returns></returns>
-	bool  checkMoveForFigureOnPosition(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const;
+	bool  checkMoveForFigureOnPosition(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure);
 
 	/// <summary>
 	/// Получить имя фигуры
@@ -87,7 +90,7 @@ public:
 	/// <param name="yPositionCurrent"> текущая позиция фигуры У</param>
 	/// <param name="locationFigure">вектор с расположением фигур</param>
 	/// <returns></returns>
-	std::vector<Position::Coordinates> getMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure) const;
+	std::vector<Position::Coordinates> getMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure);
 
 	/// <summary>
 	/// проверка -> возможно ли превращение фигуры на указанной позиции, с учетом расположения фигур на доске с их свойствами?
@@ -101,9 +104,9 @@ public:
 protected:
 
 	/// <summary>
-	/// единый id для фигур этого типа должен быть по названию класса для удобства например для class Figure -> ID_FIGURE = "Figure"
+	/// единый id для фигур этого типа должен быть по названию класса для удобства например для class Figure -> m_idFigure = "Figure"
 	/// </summary>
-	std::wstring m_idFigure = L"";
+	std::wstring m_idFigure;
 
 	/// <summary>
 	/// минимально возможный ход, для каждого направления с координаты
@@ -113,18 +116,20 @@ protected:
 	/// минимальные ходы не ограничиваются 1, 4 или 8 разными движениями, 
 	/// метод getMoveForFigure() проходится с каждым минимальным передвижением m_allMinimumMove до конца доски
 	/// после этого он добавляет результат из customMoveForFigure()
+	/// второй параметр uint8_t - это количество клеток, на которое можно сходить в указанном направлении, если 0 то без ограничений
 	/// </summary>
-	std::vector<std::pair<int, int>> m_allMinimumMove = {};
+	std::vector<std::pair<MinimumMoveRowColInt, HowMany>> m_allMinimumMove;
+
 
 	/// <summary>
 	/// вектор свойств фигур в которые может превратиться фигура
 	/// </summary>
-	std::vector<PropertiesFigure> m_allPromoution = {};
+	std::vector<PropertiesFigure> m_allPromoution;
 
 	/// <summary>
 	/// сторона игрока 1 - белый \ 2 - черный, возможны и другие игроки
 	/// </summary>
-	int m_side = -2;
+	int m_side = INT_MIN;
 
 	/// <summary>
 	/// фигуру можно убить? 
@@ -153,7 +158,7 @@ protected:
 	/// <param name="positionMove">координаты, на которые планируем переметиться</param>
 	/// <param name="m_vectorLocationFigure"></param>
 	/// <returns></returns>
-	virtual bool checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const;
+	virtual bool checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure);
 
 	/// <summary>
 	/// кастомная реализация возможных движений с указанной позиции
@@ -166,7 +171,7 @@ protected:
 	/// <summary>
 	/// установить все возможные минимальные ходы в любую сторону
 	/// </summary>
-	virtual std::vector<std::pair<int, int>> setAllMinimumMove() const = 0;
+	virtual std::vector<std::pair<MinimumMoveRowColInt, HowMany>> setAllMinimumMove() const = 0;
 };
 
 

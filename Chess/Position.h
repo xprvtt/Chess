@@ -38,14 +38,6 @@ namespace Position {
 		{
 			return inRow == other.inRow && inColum == other.inColum;
 		}
-		bool operator<(const Coordinates& other) const
-		{
-			return inRow < other.inRow || inColum < other.inColum;
-		}
-		bool operator>(const Coordinates& other) const
-		{
-			return inRow > other.inRow || inColum > other.inColum;
-		}
 		Coordinates operator+(const Coordinates& other) const
 		{
 			return 	{ inRow + other.inRow, inColum + other.inColum };
@@ -54,6 +46,7 @@ namespace Position {
 		{
 			int y = static_cast<int>(inRow) + offset.first;
 			int x = static_cast<int>(inColum) + offset.second;
+
 			if (y < 0) { y = 0; }
 			if (x < 0) { x = 0; }
 			return { static_cast<size_t>(y), static_cast<size_t>(x) };

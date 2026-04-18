@@ -17,9 +17,9 @@ bool Space::getPossibilityPromotion([[maybe_unused]]  const Position::Coordinate
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<int, int>> Space::setAllMinimumMove() const
+std::vector<std::pair<MinimumMoveRowColInt, HowMany>> Space::setAllMinimumMove() const
 {
-	return std::vector<std::pair<int, int>>();
+	return std::vector<std::pair<MinimumMoveRowColInt, HowMany>>();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------

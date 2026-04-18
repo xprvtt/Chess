@@ -5,8 +5,6 @@
 Figure::Figure(int side, bool invulnerable, bool important, std::vector<PropertiesFigure> vectorPromoution) :	m_side(side),	m_invulnerable(invulnerable),	m_important(important),	m_allPromoution(vectorPromoution)
 {
 	vectorPromoution.empty() ? m_promoution = false : m_promoution = true;
-	m_idFigure = setIdFigure();
-	m_allMinimumMove = setAllMinimumMove();	
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -15,7 +13,7 @@ Figure::Figure(const Figure& othreFigure) : m_side(othreFigure.m_side),	m_idFigu
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool  Figure::checkMoveForFigureOnPosition(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
+bool  Figure::checkMoveForFigureOnPosition(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure)
 {
 	return checkMove(positionCurrent, positionMove, m_vectorLocationFigure);
 }
@@ -24,6 +22,10 @@ bool  Figure::checkMoveForFigureOnPosition(const Position::Coordinates& position
 
 std::wstring Figure::getIdFigure() noexcept
 {
+	if(m_idFigure.empty())
+	{
+		m_idFigure = setIdFigure();
+	}
 	return m_idFigure;
 }
 
@@ -66,61 +68,83 @@ std::vector<PropertiesFigure> Figure::getVectorPromoution() const
 
 bool Figure::getPromoutionFigure(const PropertiesFigure& propertiesOther) const
 {
+	if (m_allPromoution.empty())
+	{
+		OUTPUT_LOG_ERROR("Class -> Figure -> getPromoutionFigure() -> невозможно превратиться в эту фигуру: причина m_allPromoution пустой");
+		return false;
+	}
 	for (const auto& properties : m_allPromoution)
 	{
 		// если находим такую фигуру, в которую можем превратиться
 		if (properties == propertiesOther)
-		{	
+		{
 			return true;
 		}
 	}
+	OUTPUT_LOG_ERROR("Class -> Figure -> getPromoutionFigure() -> невозможно превратиться в эту фигуру: причина отсутствует подходящие properties в m_allPromoution");
+
+	DEBUG_CODE(
+		OUTPUT_LOG_ERROR("Свойства фигур для превращения: ");
+		int i = 0;
+		for (const auto& property : m_allPromoution)
+		{
+			OUTPUT_LOG_ERROR("Свойство #" + std::to_string(i++));
+			OUTPUT_LOG_ERROR("m_idFigure " + std::filesystem::path(property.m_idFigure).string());
+			OUTPUT_LOG_ERROR("m_side " + std::to_string(property.m_side));
+			OUTPUT_LOG_ERROR("m_invulnerable " + std::to_string(property.m_invulnerable));
+			OUTPUT_LOG_ERROR("m_important " + std::to_string(property.m_important));
+			OUTPUT_LOG_ERROR("m_promoution " + std::to_string(property.m_promoution));
+		 }
+	);
 	return false;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-/// <summary>
-/// функция проверки позиции, проверяет можно ли идти на позицию, и(или) идти дальше по траектории
-/// </summary>
-/// <param name="position">позиция</param>
-/// <param name="side"></param>
-/// <param name="mediumResult"></param>
-/// <param name="figure"></param>
-/// <returns> можем ли мы продолжать идти дальше?</returns>
-__forceinline static bool checkCell(const Position::Coordinates& position, int side, std::vector<Position::Coordinates>& result, const PropertiesFigure& figure)
+std::vector<Position::Coordinates> Figure::getMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& vectorLocationFigure) 
 {
-	if (figure.m_side == 0) [[likely]]
-	{
-		result.emplace_back(position);
-		return true;
-	}
-	else if (figure.m_side > 0 && figure.m_side != side) // фигура противника добавляем возможность взятия и выходим
-	{
-		result.emplace_back(position);
-		return false;
-	}
-	// фигура своей стороны или край
-	return false;
-}
+	const Position::Coordinates max = { vectorLocationFigure.size(), vectorLocationFigure.front().size() };
+	const Position::Coordinates min = { 0, 0 };
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------
-
-std::vector<Position::Coordinates> Figure::getMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
-{
-	Position::Coordinates maxMoveCoordinate = { m_vectorLocationFigure.size(), m_vectorLocationFigure.front().size() };
-	Position::Coordinates minMoveCoordinate = { 0, 0 };
+	const auto currentSideFigure = vectorLocationFigure[position.inRow][position.inColum].m_side;
 
 	std::vector<Position::Coordinates> result;
-	result.reserve((maxMoveCoordinate.inColum + maxMoveCoordinate.inColum) * 2); // приблизительное колличество возможных ходов на основе ферьзя стоящего в центе доски
+	result.reserve((max.inColum * 4)); // приблизительное колличество возможных ходов на основе ферьзя стоящего в центе доски
 
-	for (const auto& minMove : m_allMinimumMove)
+	if (m_allMinimumMove.empty())
 	{
-		for (auto positionMove = position + minMove; positionMove < maxMoveCoordinate || positionMove > minMoveCoordinate; positionMove + minMove)
+		m_allMinimumMove = setAllMinimumMove();
+	}
+	for (const auto& [minMove, howMany] : m_allMinimumMove)
+	{
+		auto positionMove = position + minMove;
+
+		HowMany currentNumMove = 0;
+		HowMany maxCount = !howMany ? std::numeric_limits<HowMany>::max() : howMany;
+
+		while ((currentNumMove < maxCount) && /* не выход за границы доски */
+			   (positionMove.inRow < max.inRow && positionMove.inColum < max.inColum) && (positionMove.inRow > min.inRow && positionMove.inColum > min.inColum))			   
 		{
-			checkCell(positionMove, m_side, result, m_vectorLocationFigure[positionMove.inRow][positionMove.inColum]);
+			auto sideFigureOnCell = vectorLocationFigure[positionMove.inRow][positionMove.inColum].m_side;
+
+			if (sideFigureOnCell == 0)
+			{
+				result.push_back(positionMove);
+			}
+			else if (sideFigureOnCell > 0 && sideFigureOnCell != currentSideFigure) // фигура противника добавляем возможность взятия и выходим
+			{
+				result.push_back(positionMove);
+				break;
+			}
+			else // фигура своей стороны или край
+			{
+				break;
+			}
+			positionMove = positionMove + minMove;
+			currentNumMove++;
 		}
 	}
-	auto customMove = customMoveForFigure(position, m_vectorLocationFigure);
+	auto customMove = customMoveForFigure(position, vectorLocationFigure);
 	result.insert(result.end(), customMove.begin(), customMove.end());
 	return result;
 }
@@ -129,14 +153,14 @@ std::vector<Position::Coordinates> Figure::getMoveForFigure(const Position::Coor
 
 std::wstring Figure::setIdFigure() const noexcept
 {
-	return std::wstring();
+	return L"Figure";
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool Figure::checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& m_vectorLocationFigure) const
+bool Figure::checkMove(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& vectorLocationFigure)
 {
-	const std::vector<Position::Coordinates> allMove = getMoveForFigure(positionCurrent, m_vectorLocationFigure);
+	const auto allMove = getMoveForFigure(positionCurrent, vectorLocationFigure);
 
 	for (const auto& move : allMove)
 	{
@@ -158,9 +182,9 @@ std::vector<Position::Coordinates> Figure::customMoveForFigure(const Position::C
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<std::pair<int, int>> Figure::setAllMinimumMove() const
+std::vector<std::pair<MinimumMoveRowColInt, HowMany>> Figure::setAllMinimumMove() const
 {
-	return std::vector<std::pair<int, int>>();
+	return std::vector<std::pair<MinimumMoveRowColInt, HowMany>>();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------

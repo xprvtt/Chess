@@ -36,47 +36,52 @@ GameEngine::GameEngine(std::unique_ptr<sf::RenderWindow> rW, std::unique_ptr < F
 
 bool GameEngine::performBacklightThreat()
 {
+    const auto locationData = m_ptrLocation.get();
+
     // получаем расположение важных ФИГУР текущего игрока ( "король" - могут быть и другие) 
-    m_positionImportantFigure = m_ptrLocation.get()->getPositionsFigure(m_currentPlayer, true, 'M');
+    m_allPositionImportantFigures = locationData->getPositionsFigure(m_currentPlayer, true, 'M');
 
     // получаем копию расположения фигур 
-    auto locationFigureInGame = m_ptrLocation.get()->getLocationFigure();
+    auto locationFigureInGame = locationData->getLocationFigure();
 
     // стандартно существует единственый экземпляр ВАЖНЫХ ФИГУРЫ - король, на каждой стороне, но может быть и несколько -> проводим цикл
     // так же королей может не быть и в цикл не входим т.к. вектор будет пустой
-    if (!m_positionImportantFigure.empty())
+    if (!m_allPositionImportantFigures.empty())
     {
+		auto gameFieldData = m_ptrGameField.get();
 
-        for (const auto& currentPosition : m_positionImportantFigure)
+        std::wstring figure;
+        for (const auto& currentPosition : m_allPositionImportantFigures)
         {
             // => далее необходимо получить позиции фигур противников, которые могут угрожать королю, и выделяем их клетки в GameField
             // можно сделать аналогичные проверки для любых фигур
             
-            // получаем позиции фигур противников, которые "угрожают" текущей важной фигуре взятием
-            m_positionEnemyFigureThatThreaten = m_ptrLocation.get()->checkThreatForFigure(currentPosition, locationFigureInGame);
 
-            for (const auto& cPosition : m_positionEnemyFigureThatThreaten)
+            // получаем позиции фигур противников, которые "угрожают" текущей важной фигуре взятием
+            m_positionEnemyFigureThatThreaten = locationData->checkThreatForFigure(currentPosition, locationFigureInGame);
+            for (const auto& enemyPosition : m_positionEnemyFigureThatThreaten)
             {
                 // выделяем клетки на которых стоят эти фигуры
-                m_ptrGameField.get()->selectCell(cPosition, sf::Color::Red);
-                m_ptrGameField.get()->selectCell(currentPosition, sf::Color::Red);
-                setText3(L"поставлен шах");
+                gameFieldData->selectCell(enemyPosition, sf::Color::Red);
+                gameFieldData->selectCell(currentPosition, sf::Color::Red);
+				const auto& propertiesFigure = locationData->getPropertiesFigure(enemyPosition);
+				figure += propertiesFigure.m_idFigure + L"(" + std::to_wstring(currentPosition.inRow) + L"," + std::to_wstring(currentPosition.inColum) + L")";
             }
 
             // получаем позиции фигур которые могут защитить указанную
-            auto positionFrendlyFigure = m_ptrLocation.get()->getPositionFigureCanProtectedIndicatedFigure(currentPosition, locationFigureInGame);
+            auto positionFrendlyFigure = locationData->getPositionFigureCanProtectedIndicatedFigure(currentPosition, locationFigureInGame);
 
             for (const auto& currentPos : positionFrendlyFigure)
-            {
-                // выделяем их
-                m_ptrGameField.get()->selectCell(currentPos, sf::Color::Green);
+            {               
+                gameFieldData->selectCell(currentPos, sf::Color::Green); // выделяем их
             }
 
-            if (positionFrendlyFigure.size() == 1 && positionFrendlyFigure[0] == Position::Coordinates(0,0))
+            if (positionFrendlyFigure.size() == 1 && positionFrendlyFigure.back() == Position::Coordinates(0, 0) /* позиция означает что нет доступных ходов*/)
             {
-                setText4(L"поставлен мат игроку: " + std::to_wstring(m_currentPlayer));
+                setTextDebug(L"поставлен мат игроку: " + std::to_wstring(m_currentPlayer));
             }
         }
+        if (!figure.empty()) { setText3(L"поставлен шах фигурам: " + figure); }
     }
 
     return true;;
@@ -88,73 +93,74 @@ void GameEngine::performMovePlayer()
 {
     m_currentPositionInGameField = getFigureOnPositionMouse();
 
-    
-    // выводим информацию о фигуре ---- ВРЕМЕННОЕ
-    m_ptrTextInGameRow1.get()->setString(
-        m_ptrLocation.get()->getIdFigure(m_currentPositionInGameField) + L"\t"
-        + L"X:" + std::to_wstring(m_currentPositionInGameField.inRow) 
-        + L" \\ Y:" + std::to_wstring(m_currentPositionInGameField.inColum)
-        + L"\tSIDE: " + std::to_wstring(m_ptrLocation.get()->getSideFigure(m_currentPositionInGameField))
-        + L"\nInvulnerable:\t" + std::to_wstring(m_ptrLocation.get()->getInvulnerableFigure(m_currentPositionInGameField))
-        + L"\nImportant:\t\t" + std::to_wstring(m_ptrLocation.get()->getImportantFigure(m_currentPositionInGameField))
-    );
+    auto locationData = m_ptrLocation.get();
+    auto gameFieldData = m_ptrGameField.get();
 
-    // сторона у выбранной фигуры
-    int side = m_ptrLocation.get()->getSideFigure(m_currentPositionInGameField);
+    DEBUG_CODE(
+        // выводим информацию о фигуре на клетке ВРЕМЕННОЕ
+        m_ptrTextInGameRow1.get()->setString(
+            locationData->getIdFigure(m_currentPositionInGameField) + L"\t"
+            + L"X:" + std::to_wstring(m_currentPositionInGameField.inRow) 
+            + L" \\ Y:" + std::to_wstring(m_currentPositionInGameField.inColum)
+            + L"\tSIDE: " + std::to_wstring(locationData->getSideFigure(m_currentPositionInGameField))
+            + L"\nInvulnerable:\t" + std::to_wstring(locationData->getInvulnerableFigure(m_currentPositionInGameField))
+            + L"\nImportant:\t\t" + std::to_wstring(locationData->getImportantFigure(m_currentPositionInGameField))
+        );
+    )
+
 
     // выделяем ее или снимаем выделение, если выделено то ожидается передвижение фигуры
     // так же должна совпадать сторона игрока который сейчас ходит, для выделения
-    if (!m_ptrLocation.get()->figuresSelectedOrNot() && side == m_currentPlayer)
+    if (!locationData->hasSelectedFigure() && locationData->getSideFigure(m_currentPositionInGameField) == m_currentPlayer)
     {
         // выделяем выбранную фигуру
-        m_ptrLocation.get()->seletcFigure(m_currentPositionInGameField);
+        locationData->seletcFigure(m_currentPositionInGameField);
 
         // получаем вектор доступных ходов
-        auto positionSelectFigure = m_ptrLocation.get()->getPositionSelectFigure();
+        auto positionSelectFigure = locationData->getPositionSelectFigure();
 
-        m_selectCellForMove = m_ptrLocation.get()->getAvailableMovesForFigure(positionSelectFigure);
+        m_selectCellForMove = locationData->getAvailableMovesForFigure(positionSelectFigure);
 
         // выделяем доступные ходы на доске
         for (const auto& onePos : m_selectCellForMove)
         {
-            m_ptrGameField.get()->selectCell(onePos, sf::Color::Red);
+            gameFieldData->selectCell(onePos, sf::Color::Red);
         }
     }
-    else if (m_ptrLocation.get()->figuresSelectedOrNot())
+    else if (locationData->hasSelectedFigure())
     {
-        // создаем копию свойств фигуры на случай если ход выполнен в угрозу своим важным фигурам
-        PropertiesFigure tempOldPF = m_ptrLocation.get()->getPropertiesFigure(m_currentPositionInGameField);
+        // создаем копию свойств фигуры на случай если ход выполнен в угрозу своими важными фигурами
+        PropertiesFigure tempOldPF = locationData->getPropertiesFigure(m_currentPositionInGameField);
 
         // двигаем фигуру на выбранные координаты если возможно
-        if (m_ptrLocation.get()->moveSelectFigure(m_currentPositionInGameField))
+        if (locationData->moveSelectFigure(m_currentPositionInGameField))
         {
             m_needCheckThreat = true;
             if (isThreat()) // если угроза нашлась - откатываем и не передаем ход
             {
-                setText3(L"на эти координаты нельзя\nпередвинуть фигуру");
+                setTextDebug(L"на эти координаты нельзя\nпередвинуть фигуру, есть наобработанные\nугрозы");
 
-                auto tempPositionOld = m_ptrLocation.get()->getPositionSelectFigure();
+                auto tempPositionOld = locationData->getPositionSelectFigure();
 
-                m_ptrLocation.get()->setFigure(tempPositionOld, m_ptrLocation.get()->getPropertiesFigure(m_currentPositionInGameField), {});
-
-                m_ptrLocation.get()->setFigure(m_currentPositionInGameField, tempOldPF, {});
-                m_ptrLocation.get()->unseletcAllFigure();
+                locationData->setFigure(tempPositionOld, locationData->getPropertiesFigure(m_currentPositionInGameField), {});
+                locationData->setFigure(m_currentPositionInGameField, tempOldPF, {});
+                locationData->unseletcAllFigure();
             }
             else // если передвинули и угроз нет проверяем может ли фигура превратиться в другую
             {                
-                if (m_ptrLocation.get()->isPromoutionFigureOnPosition(m_currentPositionInGameField))
+                if (locationData->isPromoutionFigureOnPosition(m_currentPositionInGameField))
                 {
                     m_oldPosition = m_currentPositionInGameField;
 
-                    m_ptrLocation.get()->seletcFigure(m_currentPositionInGameField);
-                    m_ptrLocation.get()->selectForPromoutionUniqueFigure(m_currentPositionInGameField);
+                    locationData->seletcFigure(m_currentPositionInGameField);
+                    locationData->selectForPromoutionUniqueFigure(m_currentPositionInGameField);
 
                     setPromoution(true);
                 }
                 // если не может превратиться снимаем выделение
                 else
                 {
-                    m_ptrLocation.get()->unseletcAllFigure();
+                    locationData->unseletcAllFigure();
                 }
                 // передаем ход следующему игроку
                 nextPlayer();
@@ -166,9 +172,9 @@ void GameEngine::performMovePlayer()
         }
         else
         {
-            m_ptrLocation.get()->unseletcAllFigure();
+            locationData->unseletcAllFigure();
         }
-        m_ptrGameField.get()->unselectAllCell();
+        gameFieldData->unselectAllCell();
     }
     if (promoution())
     {
@@ -180,65 +186,66 @@ void GameEngine::performMovePlayer()
 
 bool GameEngine::checkThreat()
 {
-    bool result = false;
-
     // получаем расположение ВАЖНЫХ ФИГУР ( "король" - могут быть и другие) текущего игрока
-    m_positionImportantFigure = m_ptrLocation.get()->getPositionsFigure(m_currentPlayer, true, 'M');
+    m_allPositionImportantFigures = m_ptrLocation.get()->getPositionsFigure(m_currentPlayer, true, 'M');
+    m_positionEnemyFigureThatThreaten.clear();
 
-    if (!m_positionImportantFigure.empty())
+    if (!m_allPositionImportantFigures.empty())
     {
-        for (int countPosition = 0; countPosition < m_positionImportantFigure.size(); countPosition++)
-        {
-            // получаем позиции фигур противников которые "угрожают" важной фигуре взятием
-            m_positionEnemyFigureThatThreaten = m_ptrLocation.get()->checkThreatForFigure(m_positionImportantFigure[countPosition], m_ptrLocation.get()->getLocationFigure());
+		const auto locationData = m_ptrLocation.get()->getLocationFigure();
 
-            // если вектор не пуст значит угрозы есть
-            if (!m_positionEnemyFigureThatThreaten.empty())
-            {
-                result = true;
-            }
+        for (auto& posImpFigure : m_allPositionImportantFigures)
+        {   
+            // получаем позиции фигур противников которые "угрожают" важной фигуре взятием
+            const auto enemyPos = m_ptrLocation.get()->checkThreatForFigure(posImpFigure, locationData);
+            m_positionEnemyFigureThatThreaten.insert(m_positionEnemyFigureThatThreaten.end(), enemyPos.begin(), enemyPos.end());
         }
     }
-
-    return result;
-
+    return m_positionEnemyFigureThatThreaten.size();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void GameEngine::performPromouten()
 {
-
     m_currentPositionInUniqueFigureField = getUniqueFigureOnPositionMouse();
-    // выводим информацию о фигуре -- ВРЕМЕННОЕ
-    setText1(m_ptrLocation.get()->getIdFigure(m_currentPositionInUniqueFigureField) + L"\t"
-        + L"X:" + std::to_wstring(m_currentPositionInUniqueFigureField.inRow) 
-        + L" \\ Y:" + std::to_wstring(m_currentPositionInUniqueFigureField.inColum)
-        + L"\tSIDE: " + std::to_wstring(m_ptrLocation.get()->getSideFigure(m_currentPositionInUniqueFigureField))
-        + L"\nInvulnerable:\t" + std::to_wstring(m_ptrLocation.get()->getInvulnerableFigure(m_currentPositionInUniqueFigureField))
-        + L"\nImportant:\t\t" + std::to_wstring(m_ptrLocation.get()->getImportantFigure(m_currentPositionInUniqueFigureField))
-    );
-    
+
+	auto locationData = m_ptrLocation.get();
+	auto properties = locationData->getPropertiesUniqueFigure(m_currentPositionInUniqueFigureField);
+
+    DEBUG_CODE(
+        // выводим информацию о фигуре -- ВРЕМЕННОЕ
+        setText1(properties.m_idFigure + L"\t"
+            + L"X:" + std::to_wstring(m_currentPositionInUniqueFigureField.inRow) 
+            + L" \\ Y:" + std::to_wstring(m_currentPositionInUniqueFigureField.inColum)
+            + L"\tSIDE: " + std::to_wstring(properties.m_side)
+            + L"\nInvulnerable:\t" + std::to_wstring(properties.m_invulnerable)
+            + L"\nImportant:\t\t" + std::to_wstring(properties.m_important)
+        );
+    )
+
     // сторона передвинутой фигуры должно совпадать с выбранной
-    if (m_ptrLocation.get()->getSideFigure(m_oldPosition) == m_ptrLocation.get()->getSideUniqueFigure(m_currentPositionInUniqueFigureField))
+    if (locationData->getSideFigure(m_oldPosition) == properties.m_side)
     {
-        if (m_ptrLocation.get()->promoutionSelectFigure( m_ptrLocation.get()->getPropertiesFigure(m_currentPositionInUniqueFigureField)))
+        if (locationData->promoutionSelectFigure(properties))
         {
-            m_ptrLocation.get()->unselectUniqueFigure();
-            m_ptrLocation.get()->unseletcAllFigure();
+            locationData->unselectUniqueFigure();
+            locationData->unseletcAllFigure();
 
             setPromoution(false);
-            setText3(L"превращение выполнено");
+            setTextDebug(L"превращение выполнено");
         }
         else
         {
-            setText3(L"превращение невозможно\nв эту фигуру");
+            setTextDebug(L"превращение невозможно\nв эту фигуру");
+			OUTPUT_LOG_ERROR("невозможно превратить фигуру в эту фигуру: причина locationData->promoutionSelectFigure( locationData->getPropertiesFigure(m_currentPositionInUniqueFigureField))");
         }
     }
     else
     {
-        setText3(L"неверная фигура");
+        setTextDebug(L"неверная фигура");
     }
+
     if (promoution())
     {
         setText3(L"Превращение доступно");
@@ -328,15 +335,21 @@ void GameEngine::showCurrnetPlayer() const
     m_ptrTextInGameRow2.get()->setString(player);
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 int GameEngine::getCurrentPlayer() const noexcept
 {
     return m_currentPlayer;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 void GameEngine::setCurrentPlayer(int currentPlayer)
 {
-    this->m_currentPlayer = currentPlayer;
+    m_currentPlayer = currentPlayer;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void GameEngine::nextPlayer()
 {
@@ -348,17 +361,26 @@ void GameEngine::setText1(std::wstring message)
 {
     m_ptrTextInGameRow1.get()->setString(message);
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 void GameEngine::setText2(std::wstring message)
 {
-    m_ptrTextInGameRow1.get()->setString(message);
+    m_ptrTextInGameRow2.get()->setString(message);
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 void GameEngine::setText3(std::wstring message)
 {
-    m_ptrTextInGameRow1.get()->setString(message);
+    m_ptrTextInGameRow3.get()->setString(message);
 }
-void GameEngine::setText4(std::wstring message)
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+void GameEngine::setTextDebug(std::wstring message)
 {
-    m_ptrTextInGameRow1.get()->setString(message);
+    m_ptrTextInGameRow4.get()->setString(message);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -372,25 +394,28 @@ void GameEngine::drawWindowGame()
     m_ptrRWindow.get()->draw(*m_ptrTextInGameRow3.get());
     m_ptrRWindow.get()->draw(*m_ptrTextInGameRow4.get());
 
-
     for (size_t row = 0; row < propertiesGame::countCellOnLengthWindow; row++)
     {
         for (size_t coll = 0; coll < propertiesGame::countCellOnLengthWindow; coll++)
         {
-            Position::Coordinates currentPosition{ coll, row };
+            Position::Coordinates currentPosition{ row, coll };
             m_ptrRWindow.get()->draw(m_ptrGameField.get()->getRectangleShapeOnField(currentPosition));
             m_ptrRWindow.get()->draw(m_ptrGameField.get()->getFieldCoordinateOnField(currentPosition));
+
             m_ptrRWindow.get()->draw(m_ptrLocation.get()->getRectangleShapeFigure(currentPosition));
             m_ptrRWindow.get()->draw(m_ptrLocation.get()->getRectangleShapeUniqueFigure(currentPosition));
         }
     }
 }
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void GameEngine::clearWindowGame(sf::Color color)
 {
     m_ptrRWindow.get()->clear(color);
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void GameEngine::displayWindowGame()
 {

@@ -5,6 +5,7 @@ bool nextGame = false;
 
 std::unique_ptr<GameEngine> getGameEngine();
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 int main()
 {
@@ -20,19 +21,20 @@ int main()
         * // возможность загрузить игру (тут)
         * importSave();
         *
-        * 
         * // возможность выгрузить игру / перенести -> startGameCycle()
         * exportSave();
-        *
+        * 
         */
 
         // основной цикл
-        nextGame = startGameCycle(getGameEngine());;
+		auto a = std::move(getGameEngine());
+        nextGame = startGameCycle(std::move(a));
 
     } while ( nextGame );
 
     return 0;
 }
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
 std::unique_ptr<GameEngine> getGameEngine()
@@ -52,10 +54,18 @@ std::unique_ptr<GameEngine> getGameEngine()
     std::unique_ptr<FigureLocation> newLocation = std::make_unique< FigureLocation>(propertiesGame::countCellOnLengthWindow, propertiesGame::countCellOnHeightWindow, propertiesGame::sizeWindowHeight, propertiesGame::pathToEmptyImage, propertiesGame::pathToEmptyImage, 0.5f);
     
     // добавляем все уникальные фигуры
-    newLocation.get()->addUniqueVectorFigure(propertiesGame::addedVectorUniqueFigures);
-    
+    if (!newLocation.get()->addUniqueVectorFigure(propertiesGame::addedVectorUniqueFigures))
+    {
+		OUTPUT_LOG_WARNING("Не удалось корректно добавить уникальные фигуры, причина выше");
+    }
+
     // заполняем игровое поле
-    newLocation.get()->setFigureVector(propertiesGame::currentVectorLocationFigure);
+    if (!newLocation.get()->setFigureVector(propertiesGame::currentVectorLocationFigure))
+    {
+        OUTPUT_LOG_WARNING("Не удалось корректно расставить фигуры на поле, причина выше");
+    }
 
     return std::make_unique<GameEngine>(std::move(rWindow), std::move(newLocation), std::move(chessField));
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------

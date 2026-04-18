@@ -2,25 +2,37 @@
 
 FigureLocation::FigureLocation(size_t countCellOninColum, size_t countCellOninRow, int windowHeight, std::filesystem::path pathToEmptyTextureGameField, std::filesystem::path pathToEmptyTextureEdge, float precentSizeFigure) : m_countColum(countCellOninColum), m_countRow(countCellOninRow), m_sizeCell(float(windowHeight / countCellOninColum)), m_precentSizeFigure(precentSizeFigure), m_sizeRectangInCell(m_sizeCell* precentSizeFigure)
 {
-	if (countCellOninColum < 3 || countCellOninRow < 3)	
-	{ 
+	if (countCellOninColum < 3 || countCellOninRow < 3)
+	{
 		OUTPUT_LOG_WARNING("[FigureLocation] -> конструктор -> неверный размер поля (<3)");
 		return;
-	}	
+	}
 
 	precentSizeFigure <= 0 ? this->m_positionRectangInCell = 0 : this->m_positionRectangInCell = (m_sizeCell - m_sizeRectangInCell) / 2;
 
 	// РАЗМЕРЫ 	
 	m_dataLocalFigure.resize(countCellOninRow, std::vector<DataFigure>(countCellOninColum)); // ДЛЯ ФИГУР НА ДОСКЕ 
+	m_vectorLocationFigure.resize(countCellOninRow, std::vector<PropertiesFigure>(countCellOninColum));
 
 	// FIXME: 
 	// потенциальная проблема когда уникальных фигур может быть больше чем игровая доска 
-	m_uniqueFigureLocationRectangleShape.resize(countCellOninRow, std::vector< std::pair<size_t, sf::RectangleShape >>(countCellOninColum)); // ДЛЯ УНИКАЛЬНЫХ ФИГУР
+	m_uniqueFigureLocationRectangleShape.resize(countCellOninRow, std::vector< std::pair<size_t, sf::RectangleShape>>(countCellOninColum)); // ДЛЯ УНИКАЛЬНЫХ ФИГУР
 
+	std::shared_ptr<sf::Texture> tmpTexture = std::make_shared<sf::Texture>();
+	if (!tmpTexture.get()->loadFromFile(pathToEmptyTextureEdge))
+	{
+		OUTPUT_LOG_ERROR("[FigureLocation] -> конструктор -> не найден путь до текстуры края: " + pathToEmptyTextureEdge.string());
+	}
 	// край - уникальная фигура
-	m_dataUniqueFigure.emplace_back(std::make_shared<Space>(-1, true, false), std::make_shared<sf::Texture>(pathToEmptyTextureEdge));
+	m_dataUniqueFigure.emplace_back(std::make_shared<Space>(-1, true, false), std::move(tmpTexture));
+
+	tmpTexture = std::make_shared<sf::Texture>();
+	if (!tmpTexture.get()->loadFromFile(pathToEmptyTextureGameField))
+	{
+		OUTPUT_LOG_ERROR("[FigureLocation] -> конструктор -> не загружена текстура пустой клетки: " + pathToEmptyTextureGameField.string());
+	}
 	// пустая клетка - уникальная фигура
-	m_dataUniqueFigure.emplace_back(std::make_shared<Space>(0), std::make_shared<sf::Texture>(pathToEmptyTextureGameField));
+	m_dataUniqueFigure.emplace_back(std::make_shared<Space>(0), std::move(tmpTexture));
 
 	for (size_t inRow = 0; inRow < countCellOninRow; inRow++)
 	{
@@ -52,24 +64,34 @@ FigureLocation::FigureLocation(size_t countCellOninColum, size_t countCellOninRo
 
 				dataUniqLocation.second.setTexture(dataUniqueFigure.m_uniqueFigureLocationTexture.get(), true);
 			}
-			
-			//--//--//--//--//--//--//--//--//--//   ДЛЯ ФИГУР НА ДОСКЕ  //--//--//--//--//--//--//--//--//--//--//--//--//--//-//
+
+			//--//--//--//--//--//--//--//--//--//   ДЛЯ ФИГУР НА ДОСКЕ  //-- //--//--//--//--//--//--//--//--//--//--//--//-//
 			dataLocal.m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell, m_sizeCell));
 			dataLocal.m_locationRectangleShape.setPosition(sf::Vector2f(inColum * m_sizeCell, inRow * m_sizeCell));
 
 
-			//--//--//--//--//--//--//--//--//--//     ДЛЯ УНИКАЛЬНЫХ ФИГУР   //--//--//--//--//--//--//--//--//--//--//--//--//--//
+			//--//--//--//--//--//--//--//--//--//     ДЛЯ УНИКАЛЬНЫХ ФИГУР   //--//-- //--//--//--//--//--//--//--//--//--//--//--//
 			dataUniqLocation.second.setSize(sf::Vector2f(m_sizeCell * precentSizeFigure, m_sizeCell * precentSizeFigure));
-			dataUniqLocation.second.setPosition(sf::Vector2f(inColum * m_sizeCell * precentSizeFigure + windowHeight, inRow * m_sizeCell * precentSizeFigure + windowHeight / 2 ));
+			dataUniqLocation.second.setPosition(sf::Vector2f(inColum * m_sizeCell * precentSizeFigure + windowHeight, inRow * m_sizeCell * precentSizeFigure + windowHeight / 2));
 			dataUniqLocation.second.setOutlineColor(sf::Color::Black);
 
-			m_vectorLocationFigure[inRow][inColum].m_side = dataLocal.m_locationClassFigure->getSide();
-			m_vectorLocationFigure[inRow][inColum].m_idFigure = dataLocal.m_locationClassFigure->getIdFigure();
-			m_vectorLocationFigure[inRow][inColum].m_invulnerable = dataLocal.m_locationClassFigure->isInvulnerable();
-			m_vectorLocationFigure[inRow][inColum].m_important = dataLocal.m_locationClassFigure->isImportant();
-			m_vectorLocationFigure[inRow][inColum].m_promoution = dataLocal.m_locationClassFigure->isPromoution();
+			const auto figure = dataLocal.m_locationClassFigure.get();
+			m_vectorLocationFigure[inRow][inColum] = PropertiesFigure(figure->getIdFigure(), figure->getSide(), figure->isInvulnerable(), figure->isImportant(), figure->isPromoution());
 		}
 	}
+	OUTPUT_LOG("FigureLocation -> initLocalFigure -> инициализация локальных фигур завершена");
+
+	DEBUG_CODE(
+		for (const auto& data : m_dataLocalFigure)
+		{
+			std::string str = "";
+			for (const auto& Figure : data)
+			{
+				str += std::to_string(Figure.m_locationClassFigure.get()->getSide()) + "\t";
+			}
+			OUTPUT_LOG(str + "\n");
+		}
+			);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -79,29 +101,29 @@ FigureLocation::FigureLocation(size_t countCellOninColum, size_t countCellOninRo
 
 // установка по сухим параметрам устаревает => апнуть полноценную замену =>
 // bool FigureLocation::setFigure(Position::Coordinates position, PropertiesFigure pF)
-//[[deprecated]]
+// [[deprecated]]
 bool FigureLocation::setFigure(Position::Coordinates position, std::wstring idFigure, int side, bool invulnerable, bool important, [[maybe_unused]] std::vector<PropertiesFigure> vectorPromoution /* нет проверки (!) */)
 {
 	if (m_dataLocalFigure.size() <= position.inRow || m_dataLocalFigure[position.inRow].size() <= position.inColum)
 	{
-		OUTPUT_LOG_ERROR("Class -> FigureLocation -> SetFigure -> попытка установить ЗА границу");
-		return false;		
+		OUTPUT_LOG_WARNING("Class -> FigureLocation -> SetFigure -> попытка установить ЗА границу, max позиция: Row " + std::to_string(m_dataLocalFigure.size()) + ", Col " + std::to_string(m_dataLocalFigure[position.inRow].size()));
+		return false;
 	}
 
 	if (m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide() == -1)
 	{
-		OUTPUT_LOG_ERROR("Class -> FigureLocation -> SetFigure -> попытка установить НА границу");
+		OUTPUT_LOG_WARNING("Class -> FigureLocation -> SetFigure -> попытка установить НА границу: Row " + std::to_string(position.inRow) + ", Col " + std::to_string(position.inColum));
 		return false;
 	}
 
 	for (int it = 0; it < m_dataUniqueFigure.size(); it++)
 	{
 		// находим итератор указанной финугы
-		if (   m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide()         == side
-			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure()     == idFigure
-			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isInvulnerable()  == invulnerable
-			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isImportant()     == important
-		   )
+		if (m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide() == side
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure() == idFigure
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isInvulnerable() == invulnerable
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isImportant() == important
+			)
 		{
 			// станавливаем текстуру фигуры на поле
 			m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture = m_dataUniqueFigure[it].m_uniqueFigureLocationTexture;
@@ -119,7 +141,7 @@ bool FigureLocation::setFigure(Position::Coordinates position, std::wstring idFi
 			return true;
 		}
 	}
-	OUTPUT_LOG_ERROR("Class -> FigureLocation -> SetFigure -> фигура не найдена, сначала ее необходимо добавить -> AddUniqueFigure()");
+	OUTPUT_LOG_ERROR("Class -> FigureLocation -> SetFigure -> фигура не найдена, сначала ее необходимо добавить -> AddUniqueFigure() -> " + std::filesystem::path(idFigure).string());
 	return false;
 }
 
@@ -137,18 +159,14 @@ bool FigureLocation::setFigureVector(const std::vector<PositionAndPropertiesFigu
 	bool result = true;
 
 	for (const auto& currentFigure : locationFigure)
-	{		
-		if (!setFigure( currentFigure.m_position, currentFigure.m_propertions, currentFigure.m_gridPromoution  )
-		   )
+	{
+		if (!setFigure(currentFigure.m_position, currentFigure.m_propertions, currentFigure.m_gridPromoution))
 		{
-			std::wstring ws = currentFigure.m_propertions.m_idFigure;			
-			OUTPUT_LOG("ERROR -> Class -> FigureLocation -> setFigureVector -> фигура не размещена или размещена с ошибкой координат: \t" + std::filesystem::path(ws).string() + "\tряд " + std::to_string(currentFigure.m_position.inRow) + ", столбец " + std::to_string(currentFigure.m_position.inColum));
-
+			std::wstring ws = currentFigure.m_propertions.m_idFigure;
+			OUTPUT_LOG_WARNING("Class -> FigureLocation -> setFigureVector -> фигура не размещена или размещена с ошибкой координат (причина выше): \t" + std::filesystem::path(ws).string() + "\tряд " + std::to_string(currentFigure.m_position.inRow) + ", столбец " + std::to_string(currentFigure.m_position.inColum));
 			result = false;
 		}
-		
 	}
-
 	return result;
 }
 
@@ -156,34 +174,31 @@ bool FigureLocation::setFigureVector(const std::vector<PositionAndPropertiesFigu
 
 bool FigureLocation::promoutionSelectFigure(const PropertiesFigure& properties)
 {
+	auto& localData = m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum];
+
 	// фигура может превратиться в указанную фигуру?.........
-	if (m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure->getPromoutionFigure(properties))
+	if (localData.m_locationClassFigure->getPromoutionFigure(properties))
 	{
-		for (int it = 0; it < m_dataLocalFigure.size(); it++)
+		for (const auto& uniqueFigure : m_dataUniqueFigure)
 		{
-			if ( m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure() == properties.m_idFigure &&
-				 m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide() == m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure->getSide()
-			   )
+			if (uniqueFigure.m_uniqueFigureLocationClassFigure->getIdFigure() == properties.m_idFigure && 
+				uniqueFigure.m_uniqueFigureLocationClassFigure->getSide() == localData.m_locationClassFigure->getSide())
 			{
 				// заменяем текстуру
-				m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture = m_dataUniqueFigure[it].m_uniqueFigureLocationTexture;
-
+				localData.m_locationTexture = uniqueFigure.m_uniqueFigureLocationTexture;
 				// передаем установленную текстуру
-				m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture.get());
-
+				localData.m_locationRectangleShape.setTexture(localData.m_locationTexture.get());
 				// ставим класс фигуры на поле
-				m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure;
-
+				localData.m_locationClassFigure = uniqueFigure.m_uniqueFigureLocationClassFigure;
 				return true;
 			}
 		}
-		OUTPUT_LOG("Error -> Class -> FigureLocation -> promoutionSelectFigure() -> не найден итератор");
+		OUTPUT_LOG_ERROR("Class -> FigureLocation -> promoutionSelectFigure() -> не найден итератор m_dataUniqueFigure");
 	}
 	else
 	{
-		OUTPUT_LOG("Error -> Class -> FigureLocation -> promoutionSelectFigure() -> невозможно превратиться в эту фигуру");
+		OUTPUT_LOG_ERROR("Class -> FigureLocation -> promoutionSelectFigure() -> невозможно превратиться в эту фигуру: причина getPromoutionFigure(properties)");
 	}
-
 	return false;
 }
 
@@ -198,39 +213,50 @@ bool FigureLocation::addUniqueFigure(std::shared_ptr<Figure> newFigureOrHeirs, s
 	for (int it = 2; it < m_dataUniqueFigure.size(); it++)
 	{
 		// если поля совпадают значит не уникальна и не добавляем
-		if (   m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getIdFigure()          == newFigureOrHeirs.get()->getIdFigure()
-			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getSide()              == newFigureOrHeirs.get()->getSide()
-			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->isInvulnerable()      == newFigureOrHeirs.get()->isInvulnerable()
-			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->isImportant()         == newFigureOrHeirs.get()->isImportant()
-			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getVectorPromoution()  == newFigureOrHeirs.get()->getVectorPromoution()
-		   )
-		{			
-			return false;
-		}	
-	}
-	// иначе, если поля отличаются добавляем
-	m_dataUniqueFigure.emplace_back(newFigureOrHeirs, std::make_shared<sf::Texture>(currentTextureFigure));
-
-	for (size_t row = 1; row < m_countRow - 1; row++)
-	{
-		for (size_t col = 1; col < m_countColum - 1; col++)
+		if (m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getIdFigure() == newFigureOrHeirs.get()->getIdFigure()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getSide() == newFigureOrHeirs.get()->getSide()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->isInvulnerable() == newFigureOrHeirs.get()->isInvulnerable()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->isImportant() == newFigureOrHeirs.get()->isImportant()
+			&& m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure.get()->getVectorPromoution() == newFigureOrHeirs.get()->getVectorPromoution()
+			)
 		{
-			// если клетка пустая то сразу же размещаем никальную фигуру на поле уникальных фигур
-			if (m_uniqueFigureLocationRectangleShape[row][col].first == 0)
-			{
-				size_t latestElement = m_dataUniqueFigure.size() - 1;
+			OUTPUT_LOG_WARNING("Class -> FigureLocation -> addUniqueFigure() -> фигура не уникальна, не добавлена:\t" + std::filesystem::path(newFigureOrHeirs.get()->getIdFigure()).string());
+			return false;
+		}
+	}
 
+	// иначе, если поля отличаются добавляем
+	std::shared_ptr<sf::Texture> texture = std::make_shared<sf::Texture>();
+	if (!texture->loadFromFile(currentTextureFigure))
+	{
+		OUTPUT_LOG_ERROR("Class -> FigureLocation -> addUniqueFigure() -> не удалось загрузить текстуру для фигуры:\t" + std::filesystem::path(newFigureOrHeirs.get()->getIdFigure()).string());
+		return false;
+	}
+	m_dataUniqueFigure.emplace_back(newFigureOrHeirs, texture);
+
+	const auto maxRow = m_uniqueFigureLocationRectangleShape.size() - 1;
+	//располагаем на поле уникальных фигур
+	for (size_t row = 1; row < maxRow; row++)
+	{
+		const auto maxCol = m_uniqueFigureLocationRectangleShape[row].size() - 1;
+		for (size_t col = 1; col < maxCol; col++)
+		{
+			auto& [id, texture] = m_uniqueFigureLocationRectangleShape[row][col];
+			// если клетка пустая то сразу же размещаем никальную фигуру на поле уникальных фигур
+			if (id == 0)
+			{
 				// ставим текстуру
-				m_uniqueFigureLocationRectangleShape[row][col].second.setTexture(m_dataUniqueFigure[latestElement].m_uniqueFigureLocationTexture.get());
-				m_uniqueFigureLocationRectangleShape[row][col].second.setOutlineThickness(-2);
-				m_uniqueFigureLocationRectangleShape[row][col].second.setOutlineColor(sf::Color::Black);
+				texture.setTexture(m_dataUniqueFigure.back().m_uniqueFigureLocationTexture.get());
+				texture.setOutlineThickness(-2);
+				texture.setOutlineColor(sf::Color::Black);
 
 				// ставим итератор откуда привязали
-				m_uniqueFigureLocationRectangleShape[row][col].first = latestElement;
+				id = m_dataUniqueFigure.size() - 1;
 				return true;
 			}
 		}
-	}	
+	}
+	OUTPUT_LOG_ERROR("Class -> FigureLocation -> addUniqueFigure() -> не удалось разместить уникальную фигуру на поле уникальных фигур, нет места :\t" + std::filesystem::path(newFigureOrHeirs.get()->getIdFigure()).string());
 	return false;
 }
 
@@ -244,8 +270,7 @@ bool FigureLocation::addUniqueVectorFigure(std::vector<std::pair<std::shared_ptr
 	{
 		if (!addUniqueFigure(figure, path))
 		{
-			std::string id = std::filesystem::path(figure.get()->getIdFigure()).string();
-			OUTPUT_LOG("Error -> Class -> FigureLocation -> addUniqueVectorFigure -> фигура не добавлена:\t" + id);
+			OUTPUT_LOG_ERROR("Class -> FigureLocation -> addUniqueVectorFigure -> фигура не добавлена, причина выше:\t" + std::filesystem::path(figure.get()->getIdFigure()).string());
 			result = false;
 		}
 	}
@@ -262,11 +287,8 @@ bool FigureLocation::moveSelectFigure(Position::Coordinates position)
 	bool exists = false;
 
 	for (const auto& move : availableMove)
-	{ 
-		if (move.inColum == position.inColum && move.inRow == position.inRow)
-		{
-			exists = true;
-		}
+	{
+		if (move == position) { exists = true; }
 	}
 
 	if (!exists)
@@ -275,61 +297,43 @@ bool FigureLocation::moveSelectFigure(Position::Coordinates position)
 		return false;
 	}
 
-	if (m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide() == 0)
+	auto& selectedFigure = m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum];
+	auto& target = m_dataLocalFigure[position.inRow][position.inColum];
+
+	// Фигура должна быть доступна для взятия т.е. Invulnerability = false
+	if (target.m_locationClassFigure->isInvulnerable())
 	{
-		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure, m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure);
-		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture, m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture);
+		OUTPUT_LOG_ERROR("class -> FigureLocation -> moveSelectFigure() -> фигура неуязвима");
+		return false;
+	}
+	swap(selectedFigure.m_locationClassFigure, target.m_locationClassFigure);
+	swap(selectedFigure.m_locationTexture, target.m_locationTexture);
 
-		// изменяем размер и положение
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell, m_sizeCell));
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * m_positionSelectFigure.inColum, m_sizeCell * m_positionSelectFigure.inRow));
+	auto& selectShape = selectedFigure.m_locationRectangleShape; // свап
+	auto& targetShape = target.m_locationRectangleShape; // свап
 
-		// установили тестуры т.к. они свапнуты
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture.get());
+	targetShape.setSize(sf::Vector2f(m_sizeCell * m_precentSizeFigure, m_sizeCell * m_precentSizeFigure));
+	targetShape.setPosition(sf::Vector2f(m_sizeCell * position.inColum + m_positionRectangInCell, m_sizeCell * position.inRow + m_positionRectangInCell));
+	targetShape.setTexture(target.m_locationTexture.get());
 
-		// изменяем размер и положение
-		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell * m_precentSizeFigure, m_sizeCell * m_precentSizeFigure));
-		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * position.inColum + m_positionRectangInCell, m_sizeCell * position.inRow + m_positionRectangInCell));
-
-		// установили тестуры т.к. они свапнуты
-		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture.get());
+	if (target.m_locationClassFigure->getSide() == 0)
+	{
+		targetShape.setSize(sf::Vector2f(m_sizeCell * m_precentSizeFigure, m_sizeCell * m_precentSizeFigure));
+		targetShape.setPosition(sf::Vector2f(m_sizeCell * position.inColum + m_positionRectangInCell, m_sizeCell * position.inRow + m_positionRectangInCell));
+		targetShape.setTexture(target.m_locationTexture.get());
 
 		return true;
 	}
-	else
-	{	
-		// если клетка не пустая предполагается что там фигура другого игрока
+	// если клетка не пустая предполагается что там фигура другого игрока
 
-		// Фигура должна быть доступна для взятия т.е. Invulnerability = false
-		if (m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->isInvulnerable())
-		{
-			OUTPUT_LOG("ERROR -> class -> FigureLocation -> moveSelectFigure() -> фигура неуязвима");
-			return false;
-		}
+	selectedFigure.m_locationTexture = m_dataUniqueFigure[1].m_uniqueFigureLocationTexture; // 1 - пустая текстура		
+	selectedFigure.m_locationClassFigure = m_dataUniqueFigure[1].m_uniqueFigureLocationClassFigure; // 1 - пустая фигура (клетка)
 
-		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure, m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure);
-		swap(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture, m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture);
-		
-		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell * m_precentSizeFigure, m_sizeCell * m_precentSizeFigure));
-		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * position.inColum + m_positionRectangInCell, m_sizeCell * position.inRow + m_positionRectangInCell));
+	selectShape.setSize(sf::Vector2f(m_sizeCell, m_sizeCell));
+	selectShape.setPosition(sf::Vector2f(m_sizeCell * m_positionSelectFigure.inColum, m_sizeCell * m_positionSelectFigure.inRow));
+	selectShape.setTexture(selectedFigure.m_locationTexture.get());
 
-		m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[position.inRow][position.inColum].m_locationTexture.get());
-		
-		// 1 - пустая текстура		
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture = m_dataUniqueFigure[1].m_uniqueFigureLocationTexture;
-
-		// 1 - пустая фигура (клетка)
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationClassFigure = m_dataUniqueFigure[1].m_uniqueFigureLocationClassFigure;
-		
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setSize(sf::Vector2f(m_sizeCell, m_sizeCell));
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setPosition(sf::Vector2f(m_sizeCell * m_positionSelectFigure.inColum, m_sizeCell * m_positionSelectFigure.inRow));
-		
-		m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationRectangleShape.setTexture(m_dataLocalFigure[m_positionSelectFigure.inRow][m_positionSelectFigure.inColum].m_locationTexture.get());
-
-		return true;
-	}
-
-	return false;
+	return true;
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -347,7 +351,7 @@ Position::Coordinates FigureLocation::getPositionFigureWhenMousePressed(sf::Vect
 			}
 		}
 	}
-	return {0, 0};
+	return { 0, 0 };
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -368,7 +372,7 @@ bool FigureLocation::seletcFigure(Position::Coordinates position)
 	m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setOutlineThickness(-3);
 	m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape.setOutlineColor(sf::Color::Red);
 
-	m_positionSelectFigure = position; 
+	m_positionSelectFigure = position;
 	m_selectFigure = true;
 
 	return m_selectFigure;
@@ -394,7 +398,7 @@ bool FigureLocation::unseletcAllFigure()
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-bool FigureLocation::figuresSelectedOrNot() const noexcept
+bool FigureLocation::hasSelectedFigure() const noexcept
 {
 	return m_selectFigure;
 }
@@ -436,11 +440,14 @@ void FigureLocation::updateLocationFigure()
 	{
 		for (size_t inColum = 0; inColum < m_countColum; inColum++)
 		{
-			m_vectorLocationFigure[inRow][inColum].m_side         = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->getSide();
-			m_vectorLocationFigure[inRow][inColum].m_idFigure     = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->getIdFigure();
-			m_vectorLocationFigure[inRow][inColum].m_invulnerable = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->isInvulnerable();
-			m_vectorLocationFigure[inRow][inColum].m_important    = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->isImportant();
-			m_vectorLocationFigure[inRow][inColum].m_promoution   = m_dataLocalFigure[inRow][inColum].m_locationClassFigure->isPromoution();
+			auto& figureLocal = m_vectorLocationFigure[inRow][inColum];
+			auto& figureClass = m_dataLocalFigure[inRow][inColum].m_locationClassFigure;
+
+			figureLocal.m_side = figureClass->getSide();
+			figureLocal.m_idFigure = figureClass->getIdFigure();
+			figureLocal.m_invulnerable = figureClass->isInvulnerable();
+			figureLocal.m_important = figureClass->isImportant();
+			figureLocal.m_promoution = figureClass->isPromoution();
 		}
 	}
 }
@@ -452,31 +459,40 @@ std::wstring FigureLocation::getIdFigure(Position::Coordinates position) const
 	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getIdFigure();
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 int FigureLocation::getSideFigure(Position::Coordinates position) const
 {
 	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide();
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const sf::RectangleShape& FigureLocation::getRectangleShapeFigure(Position::Coordinates position) const
 {
 	return m_dataLocalFigure[position.inRow][position.inColum].m_locationRectangleShape;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 bool FigureLocation::getInvulnerableFigure(Position::Coordinates position) const
 {
 	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->isInvulnerable();
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool FigureLocation::getImportantFigure(Position::Coordinates position) const
 {
 	return m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->isImportant();
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 PropertiesFigure FigureLocation::getPropertiesFigure(Position::Coordinates position)
-{	
+{
 	return { getIdFigure(position), getSideFigure(position), getInvulnerableFigure(position), getImportantFigure(position), isPromoutionUniqueFigire(position) };
 }
-
 
 //--//--//--//--//--//--//--//--//--//      ДЛЯ ПОЛЕ УНИКАЛЬНЫХ ФИГУР     //--//--//--//--//--//--//--//--//--//--//--//-//
 
@@ -486,11 +502,23 @@ bool FigureLocation::isInvulnerableUniqueFigire(const Position::Coordinates& pos
 	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isInvulnerable();
 }
 
-std::wstring FigureLocation::geIdUniqueFigure(const Position::Coordinates& position)
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+PropertiesFigure FigureLocation::getPropertiesUniqueFigure(const Position::Coordinates& position)
+{
+	auto classUniqFigure = m_dataUniqueFigure[getIteratorUniqueFigure(position)].m_uniqueFigureLocationClassFigure;
+	return PropertiesFigure(classUniqFigure->getIdFigure(), classUniqFigure->getSide(), classUniqFigure->isInvulnerable(), classUniqFigure->isImportant(), classUniqFigure->isPromoution());
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::wstring FigureLocation::getIdUniqueFigure(const Position::Coordinates& position)
 {
 	size_t it = getIteratorUniqueFigure(position);
 	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getIdFigure();
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 int FigureLocation::getSideUniqueFigure(const Position::Coordinates& position)
 {
@@ -498,11 +526,15 @@ int FigureLocation::getSideUniqueFigure(const Position::Coordinates& position)
 	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getSide();
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 bool FigureLocation::isImportantUniqueFigire(const Position::Coordinates& position)
 {
 	size_t it = getIteratorUniqueFigure(position);
 	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isImportant();
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 bool FigureLocation::isPromoutionUniqueFigire(const Position::Coordinates& position)const
 {
@@ -510,15 +542,21 @@ bool FigureLocation::isPromoutionUniqueFigire(const Position::Coordinates& posit
 	return m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->isPromoution();
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 const sf::RectangleShape& FigureLocation::getRectangleShapeUniqueFigure(const Position::Coordinates& position)const
 {
 	return m_uniqueFigureLocationRectangleShape[position.inRow][position.inColum].second;
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
 size_t FigureLocation::getIteratorUniqueFigure(Position::Coordinates position)const
 {
 	return m_uniqueFigureLocationRectangleShape[position.inRow][position.inColum].first;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 size_t FigureLocation::getIteratorUniqueFigure(PropertiesFigure otherFigure) const
 {
@@ -553,9 +591,9 @@ bool FigureLocation::selectForPromoutionUniqueFigure(const Position::Coordinates
 
 	const auto& localFigure = m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure;
 
-	for ( auto& vectorRectangleShape : m_uniqueFigureLocationRectangleShape)
+	for (auto& vectorRectangleShape : m_uniqueFigureLocationRectangleShape)
 	{
-		for ( auto& rectangleShape : vectorRectangleShape)
+		for (auto& rectangleShape : vectorRectangleShape)
 		{
 			size_t it = rectangleShape.first;
 			const auto& uniqueFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure;
@@ -564,7 +602,7 @@ bool FigureLocation::selectForPromoutionUniqueFigure(const Position::Coordinates
 			if (uniqueFigure->getSide() == localFigure->getSide())
 			{
 				// и может превратиться в указанную фигуру???...
-				if (localFigure->getPromoutionFigure({ uniqueFigure->getIdFigure(),uniqueFigure->getSide(),uniqueFigure->isInvulnerable(),uniqueFigure->isImportant(),uniqueFigure->isPromoution() }) )
+				if (localFigure->getPromoutionFigure({ uniqueFigure->getIdFigure(),uniqueFigure->getSide(),uniqueFigure->isInvulnerable(),uniqueFigure->isImportant(),uniqueFigure->isPromoution() }))
 				{
 					// подсвечиваем фигуру
 					rectangleShape.second.setOutlineColor(sf::Color::Red);
@@ -595,10 +633,11 @@ Position::Coordinates FigureLocation::getPositionOnMousePositionUniqueFigire(con
 {
 	for (size_t inRow = 0; inRow < m_countRow; inRow++)
 	{
+		const auto figure = m_uniqueFigureLocationRectangleShape[inRow];
 		for (size_t inColum = 0; inColum < m_countColum; inColum++)
 		{
 			// если задели фигуру на поле уникальных фигур возвращаем позицию в минусе
-			if (m_uniqueFigureLocationRectangleShape[inRow][inColum].second.getGlobalBounds().contains(positonMouse))
+			if (figure[inColum].second.getGlobalBounds().contains(positonMouse))
 			{
 				return  { inRow, inColum };
 			}
@@ -609,11 +648,12 @@ Position::Coordinates FigureLocation::getPositionOnMousePositionUniqueFigire(con
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<Position::Coordinates> FigureLocation::checkThreatForFigure(const Position::Coordinates position, const  Grid<PropertiesFigure>& m_vectorLocationFigure)
+std::vector<Position::Coordinates> FigureLocation::checkThreatForFigure(const Position::Coordinates position, const  Grid<PropertiesFigure>& vectorLocationFigure)
 {
-	const auto sideCurrentFigure = m_vectorLocationFigure[position.inRow][position.inColum].m_side;
+	const auto sideCurrentFigure = vectorLocationFigure[position.inRow][position.inColum].m_side;
+	if (sideCurrentFigure <= 0) { return std::vector<Position::Coordinates>(); }
 
-	size_t maxSize = m_countRow * m_countColum;
+	//size_t maxSize = m_countRow * m_countColum;
 
 	//std::vector<std::future<std::vector<Position::Coordinates>>> threadForCalculate;
 	//threadForCalculate.reserve(maxSize);
@@ -623,35 +663,38 @@ std::vector<Position::Coordinates> FigureLocation::checkThreatForFigure(const Po
 
 	//const size_t countOpcOnThread = static_cast<size_t>(maxSize / maxThread); // колличество операций на поток
 
+
 	std::vector<Position::Coordinates> resultPositionEnemyFigure;
 
+	size_t rowMax = vectorLocationFigure.size();
 	// проверяем все фигуры на переданном игровом поле у других игроков, которые могу "угрожать взятием"
-	for (size_t rowPosition = 0; rowPosition < m_countRow; rowPosition++)
+	for (size_t rowPosition = 0; rowPosition < rowMax; rowPosition++)
 	{
+		size_t colMax = vectorLocationFigure[rowPosition].size();
 		//threadForCalculate.emplace_back(std::thread(std::launch::deferred, [=] {
-		for (size_t colPosition = 0; colPosition < m_countColum; colPosition++)
-		{			
-			const auto figure = m_vectorLocationFigure[rowPosition][colPosition];
+		for (size_t colPosition = 0; colPosition < colMax; colPosition++)
+		{
+			const auto figure = vectorLocationFigure[rowPosition][colPosition];
 
 			//std::vector<Position::Coordinates>  resultThreadPos;
 			//resultThreadPos.reserve(m_countColum);
 
-			// если у фигуры на позиции другая сторона, то проверяем далее....
-			if (figure.m_side != sideCurrentFigure && figure.m_side > 0)
+			// если фигура на позиции противник, то проверяем далее....
+			if (figure.m_side != sideCurrentFigure && figure.m_side > 0) /*не проверяем служебные фигуры*/
 			{
 				size_t it = getIteratorUniqueFigure({ figure.m_idFigure, figure.m_side,figure.m_invulnerable,figure.m_important,figure.m_promoution });
 
 				// ходы на которые может сходить фигура
-				auto allMovePosFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getMoveForFigure({ rowPosition, colPosition }, m_vectorLocationFigure);
+				auto allMovePosFigure = m_dataUniqueFigure[it].m_uniqueFigureLocationClassFigure->getMoveForFigure({ rowPosition, colPosition }, vectorLocationFigure);
 
-				for (const auto& movePosFigure : allMovePosFigure) {
+				for (const auto& movePosFigure : allMovePosFigure)
+				{
 					if (movePosFigure == position)
 					{
 						resultPositionEnemyFigure.emplace_back(rowPosition, colPosition);
 					}
 				}
 			}
-
 		}
 	}
 
@@ -689,7 +732,7 @@ std::vector<Position::Coordinates> FigureLocation::getPositionFigure(int side)
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-std::vector<Position::Coordinates> FigureLocation::getPositionsFigure(int side, bool invulnerableOrImportantOrPromoution , char IMP )
+std::vector<Position::Coordinates> FigureLocation::getPositionsFigure(int side, bool invulnerableOrImportantOrPromoution, char IMP)
 {
 	switch (IMP)
 	{
@@ -704,7 +747,7 @@ std::vector<Position::Coordinates> FigureLocation::getPositionsFigure(int side, 
 
 	default:
 		return std::vector<Position::Coordinates>();
-	}	
+	}
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -713,21 +756,22 @@ std::vector<Position::Coordinates> FigureLocation::positionFigure(int side, std:
 {
 	std::vector<Position::Coordinates> position;
 
-	for (size_t yPos = 0; yPos < m_countRow; yPos++)
+	for (size_t row = 0; row < m_countRow; row++)
 	{
-		for (size_t xPos = 0; xPos < m_countColum; xPos++)
+		for (size_t col = 0; col < m_countColum; col++)
 		{
-			// если поля совпадают то добавляем
+			const auto& figure = m_dataLocalFigure[row][col];
 
-			// если передан параметр numException значение не учитывается, так же и wsExceprion 
-			if (    (  idFigure     == m_wsExceprion  || ( m_dataLocalFigure[yPos][xPos].m_locationClassFigure->getIdFigure()                       == idFigure     && idFigure != m_wsExceprion) )
-				 && (  side         == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->getSide())         == side         && side != m_numException   ) )
-				 && (  invulnerable == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->isInvulnerable()) == invulnerable && side != m_numException   ) )
-				 && (  important    == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->isImportant())    == important    && side != m_numException   ) )
-				 && (  promoution   == m_numException || ( static_cast<int>(m_dataLocalFigure[yPos][xPos].m_locationClassFigure->isPromoution())   == promoution   && side != m_numException   ) )
-			   )
+			// если поля совпадают то добавляем
+			// если передан параметр numException значение не учитывается, так же и wsExceprion wstring 
+			if ((idFigure == m_wsExceprion || (figure.m_locationClassFigure->getIdFigure() == idFigure && idFigure != m_wsExceprion))
+				&& (side == m_numException || (static_cast<int>(figure.m_locationClassFigure->getSide()) == side && side != m_numException))
+				&& (invulnerable == m_numException || (static_cast<int>(figure.m_locationClassFigure->isInvulnerable()) == invulnerable && side != m_numException))
+				&& (important == m_numException || (static_cast<int>(figure.m_locationClassFigure->isImportant()) == important && side != m_numException))
+				&& (promoution == m_numException || (static_cast<int>(figure.m_locationClassFigure->isPromoution()) == promoution && side != m_numException))
+				)
 			{
-				position.emplace_back(xPos, yPos);
+				position.emplace_back(row, col);
 			}
 		}
 	}
@@ -740,7 +784,7 @@ bool FigureLocation::isCheckmateForFigure(const Position::Coordinates& position,
 {
 	auto tempResult = getPositionFigureCanProtectedIndicatedFigure(position, m_vectorLocationFigure);
 
-	if (tempResult.size() == 1 && tempResult.front() == Position::Coordinates( 0, 0 ))
+	if (tempResult.size() == 1 && tempResult.front() == Position::Coordinates(0, 0))
 	{
 		return true;
 	}
@@ -753,16 +797,16 @@ bool FigureLocation::isCheckmateForFigure(const Position::Coordinates& position,
 std::vector<Position::Coordinates> FigureLocation::getPositionFigureCanProtectedIndicatedFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& m_vectorLocationFigure)
 {
 	int currentSideFigure = m_dataLocalFigure[position.inRow][position.inColum].m_locationClassFigure->getSide();
-	
+
 	// край и пустую клетку не проверяем, нет смысла
-	if (currentSideFigure == 0 || currentSideFigure == -1) 
-	{		
+	if (currentSideFigure == 0 || currentSideFigure == -1)
+	{
 		return std::vector<Position::Coordinates>(); // возвращаем пустой ничего не угрожает
 	}
 
 	// если фигур, которые угрожают == 0, то логично, что ничего ему не угрожает
 	if (checkThreatForFigure(position, m_vectorLocationFigure).empty())
-	{		
+	{
 		return std::vector<Position::Coordinates>(); // возвращаем пустой ничего не угрожает
 	}
 
@@ -770,7 +814,7 @@ std::vector<Position::Coordinates> FigureLocation::getPositionFigureCanProtected
 	auto positionAllFigureForPlayer = getPositionFigure(currentSideFigure);
 
 
-	
+
 	// позиции фигур которые могут защитить
 	std::vector<Position::Coordinates> resultPositionFigure;
 
@@ -787,7 +831,7 @@ std::vector<Position::Coordinates> FigureLocation::getPositionFigureCanProtected
 		{
 			// создаем фиктивное расположение фигур
 			auto imaginaryLocation = m_vectorLocationFigure;
-			
+
 			// создаем фиктивный ход 
 			// свапаем "передвигая" фигуру
 			PropertiesFigure tempPropertiesFigure = imaginaryLocation[curentPosFigure.inRow][curentPosFigure.inColum];
@@ -810,16 +854,18 @@ std::vector<Position::Coordinates> FigureLocation::getPositionFigureCanProtected
 			}
 			// проверяем угрозу с фиктивным расположением
 			auto thFigure = checkThreatForFigure(currentPositionCheckedFigure, imaginaryLocation);
-		
+
 			// считаем колличество фигур которые могут угрожать на этом ходу
 			// если колличество угрожающих фигур == 0, то мата нет, фигура может закрыть важную фигуру или убить своим ходом
 			if (thFigure.size() == 0)
 			{
 				resultPositionFigure.emplace_back(curentPosFigure);
-			}			
-		}		
+			}
+		}
 	}
 
 	// возвращаем 0,0 позицию, если угрозу не избежать // пустой если угроз не найдено // или заполенный фигурами, которые могут задефать
-	return resultPositionFigure.empty() ? std::vector<Position::Coordinates>(1, { 0, 0 } ) : resultPositionFigure;
+	return resultPositionFigure.empty() ? std::vector<Position::Coordinates>(1, { 0, 0 }) : resultPositionFigure;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -172,6 +172,7 @@
     <ClInclude Include="CountdownTimer.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
+    <ClInclude Include="LogHelper.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Main.h" />

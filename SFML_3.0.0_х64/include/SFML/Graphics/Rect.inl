@@ -1,7 +1,7 @@
-﻿////////////////////////////////////////
+////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2024 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2007-2025 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -20,24 +20,24 @@
 //
 // 3. This notice may not be removed or altered from any source distribution.
 //
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 // Headers
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 #include <SFML/Graphics/Rect.hpp> // NOLINT(misc-header-include-cycle)
 
 
 namespace sf
 {
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 template <typename T>
 constexpr Rect<T>::Rect(Vector2<T> thePosition, Vector2<T> theSize) : position(thePosition), size(theSize)
 {
 }
 
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 template <typename T>
 template <typename U>
 constexpr Rect<T>::operator Rect<U>() const
@@ -46,7 +46,7 @@ constexpr Rect<T>::operator Rect<U>() const
 }
 
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 template <typename T>
 constexpr bool Rect<T>::contains(Vector2<T> point) const
 {
@@ -66,7 +66,7 @@ constexpr bool Rect<T>::contains(Vector2<T> point) const
 }
 
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 template <typename T>
 constexpr std::optional<Rect<T>> Rect<T>::findIntersection(const Rect<T>& rectangle) const
 {
@@ -104,7 +104,7 @@ constexpr std::optional<Rect<T>> Rect<T>::findIntersection(const Rect<T>& rectan
 }
 
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 template <typename T>
 constexpr Vector2<T> Rect<T>::getCenter() const
 {
@@ -112,7 +112,7 @@ constexpr Vector2<T> Rect<T>::getCenter() const
 }
 
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 template <typename T>
 constexpr bool operator==(const Rect<T>& lhs, const Rect<T>& rhs)
 {
@@ -120,7 +120,7 @@ constexpr bool operator==(const Rect<T>& lhs, const Rect<T>& rhs)
 }
 
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 template <typename T>
 constexpr bool operator!=(const Rect<T>& lhs, const Rect<T>& rhs)
 {

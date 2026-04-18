@@ -45,10 +45,13 @@ struct PropertiesFigure
 	PropertiesFigure(std::wstring idFigure, int side, bool invulnerable, bool important, bool promoution)
 		: m_side(side), m_idFigure(idFigure), m_invulnerable(invulnerable), m_important(important), m_promoution(promoution) {};
 
-
 	bool operator== (const PropertiesFigure& other) const
 	{
-		return m_side == other.m_side && m_idFigure == other.m_idFigure && m_invulnerable == other.m_invulnerable && m_important == other.m_important && m_promoution == other.m_promoution;
+		return (m_side         == other.m_side 
+			&& 	m_idFigure     == other.m_idFigure 
+			&& 	m_invulnerable == other.m_invulnerable 
+			&& 	m_important    == other.m_important 
+			&& 	m_promoution   == other.m_promoution);
 	};
 };
 
