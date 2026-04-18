@@ -25,7 +25,7 @@ std::vector<std::filesystem::path> searchFile(std::filesystem::path searchInPath
 	}
 	catch (const std::filesystem::filesystem_error&)
 	{
-		OutputLog("SearchFile -> Error");
+		OUTPUT_LOG_ERROR("SearchFile -> Error");
 		return std::vector<std::filesystem::path>();
 	}
 	return result;

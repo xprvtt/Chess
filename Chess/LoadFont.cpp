@@ -6,10 +6,10 @@ sf::Font loadFont(std::filesystem::path PathToFont)
 
     if (font.openFromFile(PathToFont))
     {
-        OutputLog("Class -> GameField -> Шрифт загружен");
+        OUTPUT_LOG("[loadFont] -> Шрифт загружен");
     }
 
-    OutputLog("Class -> GameField -> Ошибка загрузки шрифта");
+    OUTPUT_LOG_ERROR("[loadFont] -> Ошибка загрузки шрифта");
 
     return font;
 } 

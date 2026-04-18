@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-
 #include "Core.h"
-
 
 #include "Figure.h"
 
@@ -15,26 +13,11 @@
 #include "Space.h"
 
 #include "PropertiesFigure.h"
-
-
-
+#include "Position.h"
 
 namespace propertiesGame
 {
-
-
-	///////////////////////////////////// СВОЙСТВА ОКНА ////////////////////////////////////////////////////////////////
-
-	/// <summary>
-	/// высота окна
-	/// </summary>
-	extern  unsigned sizeWindowHeight;
-
-	/// <summary>
-	/// длина окна
-	/// </summary>
-	extern  unsigned sizeWindowLength;
-
+	// СВОЙСТВА ОКНА
 
 	/// <summary>
 	/// количество ИГРОВЫХ клеток на стороне + всегда 2 клетки для координат
@@ -46,24 +29,18 @@ namespace propertiesGame
 	/// </summary>
 	extern  size_t countCellOnHeightWindow;
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>
+	/// высота окна
+	/// </summary>
+	extern  unsigned sizeWindowHeight;
 
+	/// <summary>
+	/// длина окна
+	/// </summary>
+	extern  unsigned sizeWindowLength;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/////////////////////////////////////// СТАНДАРТНЫЕ ТЕКСТУРЫ И ШРИФТЫ ///////////////////////////////////////////
-
+	// СТАНДАРТНЫЕ ТЕКСТУРЫ И ШРИФТЫ
+	
 	/// <summary>
 	/// используемый шрифт
 	/// </summary>
@@ -79,90 +56,28 @@ namespace propertiesGame
 	/// </summary>
 	extern std::filesystem::path pathToEmptyPawn;
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// СВОЙСТВА ФИГУР 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//////////////////////////////////////////// СВОЙСТВА ФИГУР //////////////////////////////////////////////////////
-
-
-
-	/// превращения
+	// превращения
 	
 	//inline extern std::array<PropertiesFigure, 4> promoutionForPawnPlayerOne;
-
 	//inline extern std::array<PropertiesFigure, 4> promoutionForPawnPlayerTwo;
 
-
-
-
-
-
-
-
-
-	/// УНИКАЛЬНЫЕ ФИГУРЫ
+	// УНИКАЛЬНЫЕ ФИГУРЫ
 
 	/// <summary>
 	/// вектор уникальный фигур и путей до текстур к ним
 	/// </summary>
 	extern std::vector<std::pair<std::shared_ptr<Figure>, std::filesystem::path>> addedVectorUniqueFigures;
 
-
-
-
-
-
-
-
-
-	/// РАСПОЛОЖЕНИЕ ФИГУР
+	// РАСПОЛОЖЕНИЕ ФИГУР
 
 	/// <summary>
 	/// Предварительно готовый вектор с расположением фигур
 	/// </summary>
 	extern std::vector<PositionAndPropertiesFigure> currentVectorLocationFigure;
 
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	///////////////////////////////////// СВОЙСТВА ИГРОКОВ //////////////////////////////////////////////////////////
-
+	// СВОЙСТВА ИГРОКОВ
 
 	/// <summary>
 	/// количество игроков (сторон)
@@ -174,13 +89,9 @@ namespace propertiesGame
 	/// </summary>
 	extern int currentPlayer;
 
-
-
+	/// <summary>
+	/// 
+	/// </summary>
 	extern std::wstring currentParty;
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 }

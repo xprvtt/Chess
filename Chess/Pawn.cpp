@@ -1,306 +1,212 @@
 ﻿#include "Pawn.h"
 
 
-static bool customCheckMoveSideTop(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure);
-static bool customCheckMoveSideDown(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure);
+static bool customCheckMoveSideTop(const Position::Coordinates& positionCurrent, Position::Coordinates positionMove, const Grid<PropertiesFigure>& locationFigure);
+static bool customCheckMoveSideDown(const Position::Coordinates& positionCurrent, Position::Coordinates positionMove, const Grid<PropertiesFigure>& locationFigure);
 
-static std::vector<std::pair<size_t, size_t>> availableMoveForFigureSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& VectorLocationFigure);
-static std::vector<std::pair<size_t, size_t>> availableMoveForFigureSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& VectorLocationFigure);
+static std::vector<Position::Coordinates> availableMoveForFigureSideTop(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure);
+static std::vector<Position::Coordinates> availableMoveForFigureSideDown(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure);
 
-static bool possibilityPromotionSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure);
-static bool possibilityPromotionSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure);
+static bool possibilityPromotionSideTop(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure);
+static bool possibilityPromotionSideDown(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure);
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-////////////////////////////////////////////////////////////
+//bool Pawn::customMoveForFigure(const Position::Coordinates& positionCurrent, const Position::Coordinates& positionMove, const Grid<PropertiesFigure>& locationFigure) const
+//{
+//	switch (m_side)
+//	{
+//	case 1:
+//		return customCheckMoveSideTop(positionCurrent, positionMove, locationFigure);
+//	case 2:
+//		return customCheckMoveSideDown(positionCurrent, positionMove, locationFigure);
 //
-// PropertiesFigure.side должен имееть структуру => 	  
-// -1 == границы															  
-// 0 == пустая клетка 														  
-// 1+ == сторона игрока	 													  
-//
-////////////////////////////////////////////////////////////
+//	default:
+//		OUTPUT_LOG_ERROR("Не определенный Игрок проверьте линию -> Figure -> Pawn -> CheckMove -> case");
+//		return false;
+//	}
+//}
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-
-bool Pawn::checkMove(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure)
+std::vector<Position::Coordinates> Pawn::customMoveForFigure(const Position::Coordinates& position, const Grid<PropertiesFigure>& locationFigure) const
 {
-
-	switch (getSide())
+	// движение пешки в зависимости от стороны игрока
+	switch (m_side)
 	{
 	case 1:
-		return customCheckMoveSideTop(xPositionCurrent, yPositionCurrent, xPositionMove, yPositionMove, vectorLocationFigure);
+		return availableMoveForFigureSideTop(position, locationFigure);
+
 	case 2:
-		return customCheckMoveSideDown(xPositionCurrent, yPositionCurrent, xPositionMove, yPositionMove, vectorLocationFigure);
+		return availableMoveForFigureSideDown(position, locationFigure);
 
 	default:
-		OutputLog("Игрок не определен проверьте линию -> Figure -> Pawn -> CheckMove() -> case");
+		OUTPUT_LOG_ERROR("Игрок не определен. [Figure] -> [Pawn] -> [GetMoveForFigure] -> [case]");
+	}
+	return std::vector<Position::Coordinates>();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+bool Pawn::getPossibilityPromotion(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure) const
+{
+	switch (locationFigure[positionCurrent.inRow][positionCurrent.inColum].m_side)
+	{
+	case 1:
+		return possibilityPromotionSideTop(positionCurrent, locationFigure); 
+	case 2:
+		return possibilityPromotionSideDown(positionCurrent, locationFigure); 
+	default:
+		OUTPUT_LOG_ERROR("Игрок не определен. [Figure] -> [Pawn] -> [getPossibilityPromotion] -> [case]");
 		return false;
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
-static bool customCheckMoveSideTop(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure)
-{
-
-	std::vector<std::pair<size_t, size_t>> vMove = availableMoveForFigureSideTop(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
-
-	for (const auto& move : vMove)
-	{
-		if (move.first == xPositionMove && move.second == yPositionMove)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static bool customCheckMoveSideDown(size_t xPositionCurrent, size_t yPositionCurrent, size_t xPositionMove, size_t yPositionMove, const GridPropertiesFigure& vectorLocationFigure)
-{
-	std::vector<std::pair<size_t, size_t>> vMove = availableMoveForFigureSideDown(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
-
-	for (const auto& move : vMove)
-	{
-		if (move.first == xPositionMove && move.second == yPositionMove)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-
-std::vector<std::pair<size_t, size_t>> Pawn::getMoveForFigure(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
-{
-	///
-	/// движение пешки в зависимости от стороны игрока
-	/// 
-	switch (getSide())
-	{
-	case 1:
-		return availableMoveForFigureSideTop(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
-	case 2:
-		return availableMoveForFigureSideDown(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
-
-
-	default:
-		OutputLog("Игрок не определен проверьте линию -> Figure -> Pawn -> GetMoveForFigure() -> case");
-		return std::vector<std::pair<size_t, size_t>>();
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static std::vector<std::pair<size_t, size_t>> availableMoveForFigureSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
-{
-	///
-	/// по умолчанию ИГРОК 1 НИЖНИЙ БЕЛЫЙ 
-	///
-	size_t row = vectorLocationFigure.size();
-	size_t col = vectorLocationFigure[0].size();
-
-	std::vector<std::pair<size_t, size_t>> result;
-
-
-	///
-	/// просчитываем ход на пустую клетку
-	/// 
-	/// если впереди пешки ничего нет то ход доступен
-	/// 
-	if (vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent].side == 0)
-	{
-		result.emplace_back(xPositionCurrent, yPositionCurrent - 1);
-
-		///
-		/// высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед, т.е. сразу на 2
-		/// 
-		if (yPositionCurrent == row - 3 && vectorLocationFigure[yPositionCurrent - 2][xPositionCurrent].side == 0)
-		{
-			///
-			/// добавляем возможный ход на 2 клетки вперед
-			/// 
-			result.emplace_back(xPositionCurrent, yPositionCurrent - 2);
-		}
-	}
-
-	///
-	/// проситываем возможность взятие фигуры ПРОТИВНИКА справа и слева ИГРОКА 2
-	/// фигура на клетке не должна быть пустой ( side 0 ) не должна быть краем ( SIDE -1 ) и нельзя взять свою же фигуру 
-	/// 
-	if (vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent - 1].side > 0 && vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent - 1].side != vectorLocationFigure[yPositionCurrent][xPositionCurrent].side)
-	{
-		result.emplace_back(xPositionCurrent - 1, yPositionCurrent - 1);
-	}
-	if (vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent + 1].side > 0 && vectorLocationFigure[yPositionCurrent - 1][xPositionCurrent + 1].side != vectorLocationFigure[yPositionCurrent][xPositionCurrent].side)
-	{
-		result.emplace_back(xPositionCurrent + 1, yPositionCurrent - 1);
-	}
-	return result;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-static std::vector<std::pair<size_t, size_t>> availableMoveForFigureSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
-{
-	///
-	/// ИГРОК 2 ВЕРХНИЙ ЧЕРНЫЙ
-	/// 
-	size_t row = vectorLocationFigure.size();
-	size_t col = vectorLocationFigure[0].size();
-
-	std::vector<std::pair<size_t, size_t>> result;
-
-	///
-	/// если впереди пешки ничего нет
-	/// 
-	if (vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent].side == 0)
-	{
-		result.emplace_back(xPositionCurrent, yPositionCurrent + 1);
-
-		///
-		/// высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед если она не занята
-		/// 
-		if (yPositionCurrent == 2 && vectorLocationFigure[yPositionCurrent + 2][xPositionCurrent].side == 0)
-		{
-			///
-			/// добавляем возможный ход на 2 клетки вперед
-			/// 
-			result.emplace_back(xPositionCurrent, yPositionCurrent + 2);
-		}
-	}
-
-	///
-	/// проситываем возможность взятие фигуры ПРОТИВНИКА справа и слева ИГРОКА 2
-	/// фигура на клетке не должна быть пустой ( side 0 ) не должна быть краем ( SIDE -1 ) и нельзя взять свою же фигуру 
-	/// 
-	if (vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent - 1].side > 0 && vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent - 1].side != vectorLocationFigure[yPositionCurrent][xPositionCurrent].side)
-	{
-		result.emplace_back(xPositionCurrent - 1, yPositionCurrent + 1);
-	}
-	if (vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent + 1].side > 0 && vectorLocationFigure[yPositionCurrent + 1][xPositionCurrent + 1].side != vectorLocationFigure[yPositionCurrent][xPositionCurrent].side)
-	{ 
-		result.emplace_back(xPositionCurrent + 1, yPositionCurrent + 1);
-	}
-	return result;
-}
-
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-
-bool Pawn::getPossibilityPromotion(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
-{
-	switch (getSide())
-	{
-	case 1:
-		return possibilityPromotionSideTop(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
-	case 2:
-		return possibilityPromotionSideDown(xPositionCurrent, yPositionCurrent, vectorLocationFigure);
-
-	default:
-		OutputLog("Игрок не определен проверьте линию -> Figure -> Pawn -> GetPossibilityPromotion() -> case");
-		return false;
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static bool possibilityPromotionSideTop(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
-{
-	/// игрок 1 белый нижний
-	return yPositionCurrent == 1 ? true : false;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static bool possibilityPromotionSideDown(size_t xPositionCurrent, size_t yPositionCurrent, const GridPropertiesFigure& vectorLocationFigure)
-{
-	/// игрок 2 черный верхний
-	return yPositionCurrent == vectorLocationFigure.size() - 2 ? true : false;
-}
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
-std::wstring Pawn::setIdFigure()
+std::wstring Pawn::setIdFigure() const noexcept
 {
 	return L"Pawn";
 }
-//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//-----------//
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+std::vector<std::pair<MinimumMoveRowColInt, HowMany>> Pawn::setAllMinimumMove() const
+{
+	return std::vector<std::pair<MinimumMoveRowColInt, HowMany>>();
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+static bool customCheckMoveSideTop(const Position::Coordinates& positionCurrent, Position::Coordinates positionMove, const Grid<PropertiesFigure>& locationFigure)
+{
+	std::vector<Position::Coordinates> availableMove = availableMoveForFigureSideTop(positionCurrent, locationFigure);
+
+	for (const auto& move : availableMove)
+	{
+		if (move == positionMove) { return true; }
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+static bool customCheckMoveSideDown(const Position::Coordinates& positionCurrent, Position::Coordinates positionMove, const Grid<PropertiesFigure>& locationFigure)
+{
+	std::vector<Position::Coordinates> availableMove = availableMoveForFigureSideDown(positionCurrent, locationFigure);
+
+	for (const auto& move : availableMove)
+	{
+		if (move == positionMove) { return true; }
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+static bool possibilityPromotionSideTop(const Position::Coordinates& positionCurrent, [[maybe_unused]] const Grid<PropertiesFigure>& locationFigure)
+{
+	// игрок 1 белый нижний
+	return positionCurrent.inRow == 1 ? true : false;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+static bool possibilityPromotionSideDown(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure)
+{
+	// игрок 2 черный верхний
+	return positionCurrent.inRow == locationFigure.size() - 2 ? true : false;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+static std::vector<Position::Coordinates> availableMoveForFigureSideDown(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure)
+{
+	// ИГРОК 2 ВЕРХНИЙ ЧЕРНЫЙ
+	size_t row = locationFigure.size();
+	size_t col = locationFigure.front().size();
+
+	std::vector<Position::Coordinates> result;
+
+	// если впереди пешки ничего нет
+	auto pos1 = positionCurrent + Position::OffsetDownBy(1);
+	if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
+	{
+		result.emplace_back(pos1);
+
+		// высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед если она не занята
+		if (positionCurrent.inRow == 2) // на начальной позиции Side Down 
+		{
+			pos1.moveDown();
+			if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
+			{
+				// добавляем возможный ход на 2 клетки вперед
+				result.emplace_back(pos1);	
+			}
+		}
+	}
+
+	// проситываем возможность взятие фигуры ПРОТИВНИКА справа и слева ИГРОКА 2
+	// фигура на клетке не должна быть пустой ( side 0 ) не должна быть краем ( SIDE -1 ) и нельзя взять свою же фигуру 
+	Position::Coordinates fictionPositionDownLeft = positionCurrent + Position::OffsetDiagDownLeftBy();
+	if (locationFigure[fictionPositionDownLeft.inRow][fictionPositionDownLeft.inColum].m_side > 0 && locationFigure[fictionPositionDownLeft.inRow][fictionPositionDownLeft.inColum].m_side != locationFigure[positionCurrent.inRow][positionCurrent.inColum].m_side)
+	{
+		result.emplace_back(fictionPositionDownLeft);
+	}
+
+	Position::Coordinates fictionPositionDownRight = positionCurrent + Position::OffsetDiagDownRightBy();
+	if (locationFigure[fictionPositionDownRight.inRow][fictionPositionDownRight.inColum].m_side > 0 && locationFigure[fictionPositionDownRight.inRow][fictionPositionDownRight.inColum].m_side != locationFigure[positionCurrent.inRow][positionCurrent.inColum].m_side)
+	{
+		result.emplace_back(fictionPositionDownRight);
+	}
+	return result;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+static std::vector<Position::Coordinates> availableMoveForFigureSideTop(const Position::Coordinates& positionCurrent, const Grid<PropertiesFigure>& locationFigure)
+{
+	// по умолчанию ИГРОК 1 НИЖНИЙ БЕЛЫЙ 
+	size_t row = locationFigure.size();
+	size_t col = locationFigure.front().size();
+
+	std::vector<Position::Coordinates> result;
+
+	// просчитываем ход на пустую клетку
+	// если впереди пешки ничего нет то ход доступен
+
+	// если впереди пешки ничего нет
+	auto pos1 = positionCurrent + Position::OffsetUpBy(1);
+	if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
+	{
+		result.emplace_back(pos1);
+
+		// высчитываем возможную начальную позицию пешки (2 ряд для игрока) тогда можно сходить еще на 1 клетку вперед если она не занята
+		if (positionCurrent.inRow == row - 3) // на начальной позиции Side Down 
+		{
+			pos1.moveUp();
+			if (locationFigure[pos1.inRow][pos1.inColum].m_side == 0)
+			{
+				// добавляем возможный ход на 2 клетки вперед
+				result.emplace_back(pos1);
+			}
+		}
+	}
+
+	// проситываем возможность взятие фигуры ПРОТИВНИКА справа и слева ИГРОКА 2
+	// фигура на клетке не должна быть пустой ( side 0 ) не должна быть краем ( SIDE -1 ) и нельзя взять свою же фигуру 
+	Position::Coordinates fictionPositionUpLeft = positionCurrent + Position::OffsetDiagUpLeftBy();
+	if (locationFigure[fictionPositionUpLeft.inRow][fictionPositionUpLeft.inColum].m_side > 0 && locationFigure[fictionPositionUpLeft.inRow][fictionPositionUpLeft.inColum].m_side != locationFigure[positionCurrent.inRow][positionCurrent.inColum].m_side)
+	{
+		result.emplace_back(fictionPositionUpLeft);
+	}
+
+	Position::Coordinates fictionPositionUpRight = positionCurrent + Position::OffsetDiagUpRightBy();
+	if (locationFigure[fictionPositionUpRight.inRow][fictionPositionUpRight.inColum].m_side > 0 && locationFigure[fictionPositionUpRight.inRow][fictionPositionUpRight.inColum].m_side != locationFigure[positionCurrent.inRow][positionCurrent.inColum].m_side)
+	{
+		result.emplace_back(fictionPositionUpRight);
+	}
+	return result;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------

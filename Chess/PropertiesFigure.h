@@ -3,87 +3,79 @@
 #include "Core.h"
 
 struct PropertiesFigure;
-using GridPropertiesFigure = std::vector<std::vector<PropertiesFigure>>;
-
-
 
 /// <summary>
-/// Свойства фигуры
+/// Сетка содержащая информацию о фигурах находящихся на позициях
+/// </summary>
+template<typename T>
+using Grid = std::vector<std::vector<T>>;
+
+/// <summary>
+/// свойства фигуры
 /// </summary>
 struct PropertiesFigure
 {
+	/// <summary>
+	/// уникальный id первоначальной фигуры 
+	/// </summary>
+	std::wstring m_idFigure = L"";
 
 	/// <summary>
 	/// сторона, к которой принадлежит фигура
 	/// </summary>
-	int side = 0;
-
-	/// <summary>
-	/// уникальный id первоначальной фигуры 
-	/// </summary>
-	std::wstring idFigure = L"";
+	int m_side = 0;
 
 	/// <summary>
 	/// неуязвима ли фигура
 	/// </summary>
-	bool invulnerable = false;
+	bool m_invulnerable = false;
 
 	/// <summary>
 	/// важная ли фигура
 	/// </summary>
-	bool important = false;
+	bool m_important = false;
 
 	/// <summary>
 	/// может ли фигура преврашаться
 	/// </summary>
-	bool promoution = false;
+	bool m_promoution = false;
 
+	PropertiesFigure() = default;
 
-
+	PropertiesFigure(std::wstring idFigure, int side, bool invulnerable, bool important, bool promoution)
+		: m_side(side), m_idFigure(idFigure), m_invulnerable(invulnerable), m_important(important), m_promoution(promoution) {};
 
 	bool operator== (const PropertiesFigure& other) const
 	{
-		return side == other.side && idFigure == other.idFigure && invulnerable == other.invulnerable && important == other.important && promoution == other.promoution;
+		return (m_side         == other.m_side 
+			&& 	m_idFigure     == other.m_idFigure 
+			&& 	m_invulnerable == other.m_invulnerable 
+			&& 	m_important    == other.m_important 
+			&& 	m_promoution   == other.m_promoution);
 	};
-
 };
-
-
-
-
 
 struct PositionAndPropertiesFigure
 {
-
-
-	PositionAndPropertiesFigure(size_t xPosition, size_t yPosition, PropertiesFigure propertions, std::vector<PropertiesFigure> vectorPromoution)
-	{
-		this->xPosition = xPosition;
-		this->yPosition = yPosition;
-		this->propertions = propertions;
-		this->vectorPromoution = vectorPromoution;
-	}
-
-	size_t xPosition;
-
-	size_t yPosition;
-
 	/// <summary>
 	/// Свойства фигуры
 	/// </summary>
-	PropertiesFigure propertions;
+	PropertiesFigure m_propertions{};
 
 	/// <summary>
 	/// вектор с указанными свойствами фигур, в которые можно превратиться данной фигуре
 	/// </summary>
-	std::vector<PropertiesFigure> vectorPromoution;
+	std::vector<PropertiesFigure> m_gridPromoution{};
+	
+	Position::Coordinates m_position{};
 
+	PositionAndPropertiesFigure() = default;
 
+	PositionAndPropertiesFigure(Position::Coordinates coordinates, PropertiesFigure propertions, std::vector<PropertiesFigure> gridPromoution) : m_position(coordinates), m_propertions(propertions), m_gridPromoution(gridPromoution) {};
 
 	bool operator==(const PositionAndPropertiesFigure& other) const
 	{
-		return xPosition == other.xPosition && yPosition == other.yPosition && propertions == other.propertions && vectorPromoution == other.vectorPromoution;
+		return m_position == other.m_position && m_propertions == other.m_propertions && m_gridPromoution == other.m_gridPromoution;
 	};
-
 
 };

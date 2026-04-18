@@ -1,22 +1,21 @@
 ﻿#pragma once
 
-
 #include "iostream"
 #include "string"
 #include "vector"
 #include "ctime"
 #include "fstream"
 #include "filesystem"
-
+#include "future"
 
 #pragma warning(disable: 4275)
 #include <SFML/Graphics.hpp>
 #pragma warning(default: 4275)
 
+#include "LogHelper.h"
+#include "Position.h"
 
-#include "Define.h"
-
-
+#pragma warning(disable : 4566)
 
 /// <summary>
 /// Функция возвращает строку времени 
@@ -30,24 +29,12 @@ std::string getCurrentTime();
 /// <returns>дата и время</returns>
 std::wstring getCurrentTimeWstring();
 
-
-/// <summary>
-/// Функция выводит сообщение в файл Log/log.txt
-/// </summary>
-/// <param name="message">Сообщение которое необходимо вывести</param>
-/// <returns>true если выведен</returns>
-bool outputMessage(std::string message);
-
-
-
 /// <summary>
 /// Функция Загружает шрифт из пути
 /// </summary>
 /// <param name="pathToFont">путь до шрифта</param>
 /// <returns></returns>
 sf::Font loadFont(std::filesystem::path pathToFont);
-
-
 
 /// <summary>
 /// поиск файлов в директории

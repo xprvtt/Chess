@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>I:\10_GitHub\GitHub\Chess\SFML_3.0.0_х64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,6 +172,7 @@
     <ClInclude Include="CountdownTimer.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
+    <ClInclude Include="LogHelper.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Main.h" />

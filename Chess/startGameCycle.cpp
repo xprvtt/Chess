@@ -1,60 +1,39 @@
 ﻿#include "Main.h"
 
-
-
 bool startGameCycle(std::unique_ptr<GameEngine> game)
 {
+	auto gameData = game.get();
 
-    while (game.get()->isOpen())
+    while (gameData->isOpen())
     {
-
-        ///
-        /// проверяем угрозы, подсвечиваем их при наличии
-        /// 
-        if (game.get()->isThreat())
+        // проверяем угрозы текущего игрока, подсвечиваем их при наличии
+        if (gameData->isThreat())
         {
-            game.get()->performBacklightThreat();
+			gameData->performBacklightThreat(); // подсветка фигур, которые угрожают важным фигурам текущего игрока
         }
 
-
-
-        while (const std::optional event = game.get()->getEvent())
+        while (const std::optional event = gameData->getEvent())
         {
             if (event->is<sf::Event::Closed>())
             {
-                game.get()->closeGame();
-            }
+                gameData->closeGame();
+            }    
 
-            ///
-            /// выделяем фигуру при нажатии по ней или передвигаем
-            /// 
-            else if (const auto& mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+            else if (const auto& mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>()) // выделяем фигуру при нажатии по ней или передвигаем
             {
                 if (mouseButtonPressed->button == sf::Mouse::Button::Left)
                 {
-                    ///
-                    /// необходимо ли превращение?       
-                    /// если нет выполняем действие игрока
-                    /// 
-                    game.get()->promoution() ? game.get()->performPromouten() : game.get()->performMovePlayer();
+                    // необходимо ли превращение?       
+                    // если нет обрабатываем действие игрока
+                    gameData->promoution() ? gameData->performPromouten() : gameData->performMovePlayer();
                 }
             }
         }
 
-
-
-        game.get()->clearWindowGame(sf::Color::White);
-
-        game.get()->drawWindowGame();
-
-        game.get()->displayWindowGame();
-
+        gameData->clearWindowGame(sf::Color::White);
+        gameData->drawWindowGame();
+        gameData->displayWindowGame();
     }
-
-
-    ///
-    /// управляем необходимостью начать следующую игру
-    ///
+    // управляем необходимостью начать следующую игру
     return false;
-
 }

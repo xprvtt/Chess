@@ -1,29 +1,20 @@
 ﻿#pragma once
 
 #include "Core.h"
-
 #include "GameEngine.h"
-
 #include "CountdownTimer.h" 
-
 #include "propertiesGame.h"
 
-
 /// <summary>
-/// начинаем новую игру после выхода из цикла startGameCycle() ?
+/// начать ли новую игру после выхода из цикла startGameCycle() ?
 /// </summary>
 extern bool nextGame;
-
-
 
 /// <summary>
 /// основной цикл игры
 /// </summary>
 /// <param name="rWindow"></param>
 bool startGameCycle(std::unique_ptr<GameEngine> Game);
-
-
-
 
 /// <summary>
 /// <para> НЕ РЕАЛИЗОВАНО (!) </para> 
@@ -35,9 +26,6 @@ bool startGameCycle(std::unique_ptr<GameEngine> Game);
 /// <returns>вектор</returns>
 std::vector<PositionAndPropertiesFigure> getVectorLocationFigure(std::filesystem::path pathToSave);
 
-
-
-
 /// <summary>
 /// 
 /// </summary>
@@ -45,9 +33,6 @@ std::vector<PositionAndPropertiesFigure> getVectorLocationFigure(std::filesystem
 /// <param name="numberSave"></param>
 /// <returns></returns>
 bool importSave(std::filesystem::path pathToSave, int numberSave);
-
-
-
 
 /// <summary>
 /// 
