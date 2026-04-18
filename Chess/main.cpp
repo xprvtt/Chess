@@ -1,6 +1,5 @@
 ﻿#include "Main.h"
 
-
 bool nextGame = false;
 
 std::unique_ptr<GameEngine> getGameEngine();

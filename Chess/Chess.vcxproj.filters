@@ -176,5 +176,8 @@
     <ClInclude Include="Space.h">
       <Filter>Файлы заголовков\Class\Figure\heirs</Filter>
     </ClInclude>
+    <ClInclude Include="LogHelper.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
